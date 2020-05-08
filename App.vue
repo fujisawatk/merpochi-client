@@ -1,8 +1,24 @@
 <template>
   <view class="container">
-    <text class="text-color-primary">My Vue Native App</text>
+    <nb-text class="text-color-primary">{{ msg }}</nb-text>
   </view>
 </template>
+
+<script>
+import Vue from 'vue-native-core'
+import { VueNativeBase } from 'native-base'
+
+Vue.use(VueNativeBase)
+
+export default {
+  data: function() {
+    return {
+      msg: "My Vue Native App"
+    }
+  }
+}
+
+</script>
 
 <style>
 .container {
