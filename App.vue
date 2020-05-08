@@ -1,17 +1,47 @@
 <template>
   <view class="container">
-    <text class="text-color-primary">My Vue Native App</text>
+    <app-loading v-if="!isAppReady" />
+    <app v-else />
   </view>
 </template>
 
+<script>
+import { AppLoading } from 'expo';
+import App from "./src";
+
+export default {
+  components: {
+    App,
+    AppLoading
+  },
+  data: function() {
+    return {
+      isAppReady: false,
+    };
+  },
+  created: function() {
+    this.loadFonts();
+  },
+  methods: {
+    loadFonts: async function() {
+      try {
+        this.isAppReady = false;
+        await Expo.Font.loadAsync({
+          Roboto: require('native-base/Fonts/Roboto.ttf'),
+          Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+        });
+        this.isAppReady = true;
+      } catch (error) {
+        console.log('some error occured', error);
+        this.isAppReady = true;
+      }
+    },
+  },
+}
+</script>
+
 <style>
 .container {
-  background-color: white;
-  align-items: center;
-  justify-content: center;
   flex: 1;
-}
-.text-color-primary {
-  color: blue;
 }
 </style>
