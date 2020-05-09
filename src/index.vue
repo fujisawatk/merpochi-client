@@ -1,7 +1,8 @@
 <template>
   <view class="container">
     <!-- <signup /> -->
-    <signin />
+    <!-- <signin /> -->
+    <home />
   </view>
 </template>
 
@@ -9,14 +10,16 @@
 import Vue from 'vue-native-core'
 import { VueNativeBase } from 'native-base'
 // import Signup from './screens/SignupScreen.vue'
-import Signin from './screens/SigninScreen.vue'
+// import Signin from './screens/SigninScreen.vue'
+import Home from './screens/HomeScreen.vue'
 
 Vue.use(VueNativeBase)
 
 export default {
   components: {
     // Signup,
-    Signin
+    // Signin,
+    Home
   }
 }
 </script>
