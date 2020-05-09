@@ -1,20 +1,26 @@
 <template>
-  <nb-content>
-    <nb-list-item thumbnail>
-      <nb-left>
-        <nb-thumbnail square :source="require('../../assets/icons/logo.png')" />
-      </nb-left>
-      <nb-body>
-        <nb-text>鳥貴族</nb-Text>
-        <nb-text note :numberOfLines="1">焼き鳥屋</nb-Text>
-      </nb-body>
-      <nb-right>
-          <nb-icon type="AntDesign" name="like1" class="like-icon"/>
-          <nb-text>+1</nb-text>
-      </nb-right>
-    </nb-list-item>
-  </nb-content>
+  <nb-list-item thumbnail>
+    <nb-left>
+      <nb-thumbnail square :source="require('../../assets/icons/logo.png')" />
+    </nb-left>
+    <nb-body>
+      <nb-text>{{ item.name }}</nb-Text>
+      <nb-text>{{ item.category }}</nb-Text>
+    </nb-body>
+    <nb-right>
+        <nb-icon type="AntDesign" name="like1" class="like-icon"/>
+        <nb-text>+{{ item.like }}</nb-text>
+    </nb-right>
+  </nb-list-item>
 </template>
+
+<script>
+export default {
+  props: {
+    item: Object
+  }
+}
+</script>
 
 <style>
 .like-icon {

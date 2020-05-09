@@ -2,7 +2,7 @@
   <nb-header class="header">
     <nb-left class="header-left"/>
       <nb-body class="header-body">
-        <nb-title class="header-title">最新のお気に入り</nb-title>
+        <nb-title class="header-title">{{ screen }}</nb-title>
       </nb-body>
       <nb-right class="header-right">
         <nb-button transparent class="header-icon">
@@ -14,6 +14,16 @@
       </nb-right>
     </nb-header>
 </template>
+
+<script>
+export default {
+  props: {
+    screen: {
+      type: String,
+    },
+  }
+}
+</script>
 
 <style>
 .header {
