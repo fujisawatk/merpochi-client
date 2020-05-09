@@ -1,20 +1,19 @@
 <template>
   <view class="container">
-    <nb-text class="text-color-primary">{{ msg }}</nb-text>
+    <signup />
   </view>
 </template>
 
 <script>
 import Vue from 'vue-native-core'
 import { VueNativeBase } from 'native-base'
+import Signup from './screens/SignupScreen.vue'
 
 Vue.use(VueNativeBase)
 
 export default {
-  data: function() {
-    return {
-      msg: "My Vue Native App"
-    }
+  components: {
+    Signup
   }
 }
 
@@ -22,12 +21,6 @@ export default {
 
 <style>
 .container {
-  background-color: white;
-  align-items: center;
-  justify-content: center;
   flex: 1;
-}
-.text-color-primary {
-  color: blue;
 }
 </style>
