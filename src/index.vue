@@ -3,7 +3,8 @@
     <!-- <signup /> -->
     <!-- <signin /> -->
     <!-- <home /> -->
-    <detail />
+    <!-- <detail /> -->
+    <map />
   </view>
 </template>
 
@@ -14,7 +15,8 @@ import { VueNativeBase } from 'native-base'
 // import Signup from './screens/SignupScreen.vue'
 // import Signin from './screens/SigninScreen.vue'
 // import Home from './screens/HomeScreen.vue'
-import Detail from './screens/DetailScreen.vue'
+// import Detail from './screens/DetailScreen.vue'
+import Map from './screens/MapScreen.vue'
 
 // import Header from './components/Header.vue'
 // import Item from './components/Item.vue'
@@ -31,7 +33,8 @@ export default {
     // Signup,
     // Signin,
     // Home,
-    Detail
+    // Detail
+    Map
   }
 }
 </script>
