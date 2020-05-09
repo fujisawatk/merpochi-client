@@ -1,0 +1,30 @@
+<template>
+  <nb-list-item thumbnail>
+    <nb-left>
+      <nb-thumbnail square :source="require('../../assets/icons/logo.png')" />
+    </nb-left>
+    <nb-body>
+      <nb-text>{{ item.name }}</nb-Text>
+      <nb-text>{{ item.category }}</nb-Text>
+    </nb-body>
+    <nb-right>
+        <nb-icon type="AntDesign" name="like1" class="like-icon"/>
+        <nb-text>+{{ item.like }}</nb-text>
+    </nb-right>
+  </nb-list-item>
+</template>
+
+<script>
+export default {
+  props: {
+    item: Object
+  }
+}
+</script>
+
+<style>
+.like-icon {
+  color: #FF773E;
+  font-size: 35;
+}
+</style>
