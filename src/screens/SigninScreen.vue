@@ -25,7 +25,10 @@
         <nb-text>Login</nb-text>
       </nb-button>
 
-      <nb-button rounded dark class="form-btn">
+      <nb-button rounded dark
+        class="form-btn"
+        :on-press="changeSignup"
+      >
         <nb-text>Create account</nb-text>
       </nb-button>
     </nb-form>
@@ -44,6 +47,9 @@ export default {
   methods: {
     changeHome() {
       this.navigation.navigate("Home")
+    },
+    changeSignup() {
+      this.navigation.navigate("Signup")
     }
   }
 }

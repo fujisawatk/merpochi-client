@@ -1,6 +1,5 @@
 <template>
   <view class="container">
-    <!-- <signup /> -->
     <!-- <detail /> -->
     <!-- <map /> -->
     <navigator />
@@ -12,7 +11,6 @@ import Vue from "vue-native-core"
 import { VueNativeBase } from "native-base"
 
 import Navigator from "./navigator"
-// import Signup from './screens/SignupScreen.vue'
 // import Detail from './screens/DetailScreen.vue'
 // import Map from './screens/MapScreen.vue'
 
@@ -28,7 +26,6 @@ Vue.component("Item", Item)
 
 export default {
   components: {
-    // Signup,
     // Detail
     // Map
     Navigator

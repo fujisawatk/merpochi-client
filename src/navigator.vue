@@ -7,6 +7,7 @@
 <script>
 import HomeScreen from './screens/HomeScreen.vue'
 import SigninScreen from './screens/SigninScreen.vue'
+import SignupScreen from './screens/SignupScreen.vue'
 
 import { Root } from 'native-base'
 
@@ -19,6 +20,7 @@ const StackNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Signin: SigninScreen,
+    Signup: SignupScreen
   },
   {
     initialRouteName: 'Home',
