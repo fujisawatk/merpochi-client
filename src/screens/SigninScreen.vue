@@ -1,41 +1,64 @@
 <template>
   <nb-container class="signup-container">
-      <view class="logo">
-        
-        <image
-          class="logo-image"
-          :source="require('../../assets/icons/logo.png')"
-        />
-        <text class="logo-title">merpochi</text>
-      </view>
+    <view class="logo">
+      <image
+        class="logo-image"
+        :source="require('../../assets/icons/logo.png')"
+      />
+      <text class="logo-title">merpochi</text>
+    </view>
 
-      <nb-form class="form">
-        <nb-item rounded class="form-input">
-          <nb-icon active type="Entypo" name="mail"/>
-          <nb-input placeholder="E-mail"/>
-        </nb-item>
-        <nb-item rounded class="form-input">
-          <nb-icon active type="Entypo" name="key"/>
-          <nb-input placeholder="Password"/>
-        </nb-item>
+    <nb-form class="form">
+      <nb-item rounded class="form-input">
+        <nb-icon active type="Entypo" name="mail" />
+        <nb-input placeholder="E-mail" />
+      </nb-item>
+      <nb-item rounded class="form-input">
+        <nb-icon active type="Entypo" name="key" />
+        <nb-input placeholder="Password" />
+      </nb-item>
 
-        <nb-button rounded dark class="form-btn">
-          <nb-text>Login</nb-text>
-        </nb-button>
-        <nb-button rounded dark class="form-btn">
-          <nb-text>Create account</nb-text>
-        </nb-button>
-      </nb-form>
+      <nb-button rounded dark
+        class="form-btn"
+        :on-press="changeHome"
+      >
+        <nb-text>Login</nb-text>
+      </nb-button>
 
-      <view class="form-bottom" />
+      <nb-button rounded dark
+        class="form-btn"
+        :on-press="changeSignup"
+      >
+        <nb-text>Create account</nb-text>
+      </nb-button>
+    </nb-form>
 
+    <view class="form-bottom" />
   </nb-container>
 </template>
+
+<script>
+export default {
+  props: {
+    navigation: {
+      type: Object,
+    }
+  },
+  methods: {
+    changeHome() {
+      this.navigation.navigate("Home")
+    },
+    changeSignup() {
+      this.navigation.navigate("Signup")
+    }
+  }
+}
+</script>
 
 <style>
 .signup-container {
   flex: 1;
-  background-color: #FFCC33;
+  background-color: #ffcc33;
 }
 .logo {
   flex: 2;

@@ -30,15 +30,35 @@
         <nb-button rounded dark class="form-btn">
           <nb-text>Create account</nb-text>
         </nb-button>
-        <nb-button rounded dark class="form-btn">
+
+        <nb-button rounded dark
+          class="form-btn"
+          :on-press="changeHome"
+        >
           <nb-text>Cancel</nb-text>
         </nb-button>
+        
       </nb-form>
 
       <view class="form-bottom" />
 
   </nb-container>
 </template>
+
+<script>
+export default {
+  props: {
+    navigation: {
+      type: Object,
+    }
+  },
+  methods: {
+    changeHome() {
+      this.navigation.navigate("Home")
+    }
+  }
+}
+</script>
 
 <style>
 .signup-container {

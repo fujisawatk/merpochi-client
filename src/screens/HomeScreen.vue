@@ -1,9 +1,18 @@
 <template>
   <nb-container class="home-container">
-    <header :screen="title" />
-    <view v-for="item in items" :key="item.id">
-      <item :item="item" />
+
+    <header
+      :screen="title"
+      :change-signin="changeSignin"
+    />
+
+    <view
+      v-for="item in items"
+      :key="item.id"
+    >
+      <item :item="item" :change-detail="changeDetail" />
     </view>
+
   </nb-container>
 </template>
 
@@ -16,6 +25,19 @@ export default {
         {id: 0, name: "鳥貴族", category: "焼鳥", like: 3},
         {id: 1, name: "笑笑", category: "洋風居酒屋", like: 2}
       ]
+    }
+  },
+  props: {
+    navigation: {
+      type: Object
+    }
+  },
+  methods: {
+    changeSignin() {
+      this.navigation.navigate('Signin')
+    },
+    changeDetail() {
+      this.navigation.navigate('DetailTab')
     }
   }
 }
