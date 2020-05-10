@@ -8,19 +8,28 @@
         <nb-button transparent class="header-icon">
           <nb-icon type="Fontisto" name="map-marker-alt" class="map-icon"/>
         </nb-button>
-        <nb-button transparent class="header-icon">
+        <nb-button transparent class="header-icon" :on-press="userIconPress">
           <nb-icon type="Entypo" name="user" class="user-icon"/>
         </nb-button>
       </nb-right>
     </nb-header>
 </template>
 
-<script>
+ <script>
 export default {
   props: {
     screen: {
       type: String,
     },
+    navigation: {
+      type: Object
+    },
+    changeSignin: Function
+  },
+  methods: {
+    userIconPress: function() {
+      this.changeSignin()
+    }
   }
 }
 </script>
