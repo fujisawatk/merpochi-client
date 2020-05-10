@@ -15,7 +15,7 @@
     </nb-header>
 </template>
 
- <script>
+<script>
 export default {
   props: {
     screen: {

@@ -10,7 +10,7 @@
       v-for="item in items"
       :key="item.id"
     >
-      <item :item="item" />
+      <item :item="item" :change-detail="changeDetail" />
     </view>
 
   </nb-container>
@@ -35,6 +35,9 @@ export default {
   methods: {
     changeSignin() {
       this.navigation.navigate('Signin')
+    },
+    changeDetail() {
+      this.navigation.navigate('DetailTab')
     }
   }
 }

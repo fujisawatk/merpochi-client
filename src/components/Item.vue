@@ -1,5 +1,5 @@
 <template>
-  <nb-list-item thumbnail>
+  <nb-list-item thumbnail :on-press="itemsPress">
     <nb-left>
       <nb-thumbnail square :source="require('../../assets/icons/logo.png')" />
     </nb-left>
@@ -17,7 +17,16 @@
 <script>
 export default {
   props: {
-    item: Object
+    item: Object,
+    navigation: {
+      type: Object
+    },
+    changeDetail: Function
+  },
+  methods: {
+    itemsPress: function() {
+      this.changeDetail()
+    }
   }
 }
 </script>
