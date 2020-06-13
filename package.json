@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.6",
+    "axios": "^0.19.2",
     "expo": "^37.0.8",
     "expo-font": "~8.1.0",
     "native-base": "^2.13.12",
@@ -24,7 +25,8 @@
     "react-native-web": "~0.11.7",
     "vue-native-core": "^0.1.4",
     "vue-native-helper": "^0.1.4",
-    "vue-native-router": "^0.1.1"
+    "vue-native-router": "^0.1.1",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
