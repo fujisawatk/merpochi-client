@@ -11,16 +11,22 @@
     <nb-form class="form">
       <nb-item rounded class="form-input">
         <nb-icon active type="Entypo" name="mail" />
-        <nb-input placeholder="E-mail" />
+        <nb-input
+          placeholder="E-mail"
+          v-model="form.email"
+        />
       </nb-item>
       <nb-item rounded class="form-input">
         <nb-icon active type="Entypo" name="key" />
-        <nb-input placeholder="Password" />
+        <nb-input
+          placeholder="Password"
+          v-model="form.password"
+        />
       </nb-item>
 
       <nb-button rounded dark
         class="form-btn"
-        :on-press="changeHome"
+        :on-press="login"
       >
         <nb-text>Login</nb-text>
       </nb-button>
@@ -38,18 +44,35 @@
 </template>
 
 <script>
+import axios from 'axios'
+import store from '../store';
+
 export default {
+  data () {
+    return {
+      form: {
+        email: '',
+        password: ''
+      }
+    }
+  },
   props: {
     navigation: {
       type: Object,
     }
   },
   methods: {
-    changeHome() {
-      this.navigation.navigate("Home")
-    },
     changeSignup() {
       this.navigation.navigate("Signup")
+    },
+    login: function() {
+      store.dispatch("loginOne", this.form)
+      .then(user => {
+        this.navigation.navigate('Home')
+      })
+      .catch(() => {
+        console.log("ログインに失敗しました")
+      })
     }
   }
 }
