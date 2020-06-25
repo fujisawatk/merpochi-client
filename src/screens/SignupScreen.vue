@@ -12,22 +12,37 @@
       <nb-form class="form">
         <nb-item rounded class="form-input">
           <nb-icon active type="Entypo" name="user"/>
-          <nb-input placeholder="Name"/>
+          <nb-input
+            placeholder="Nickname"
+            v-model="form.nickname
+          "/>
         </nb-item>
         <nb-item rounded class="form-input">
           <nb-icon active type="Entypo" name="mail"/>
-          <nb-input placeholder="E-mail"/>
+          <nb-input
+            placeholder="E-mail"
+            v-model="form.email"
+          />
         </nb-item>
         <nb-item rounded class="form-input">
           <nb-icon active type="Entypo" name="key"/>
-          <nb-input placeholder="Password"/>
+          <nb-input
+            placeholder="Password"
+            v-model="form.password"
+          />
         </nb-item>
         <nb-item rounded class="form-input">
           <nb-icon active type="Entypo" name="key"/>
-          <nb-input placeholder="Repeat the password"/>
+          <nb-input
+            placeholder="Repeat the password"
+            v-model="form.passwordConfirmation"
+          />
         </nb-item>
 
-        <nb-button rounded dark class="form-btn">
+        <nb-button rounded dark
+          class="form-btn"
+          :on-press="register"
+        >
           <nb-text>Create account</nb-text>
         </nb-button>
 
@@ -46,7 +61,19 @@
 </template>
 
 <script>
+import store from '../store';
+
 export default {
+  data () {
+    return {
+      form: {
+        nickname: '',
+        email: '',
+        password: '',
+        passwordConfirmation: ''
+      }
+    }
+  },
   props: {
     navigation: {
       type: Object,
@@ -55,6 +82,16 @@ export default {
   methods: {
     changeHome() {
       this.navigation.navigate("Home")
+    },
+    register() {
+      store.dispatch("register", this.form)
+       .then(() => this.navigateToSignin())
+       .catch(() => {
+          console.log("登録出来ませんでした")
+      })
+    },
+    navigateToSignin() {
+      this.navigation.navigate('Signin')
     }
   }
 }
