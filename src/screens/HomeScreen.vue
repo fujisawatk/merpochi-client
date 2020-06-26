@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import store from '../store'
+
 export default {
   data: function() {
     return {
@@ -37,7 +39,11 @@ export default {
       this.navigation.navigate('Signin')
     },
     changeDetail() {
-      this.navigation.navigate('DetailTab')
+      if (store.state.isAuthResolved == true) {
+        this.navigation.navigate('DetailTab')
+      } else {
+        this.navigation.navigate('Signin')
+      }  
     }
   }
 }

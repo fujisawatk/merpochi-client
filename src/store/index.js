@@ -7,12 +7,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: null
+    token: null,
+    // 認証が許可されているかを判定する値
+    isAuthResolved: false
   },
   getters: {},
   mutations: {
     login (state, token) {
       state.token = token
+      state.isAuthResolved = true
       console.log(state.token)
     }
   },
