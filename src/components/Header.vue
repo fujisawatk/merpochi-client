@@ -8,7 +8,10 @@
         <nb-button transparent class="header-icon">
           <nb-icon type="Fontisto" name="map-marker-alt" class="map-icon"/>
         </nb-button>
-        <nb-button transparent class="header-icon" :on-press="userIconPress">
+        <nb-button transparent
+          class="header-icon"
+          :on-press="displayActionSheet"
+        >
           <nb-icon type="Entypo" name="user" class="user-icon"/>
         </nb-button>
       </nb-right>
@@ -16,19 +19,56 @@
 </template>
 
 <script>
+import { ActionSheet } from 'native-base'
+import store from '../store'
+
 export default {
   props: {
     screen: {
       type: String,
     },
     navigation: {
-      type: Object
+      type: Object,
+    }
+  },
+  computed: {
+    optionCancelIndex () {
+      return this.btnOptions.length - 1
     },
-    changeSignin: Function
+    btnOptions () {
+      if (store.isAuthResolved == true) {
+        return ['ログアウト', '閉じる']
+      } else {
+        return ['ログイン', 'アカウント登録', '閉じる']
+      }
+    }
   },
   methods: {
-    userIconPress: function() {
-      this.changeSignin()
+    displayActionSheet () {
+      ActionSheet.show(
+        {
+          options: this.btnOptions,
+          cancelButtonIndex: this.optionCancelIndex
+        },
+        this.handleOptionSelect
+      )
+    },
+    handleOptionSelect (buttonIndex) {
+      const option = this.btnOptions[buttonIndex]
+      // 押されたボタンによって分岐
+      switch (option) {
+        case 'ログイン':
+          this.navigation.navigate('Signin')
+          break
+        case 'アカウント登録':
+          this.navigation.navigate('Signup')
+          break
+        case 'ログアウト':
+          console.log("ログアウト")
+          break
+        default:
+          return null
+      }
     }
   }
 }
