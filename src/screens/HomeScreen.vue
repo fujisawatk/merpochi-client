@@ -3,7 +3,7 @@
 
     <header
       :screen="title"
-      :change-signin="changeSignin"
+      :navigation="navigation"
     />
 
     <view
@@ -35,9 +35,6 @@ export default {
     }
   },
   methods: {
-    changeSignin() {
-      this.navigation.navigate('Signin')
-    },
     changeDetail() {
       if (store.state.isAuthResolved == true) {
         this.navigation.navigate('DetailTab')
