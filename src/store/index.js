@@ -16,7 +16,10 @@ export default new Vuex.Store({
     login (state, token) {
       state.token = token
       state.isAuthResolved = true
-      console.log(state.token)
+    },
+    setLogout (state, delToken) {
+      state.token = delToken
+      state.isAuthResolved = false
     }
   },
   actions: {
@@ -30,6 +33,13 @@ export default new Vuex.Store({
     },
     register ({commit}, userData) {
       return axios.post('http://localhost:8000/users', userData)
+    },
+    logout ({commit}) {
+      return new Promise((resolve) => {
+        AsyncStorage.removeItem('merpochi-jwt')
+        commit('setLogout', null)
+        resolve(true)
+      })
     }
   }
 })
