@@ -6,7 +6,12 @@
       </nb-body>
       <nb-right class="header-right">
         <nb-button transparent class="header-icon">
-          <nb-icon type="Fontisto" name="map-marker-alt" class="map-icon"/>
+          <nb-icon
+            type="Fontisto"
+            name="map-marker-alt"
+            class="map-icon"
+            :on-press="testPage"  
+          />
         </nb-button>
         <nb-button transparent
           class="header-icon"
@@ -72,6 +77,9 @@ export default {
         default:
           return null
       }
+    },
+    testPage () {
+      this.navigation.navigate('Search')
     }
   }
 }

@@ -10,6 +10,7 @@ import SigninScreen from './screens/SigninScreen.vue'
 import SignupScreen from './screens/SignupScreen.vue'
 import DetailScreen from './screens/DetailScreen.vue'
 import MapScreen from './screens/MapScreen.vue'
+import SearchScreen from './screens/SearchScreen.vue'
 import { Root } from 'native-base'
 
 import {
