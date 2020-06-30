@@ -24,7 +24,7 @@ export default new Vuex.Store({
   },
   actions: {
     loginOne ({commit}, userData) {
-      return axios.post('http://localhost:8000/login', userData)
+      return axios.post('http://192.168.100.100:8000/login', userData)
       .then(res => {
         const token = res.data
         AsyncStorage.setItem('merpochi-jwt', token)
@@ -32,7 +32,7 @@ export default new Vuex.Store({
       })
     },
     register ({commit}, userData) {
-      return axios.post('http://localhost:8000/users', userData)
+      return axios.post('http://192.168.100.100:8000/users', userData)
     },
     logout ({commit}) {
       return new Promise((resolve) => {
