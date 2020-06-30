@@ -36,6 +36,7 @@ const StackNavigator = createStackNavigator(
     Home: HomeScreen,
     Signin: SigninScreen,
     Signup: SignupScreen,
+    Search: SearchScreen,
     DetailTab
   },
   {
