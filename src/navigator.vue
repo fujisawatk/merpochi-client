@@ -5,13 +5,14 @@
 </template>
 
 <script>
-import HomeScreen from './screens/HomeScreen.vue'
-import SigninScreen from './screens/SigninScreen.vue'
-import SignupScreen from './screens/SignupScreen.vue'
-import DetailScreen from './screens/DetailScreen.vue'
-import MapScreen from './screens/MapScreen.vue'
-import SearchScreen from './screens/SearchScreen.vue'
-import { Root } from 'native-base'
+import HomeScreen from "./screens/HomeScreen.vue"
+import SigninScreen from "./screens/SigninScreen.vue"
+import SignupScreen from "./screens/SignupScreen.vue"
+import DetailScreen from "./screens/DetailScreen.vue"
+import MapScreen from "./screens/MapScreen.vue"
+import SearchScreen from "./screens/SearchScreen.vue"
+import MypageScreen from "./screens/MypageScreen.vue"
+import { Root } from "native-base"
 
 import {
   createAppContainer,
@@ -38,6 +39,7 @@ const StackNavigator = createStackNavigator(
     Signin: SigninScreen,
     Signup: SignupScreen,
     Search: SearchScreen,
+    Mypage: MypageScreen,
     DetailTab
   },
   {

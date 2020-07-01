@@ -79,7 +79,7 @@ export default {
       }
     },
     testPage () {
-      this.navigation.navigate('Search')
+      this.navigation.navigate('Mypage')
     }
   }
 }
