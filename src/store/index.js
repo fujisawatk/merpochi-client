@@ -9,7 +9,11 @@ export default new Vuex.Store({
   state: {
     token: null,
     // 認証が許可されているかを判定する値
-    isAuthResolved: false
+    isAuthResolved: false,
+    // ナビゲーションバーのアクティブページ判定
+    homeTab: true,
+    searchTab: false,
+    mypageTab: false,
   },
   getters: {},
   mutations: {

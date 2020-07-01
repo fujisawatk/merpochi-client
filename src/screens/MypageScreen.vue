@@ -53,6 +53,10 @@
         </view>
       </nb-tab>
     </nb-tabs>
+
+     <footer
+      :navigation="navigation"
+    />
   </nb-container>
 </template>
 
