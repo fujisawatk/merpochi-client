@@ -21,12 +21,18 @@
       </nb-item> 
     </nb-form>
 
-    <view
-      v-for="item in items"
-      :key="item.id"
-    >
-      <item :item="item"/>
-    </view>
+    <nb-content>
+      <view
+        v-for="item in items"
+        :key="item.id"
+      >
+        <item :item="item"/>
+      </view>
+    </nb-content>
+
+     <footer
+      :navigation="navigation"
+    />
 
   </nb-container>
 </template>

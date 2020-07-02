@@ -6,12 +6,18 @@
       :navigation="navigation"
     />
 
-    <view
-      v-for="item in items"
-      :key="item.id"
-    >
-      <item :item="item" :change-detail="changeDetail" />
-    </view>
+    <nb-content>
+      <view
+        v-for="item in items"
+        :key="item.id"
+      >
+        <item :item="item" :change-detail="changeDetail" />
+      </view>
+    </nb-content>
+
+    <footer
+      :navigation="navigation"
+    />
 
   </nb-container>
 </template>
