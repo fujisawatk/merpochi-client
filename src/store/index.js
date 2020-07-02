@@ -2,6 +2,8 @@ import Vuex from 'vuex'
 import Vue from 'vue-native-core'
 import axios from 'axios'
 import { AsyncStorage } from 'react-native'
+import * as Location from "expo-location"
+import * as Permissions from "expo-permissions"
 
 Vue.use(Vuex)
 
@@ -14,8 +16,31 @@ export default new Vuex.Store({
     homeTab: true,
     searchTab: false,
     mypageTab: false,
+    // 現在位置情報
+    latitude: "",     // 緯度
+    longitude: "",    // 経度
+    errorMessage: ""
   },
-  getters: {},
+  getters: {
+    getGeolocation (state) {
+      Permissions.askAsync(Permissions.LOCATION)
+        .then(status => {
+          if (!status.granted) {
+            this.errorMessage = "Permission to access location was denied"
+          } else if (status.granted) {
+            Location.getCurrentPositionAsync({}).then(location => {
+              state.latitude = location.coords.latitude
+              state.longitude = location.coords.longitude
+              state.errorMessage = ""
+              console.log(state.latitude, state.longitude)
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  },
   mutations: {
     login (state, token) {
       state.token = token
