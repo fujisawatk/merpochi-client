@@ -10,7 +10,7 @@
             type="Fontisto"
             name="map-marker-alt"
             class="map-icon"
-            :on-press="testPage"  
+            :on-press="pushMarker"  
           />
         </nb-button>
         <nb-button transparent
@@ -78,8 +78,8 @@ export default {
           return null
       }
     },
-    testPage () {
-      this.navigation.navigate('Mypage')
+    pushMarker () {
+      store.getters.getGeolocation
     }
   }
 }
