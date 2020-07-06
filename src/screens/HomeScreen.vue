@@ -43,10 +43,10 @@ export default {
   methods: {
     changeDetail() {
       if (store.state.isAuthResolved == true) {
-        this.navigation.navigate('DetailTab')
+        this.navigation.navigate('Detail')
       } else {
         this.navigation.navigate('Signin')
-      }  
+      }
     }
   }
 }
