@@ -24,7 +24,7 @@ export default new Vuex.Store({
     gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/",
     keyid: "980bec359baeb39b9866300dd9a38675",
     // 取得した店舗情報
-    rest: []
+    rests: []
   },
   getters: {},
   mutations: {
@@ -42,18 +42,19 @@ export default new Vuex.Store({
       state.errorMessage = ""
     },
     setRest (state, data) {
+      state.rests = []
       data.rest.map(function( value ) {
         const hash = {
           code: value.id,
           name: value.name,
+          category: value.category,
           opentime: value.opentime,
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,
         }
-        state.rest.push(hash)
+        state.rests.push(hash)
       })
-      console.log(state.rest)
     }
   },
   actions: {
@@ -92,9 +93,8 @@ export default new Vuex.Store({
         }) 
     },
     // 付近の店舗情報取得
-    async getShop ({dispatch, state, commit}) {
-      const location = await dispatch('getGeolocation')
-      console.log(state.latitude, state.longitude)
+    async getRests ({dispatch, state, commit}) {
+      await dispatch('getGeolocation')
       const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
       axios
         .get(requestUrl)
