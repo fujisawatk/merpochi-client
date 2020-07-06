@@ -47,6 +47,7 @@ export default new Vuex.Store({
         const hash = {
           code: value.id,
           name: value.name,
+          img: value.image_url.shop_image1,
           category: value.category,
           opentime: value.opentime,
           url: value.url,
