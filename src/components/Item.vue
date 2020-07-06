@@ -1,7 +1,16 @@
 <template>
   <nb-list-item thumbnail :on-press="itemsPress">
     <nb-left>
-      <nb-thumbnail square :source="require('../../assets/icons/logo.png')" />
+      <nb-thumbnail
+        square
+        v-if="item.img != ''"
+        :source="{uri: item.img}"
+      />
+      <nb-thumbnail
+        square
+        v-else
+        :source="require('../../assets/icons/logo.png')"
+      />
     </nb-left>
     <nb-body>
       <nb-text>{{ item.name }}</nb-Text>
@@ -21,11 +30,12 @@ export default {
     navigation: {
       type: Object
     },
-    changeDetail: Function
+    changeDetail: Function,
+    selCode: String
   },
   methods: {
     itemsPress: function() {
-      this.changeDetail()
+      this.changeDetail(this.selCode)
     }
   }
 }

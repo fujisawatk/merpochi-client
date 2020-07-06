@@ -6,7 +6,16 @@
       <nb-tab :heading="getDetailsTab()">
         <scroll-view class="detail-card">
           <nb-card-item class="card-top">
-              <image :source="require('../../assets/icons/sample.jpg')" class="card-image"/>
+              <image
+                v-if="img != ''"
+                :source="{uri: img}"
+                class="card-image"
+              />
+              <image
+                v-else
+                :source="require('../../assets/icons/sample.jpg')"
+                class="card-image"
+              />
           </nb-card-item>
 
           <nb-list class="card-body">
@@ -16,17 +25,17 @@
 
             <nb-item class="card-info">
               <nb-text class="card-title">店名：</nb-text>
-              <nb-text class="card-text">鳥貴族</nb-text>
+              <nb-text class="card-text">{{ name }}</nb-text>
             </nb-item>
 
             <nb-item class="card-info">
               <nb-text class="card-title">営業時間：</nb-text>
-              <nb-text class="card-text">17:00〜23:00</nb-text>
+              <nb-text class="card-text">{{ opentime }}</nb-text>
             </nb-item>
 
             <nb-item class="card-info">
               <nb-text class="card-title">平均予算：</nb-text>
-              <nb-text class="card-text">4,000円</nb-text>
+              <nb-text class="card-text">{{ budget }}円</nb-text>
             </nb-item>
           </nb-list>
 
@@ -54,13 +63,12 @@
             ref="map"
             :initial-region="coordinates"
           >
-            <view>
-              <map-view:marker
-                :coordinate="marker.coordinate"
-                :title="marker.title"
-                :description="marker.description"
-              ></map-view:marker>
-            </view>
+            <map-view:marker
+              :coordinate="marker.coordinate"
+              :title="name"
+              :description="marker.description"
+            >
+            </map-view:marker>
           </map-view>
         </view>
       </nb-tab>
@@ -74,30 +82,34 @@ import { ScrollView } from 'react-native'
 import React from "react"
 import { TabHeading, Text } from "native-base"
 import MapView from 'react-native-maps'
+import store from '../store'
 
 export default {
-  components: {
-    ScrollView,
-    MapView
-  },
   data: function() {
     return {
+      name: "",
+      opentime: "",
+      budget: "",
+      img: "",
       title: "店舗詳細ページ",
       marker: {
         coordinate: {
-          latitude: 45.524548,
-          longitude: -122.6749817,
+          latitude: 0,
+          longitude: 0,
         },
-        title: "Best Place",
-        description: "This is the best place in Portland",
+        description: "",
       },
       coordinates: {
-        latitude: 45.52220671242907,
-        longitude: -122.6653281029795,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.003,
+        longitudeDelta: 0.003
       }
     }
+  },
+  components: {
+    ScrollView,
+    MapView
   },
   props: {
     navigation: {
@@ -118,7 +130,20 @@ export default {
           <Text style={{color:'#444444', fontSize:13}}>マップ</Text>
         </TabHeading>
       )
-    },
+    }
+  },
+  created () {
+    const code = this.navigation.getParam('code')
+    const rest = store.getters.getRest(code)
+    this.name = rest.name
+    this.opentime = rest.opentime
+    this.budget = rest.budget
+    this.img = rest.img
+    this.marker.description = rest.category
+    this.marker.coordinate.latitude = Number(rest.latitude)
+    this.marker.coordinate.longitude = Number(rest.longitude)
+    this.coordinates.latitude = Number(store.state.latitude)
+    this.coordinates.longitude = Number(store.state.longitude)
   }
 }
 </script>

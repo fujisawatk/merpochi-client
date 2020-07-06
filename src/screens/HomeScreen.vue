@@ -9,9 +9,13 @@
     <nb-content>
       <view
         v-for="item in items"
-        :key="item.id"
+        :key="item.code"
       >
-        <item :item="item" :change-detail="changeDetail" />
+        <item
+          :item="item"
+          :sel-code="item.code"
+          :change-detail="changeDetail"
+        />
       </view>
     </nb-content>
 
@@ -29,10 +33,6 @@ export default {
   data: function() {
     return {
       title: "最新のお気に入り",
-      items: [
-        {id: 0, name: "鳥貴族", category: "焼鳥", like: 3},
-        {id: 1, name: "笑笑", category: "洋風居酒屋", like: 2}
-      ]
     }
   },
   props: {
@@ -40,10 +40,15 @@ export default {
       type: Object
     }
   },
+  computed: {
+    items() {
+      return store.state.rests
+    }
+  },
   methods: {
-    changeDetail() {
+    changeDetail(code) {
       if (store.state.isAuthResolved == true) {
-        this.navigation.navigate('Detail')
+        this.navigation.navigate('Detail', { code })
       } else {
         this.navigation.navigate('Signin')
       }
