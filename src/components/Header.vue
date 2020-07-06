@@ -79,8 +79,8 @@ export default {
       }
     },
     pushMarker () {
-      store.getters.getGeolocation
-    }
+     store.dispatch("getShop")
+    },
   }
 }
 </script>

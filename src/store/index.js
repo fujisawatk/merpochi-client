@@ -19,28 +19,14 @@ export default new Vuex.Store({
     // 現在位置情報
     latitude: "",     // 緯度
     longitude: "",    // 経度
-    errorMessage: ""
+    errorMessage: "",
+    // ぐるなびAPIアクセス用
+    gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/",
+    keyid: "980bec359baeb39b9866300dd9a38675",
+    // 取得した店舗情報
+    rest: []
   },
-  getters: {
-    getGeolocation (state) {
-      Permissions.askAsync(Permissions.LOCATION)
-        .then(status => {
-          if (!status.granted) {
-            this.errorMessage = "Permission to access location was denied"
-          } else if (status.granted) {
-            Location.getCurrentPositionAsync({}).then(location => {
-              state.latitude = location.coords.latitude
-              state.longitude = location.coords.longitude
-              state.errorMessage = ""
-              console.log(state.latitude, state.longitude)
-            })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  },
+  getters: {},
   mutations: {
     login (state, token) {
       state.token = token
@@ -49,6 +35,25 @@ export default new Vuex.Store({
     setLogout (state, delToken) {
       state.token = delToken
       state.isAuthResolved = false
+    },
+    setGeolocation (state, location) {
+      state.latitude = location.coords.latitude
+      state.longitude = location.coords.longitude
+      state.errorMessage = ""
+    },
+    setRest (state, data) {
+      data.rest.map(function( value ) {
+        const hash = {
+          code: value.id,
+          name: value.name,
+          opentime: value.opentime,
+          url: value.url,
+          latitude: value.latitude,
+          longitude: value.longitude,
+        }
+        state.rest.push(hash)
+      })
+      console.log(state.rest)
     }
   },
   actions: {
@@ -69,6 +74,34 @@ export default new Vuex.Store({
         commit('setLogout', null)
         resolve(true)
       })
+    },
+    // 現在位置情報取得
+    getGeolocation ({commit, state}) {
+      Permissions.askAsync(Permissions.LOCATION)
+        .then(status => {
+          if (!status.granted) {
+            this.errorMessage = "Permission to access location was denied"
+          } else if (status.granted) {
+            Location.getCurrentPositionAsync({}).then(location => {
+              commit('setGeolocation', location)
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        }) 
+    },
+    // 付近の店舗情報取得
+    async getShop ({dispatch, state, commit}) {
+      const location = await dispatch('getGeolocation')
+      console.log(state.latitude, state.longitude)
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
+      axios
+        .get(requestUrl)
+        .then(res => {
+          commit('setRest', res.data)
+        })
+        .catch(() => undefined)
     }
   }
 })
