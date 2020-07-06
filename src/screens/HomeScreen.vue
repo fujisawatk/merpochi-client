@@ -9,9 +9,13 @@
     <nb-content>
       <view
         v-for="item in items"
-        :key="item.id"
+        :key="item.code"
       >
-        <item :item="item" :change-detail="changeDetail" />
+        <item
+          :item="item"
+          :sel-code="item.code"
+          :change-detail="changeDetail"
+        />
       </view>
     </nb-content>
 
@@ -42,9 +46,9 @@ export default {
     }
   },
   methods: {
-    changeDetail() {
+    changeDetail(code) {
       if (store.state.isAuthResolved == true) {
-        this.navigation.navigate('Detail')
+        this.navigation.navigate('Detail', { code })
       } else {
         this.navigation.navigate('Signin')
       }

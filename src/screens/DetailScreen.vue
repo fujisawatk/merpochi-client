@@ -2,18 +2,34 @@
   <nb-container class="detail-container">
     <header :screen="title" :navigation="navigation" />
 
+<<<<<<< HEAD
     <nb-tabs>
       <nb-tab :heading="getDetailsTab()">
         <scroll-view class="detail-card">
           <nb-card-item class="card-top">
               <image :source="require('../../assets/icons/sample.jpg')" class="card-image"/>
           </nb-card-item>
+=======
+      <nb-card-item class="card-top">
+          <image
+            v-if="img != ''"
+            :source="{uri: img}"
+            class="card-image"
+          />
+          <image
+            v-else
+            :source="require('../../assets/icons/sample.jpg')"
+            class="card-image"
+          />
+      </nb-card-item>
+>>>>>>> add shop detail function
 
           <nb-list class="card-body">
             <nb-separator class="card-index">
               <nb-text class="index-title">店舗情報</nb-text>
             </nb-separator>
 
+<<<<<<< HEAD
             <nb-item class="card-info">
               <nb-text class="card-title">店名：</nb-text>
               <nb-text class="card-text">鳥貴族</nb-text>
@@ -29,6 +45,23 @@
               <nb-text class="card-text">4,000円</nb-text>
             </nb-item>
           </nb-list>
+=======
+        <nb-item class="card-info">
+          <nb-text class="card-title">店名：</nb-text>
+          <nb-text class="card-text">{{ name }}</nb-text>
+        </nb-item>
+
+        <nb-item class="card-info">
+          <nb-text class="card-title">営業時間：</nb-text>
+          <nb-text class="card-text">{{ opentime }}</nb-text>
+        </nb-item>
+
+        <nb-item class="card-info">
+          <nb-text class="card-title">平均予算：</nb-text>
+          <nb-text class="card-text">{{ budget }}円</nb-text>
+        </nb-item>
+      </nb-list>
+>>>>>>> add shop detail function
 
           <nb-form>
             <nb-text class="comment-title">コメント</nb-text>
@@ -71,12 +104,25 @@
 
 <script>
 import { ScrollView } from 'react-native'
+<<<<<<< HEAD
 import React from "react"
 import { TabHeading, Text } from "native-base"
 import MapView from 'react-native-maps'
+=======
+import store from '../store'
+>>>>>>> add shop detail function
 
 export default {
+  data: function() {
+    return {
+      name: "",
+      opentime: "",
+      budget: "",
+      img: ""
+    }
+  },
   components: {
+<<<<<<< HEAD
     ScrollView,
     MapView
   },
@@ -98,12 +144,16 @@ export default {
         longitudeDelta: 0.03
       }
     }
+=======
+    ScrollView
+>>>>>>> add shop detail function
   },
   props: {
     navigation: {
       type: Object
     }
   },
+<<<<<<< HEAD
   methods: {
     getDetailsTab() {
       return (
@@ -119,6 +169,15 @@ export default {
         </TabHeading>
       )
     },
+=======
+  created () {
+    const code = this.navigation.getParam('code')
+    const rest = store.getters.getRest(code)
+    this.name = rest.name
+    this.opentime = rest.opentime
+    this.budget = rest.budget
+    this.img = rest.img
+>>>>>>> add shop detail function
   }
 }
 </script>

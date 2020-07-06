@@ -26,7 +26,11 @@ export default new Vuex.Store({
     // 取得した店舗情報
     rests: []
   },
-  getters: {},
+  getters: {
+    getRest: (state) => (code) => {
+      return state.rests.find(rest => rest.code === code)
+    }
+  }, 
   mutations: {
     login (state, token) {
       state.token = token
@@ -50,6 +54,7 @@ export default new Vuex.Store({
           img: value.image_url.shop_image1,
           category: value.category,
           opentime: value.opentime,
+          budget: value.budget,
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,

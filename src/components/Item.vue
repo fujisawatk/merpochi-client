@@ -30,11 +30,12 @@ export default {
     navigation: {
       type: Object
     },
-    changeDetail: Function
+    changeDetail: Function,
+    selCode: String
   },
   methods: {
     itemsPress: function() {
-      this.changeDetail()
+      this.changeDetail(this.selCode)
     }
   }
 }
