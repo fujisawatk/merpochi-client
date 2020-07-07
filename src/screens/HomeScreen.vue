@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     items() {
-      return store.state.rests
+      return store.state.shop.shops
     }
   },
   methods: {

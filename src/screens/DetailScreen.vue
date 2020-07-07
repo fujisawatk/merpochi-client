@@ -134,16 +134,16 @@ export default {
   },
   created () {
     const code = this.navigation.getParam('code')
-    const rest = store.getters.getRest(code)
-    this.name = rest.name
-    this.opentime = rest.opentime
-    this.budget = rest.budget
-    this.img = rest.img
-    this.marker.description = rest.category
-    this.marker.coordinate.latitude = Number(rest.latitude)
-    this.marker.coordinate.longitude = Number(rest.longitude)
-    this.coordinates.latitude = Number(store.state.latitude)
-    this.coordinates.longitude = Number(store.state.longitude)
+    const shop = store.getters['shop/getShop'](code)
+    this.name = shop.name
+    this.opentime = shop.opentime
+    this.budget = shop.budget
+    this.img = shop.img
+    this.marker.description = shop.category
+    this.marker.coordinate.latitude = Number(shop.latitude)
+    this.marker.coordinate.longitude = Number(shop.longitude)
+    this.coordinates.latitude = Number(store.state.shop.latitude)
+    this.coordinates.longitude = Number(store.state.shop.longitude)
   }
 }
 </script>

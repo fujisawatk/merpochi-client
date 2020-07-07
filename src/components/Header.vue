@@ -79,7 +79,7 @@ export default {
       }
     },
     pushMarker () {
-     store.dispatch("getRests")
+     store.dispatch("shop/getShops")
     },
   }
 }
