@@ -84,7 +84,7 @@ export default {
       this.navigation.navigate("Home")
     },
     register() {
-      store.dispatch("register", this.form)
+      store.dispatch("auth/register", this.form)
        .then(() => this.navigateToSignin())
        .catch(() => {
           console.log("登録出来ませんでした")
