@@ -41,7 +41,7 @@ export default {
       return this.btnOptions.length - 1
     },
     btnOptions () {
-      if (store.state.isAuthResolved == true) {
+      if (store.state.auth.isAuthResolved == true) {
         return ['ログアウト', '閉じる']
       } else {
         return ['ログイン', 'アカウント登録', '閉じる']
@@ -69,7 +69,7 @@ export default {
           this.navigation.navigate('Signup')
           break
         case 'ログアウト':
-          store.dispatch('logout')
+          store.dispatch('auth/logout')
             .then(() => {
               this.navigation.navigate('Home')
             })

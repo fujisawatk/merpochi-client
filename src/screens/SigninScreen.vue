@@ -66,7 +66,7 @@ export default {
       this.navigation.navigate("Signup")
     },
     login: function() {
-      store.dispatch("loginOne", this.form)
+      store.dispatch("auth/loginOne", this.form)
       .then(user => {
         this.navigation.navigate('Home')
       })

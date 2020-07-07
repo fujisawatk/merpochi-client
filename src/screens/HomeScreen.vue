@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     changeDetail(code) {
-      if (store.state.isAuthResolved == true) {
+      if (store.state.auth.isAuthResolved == true) {
         this.navigation.navigate('Detail', { code })
       } else {
         this.navigation.navigate('Signin')

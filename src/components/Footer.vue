@@ -28,32 +28,32 @@ export default {
   },
   computed: {
     inHome() {
-      return store.state.homeTab
+      return store.state.auth.homeTab
     },
     inSearch() {
-      return store.state.searchTab
+      return store.state.auth.searchTab
     },
     inMypage() {
-      return store.state.mypageTab
+      return store.state.auth.mypageTab
     }
   },
   methods: {
     goHome() {
-      store.state.homeTab = true
-      store.state.searchTab = false
-      store.state.mypageTab = false
+      store.state.auth.homeTab = true
+      store.state.auth.searchTab = false
+      store.state.auth.mypageTab = false
       this.navigation.navigate("Home");
     },
     goSearch() {
-      store.state.homeTab = false
-      store.state.searchTab = true
-      store.state.mypageTab = false
+      store.state.auth.homeTab = false
+      store.state.auth.searchTab = true
+      store.state.auth.mypageTab = false
       this.navigation.navigate("Search");
     },
     goMypage() {
-      store.state.homeTab = false
-      store.state.searchTab = false
-      store.state.mypageTab = true
+      store.state.auth.homeTab = false
+      store.state.auth.searchTab = false
+      store.state.auth.mypageTab = true
       this.navigation.navigate("Mypage");
     },
   }
