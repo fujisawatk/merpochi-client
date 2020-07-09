@@ -18,7 +18,7 @@
     </nb-body>
     <nb-right>
         <nb-icon type="AntDesign" name="like1" class="like-icon"/>
-        <nb-text>+{{ item.like }}</nb-text>
+        <nb-text>+{{ item.commentsCount }}</nb-text>
     </nb-right>
   </nb-list-item>
 </template>

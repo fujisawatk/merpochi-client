@@ -10,7 +10,8 @@ export default {
     errorMessage: "",                                         // 現在位置取得時のエラーメッセージ
     gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
     keyid: "980bec359baeb39b9866300dd9a38675",                // ぐるなびAPIのキーID
-    shops: []                                                 // 取得した店舗情報
+    shops: [],                                                // 取得した店舗情報
+    commentsCount: ""                                         // 各店舗のコメント数
   },
   getters: {
     // 指定IDの店舗情報をstate.restsから取得
@@ -26,7 +27,8 @@ export default {
     },
     setShop (state, data) {
       state.shops = []
-      data.rest.map(function( value ) {
+      // mapでindexを取得し、indexが同じコメント数の値を取得,hashに追加する
+      data.rest.map(function( value, index ) {
         const hash = {
           code: value.id,
           name: value.name,
@@ -37,9 +39,13 @@ export default {
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,
+          commentsCount: state.commentsCount[index]
         }
         state.shops.push(hash)
       })
+    },
+    setCommentsCount (state, data) {
+      state.commentsCount = data
     }
   },
   actions: {
@@ -65,10 +71,22 @@ export default {
       const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
       axios
         .get(requestUrl)
-        .then(res => {
+        .then(async (res) => {
+          const shopCodes = res.data.rest.map(function( value ) {
+            return value.id
+          })
+          await dispatch('getCommentsCount', shopCodes)
           commit('setShop', res.data)
         })
         .catch(() => undefined)
+    },
+    // 店舗IDをAPI側にリクエスト → 各店舗のコメント数を期待
+    async getCommentsCount ({commit}, shopCodes) {
+      console.log(shopCodes)
+      return axios.post('http://192.168.100.100:8000/shops', shopCodes)
+      .then(res => {
+        commit('setCommentsCount', res.data)
+      })
     }
   }
 }
