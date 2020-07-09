@@ -32,7 +32,7 @@ import store from '../store'
 export default {
   data: function() {
     return {
-      title: "最新のお気に入り",
+      title: "付近の店舗一覧",
     }
   },
   props: {
