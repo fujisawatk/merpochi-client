@@ -5,7 +5,7 @@
     <nb-tabs>
       <nb-tab :heading="getDetailsTab()">
         <scroll-view class="detail-card">
-          <nb-card-item class="card-top">
+          <nb-card-item>
               <image
                 v-if="img != ''"
                 :source="{uri: img}"
@@ -18,7 +18,7 @@
               />
           </nb-card-item>
 
-          <nb-list class="card-body">
+          <nb-list>
             <nb-separator class="card-index">
               <nb-text class="index-title">店舗情報</nb-text>
             </nb-separator>
@@ -37,22 +37,60 @@
               <nb-text class="card-title">平均予算：</nb-text>
               <nb-text class="card-text">{{ budget }}円</nb-text>
             </nb-item>
+
+            <nb-item class="fc-info">
+              <nb-left class="fc-left">
+                <nb-button transparent class="fc-icons">
+                  <nb-icon class="fc-icon" name="thumbs-up"></nb-icon>
+                  <nb-text class="fc-count" :style="{paddingLeft:4}">9</nb-text>
+                </nb-button>
+                <nb-button transparent class="fc-icons">
+                  <nb-icon class="fc-icon" name="chatbubbles"></nb-icon>
+                  <nb-text class="fc-count" :style="{paddingLeft:4}">18</nb-text>
+                </nb-button>
+              </nb-left>
+              <nb-right />
+            </nb-item>
           </nb-list>
 
-          <nb-form>
-            <nb-text class="comment-title">コメント</nb-text>
-            <nb-textarea :rowSpan="5" bordered placeholder="コメントを入力してください" />
-          </nb-form>
+          
+
+          <nb-list-item :style="{paddingRight:14}" transparent no-shadow avatar>
+            <nb-left>
+              <nb-thumbnail small :source="require('../../assets/icon.png')"/>
+            </nb-left>
+            <nb-body>
+              <nb-text>miku</nb-Text>
+              <nb-form :style="{width:'100%',marginTop:8}">
+                <nb-textarea :rowSpan="3" :style="{paddingTop:8}" bordered placeholder="コメント..." />
+                  <nb-button :style="{width:60,marginTop: 9}" small>
+                    <nb-text>追加</nb-text>
+                  </nb-button>
+              </nb-form>
+            </nb-body>
+          </nb-list-item>
+          <nb-list-item :style="{paddingRight:14, paddingBottom:100}" avatar>
+            <nb-left>
+              <nb-thumbnail small :source="require('../../assets/icon.png')"/>
+            </nb-left>
+            <nb-body>
+              <nb-text>miku</nb-Text>
+              <nb-text note>美味しかったです！このお店おすすめ！！</nb-Text>
+            </nb-body>
+            <nb-right>
+              <nb-text note>2020/07/09</nb-text>
+            </nb-right>
+          </nb-list-item>
         </scroll-view>
 
         <view class="detail-footer">
           <nb-button warning class="like-button">
             <nb-icon active type="AntDesign" name="like1" />
-            <nb-text>いいね</nb-text>
+            <nb-text>お気に入り</nb-text>
           </nb-button>
-          <nb-button warning class="like-button">
+          <nb-button warning class="like-button" :on-press="openLink">
             <nb-icon active type="Entypo" name="phone" />
-            <nb-text>詳細</nb-text>
+            <nb-text>予約</nb-text>
           </nb-button>
         </view>    
       </nb-tab>
@@ -78,7 +116,7 @@
 </template>
 
 <script>
-import { ScrollView } from 'react-native'
+import { ScrollView, Linking } from 'react-native'
 import React from "react"
 import { TabHeading, Text } from "native-base"
 import MapView from 'react-native-maps'
@@ -104,7 +142,8 @@ export default {
         longitude: 0,
         latitudeDelta: 0.003,
         longitudeDelta: 0.003
-      }
+      },
+      url: "",
     }
   },
   components: {
@@ -130,6 +169,13 @@ export default {
           <Text style={{color:'#444444', fontSize:13}}>マップ</Text>
         </TabHeading>
       )
+    },
+    openLink: function() {
+      Linking
+        .openURL(this.url)
+        .catch(
+          err => console.error('URLを開けませんでした。', err)
+        )
     }
   },
   created () {
@@ -144,6 +190,7 @@ export default {
     this.marker.coordinate.longitude = Number(shop.longitude)
     this.coordinates.latitude = Number(store.state.shop.latitude)
     this.coordinates.longitude = Number(store.state.shop.longitude)
+    this.url = shop.url
   }
 }
 </script>
@@ -154,28 +201,21 @@ export default {
 }
 .detail-card {
   padding: 10;
-  overflow: scroll;
-}
-.card-top {
-  height: 350;
 }
 .card-image {
-  height: 100%;
+  height: 200;
   width: 100%;
 }
-.card-body {
-  height: 250;
-}
 .card-index {
-  height: 25%;
+  max-height: 50px;
   align-items: center;
 }
 .index-title {
   font-size: 15;
 }
 .card-info {
-  height: 25%;
-  flex-direction: row;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .card-title {
   flex: 1;
@@ -188,12 +228,29 @@ export default {
   margin-left: 15;
   font-size: 15;
 }
-.comment-title {
-  padding-top: 15px;
+.fc-info {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.fc-left {
+  flex: 1;
+  flex-direction: row;
+}
+.fc-icons {
+  flex: 1;
+  position: relative;
+}
+.fc-icon {
+  color: #FFCC33;
+}
+.fc-count {
+  position: absolute;
+  left: 40;
+  color: #444;
 }
 .detail-footer {
   flex-direction: row;
-  background-color: #DDDDDD	;
+  background-color: #DDDDDD;
   position: absolute;
   bottom: 0;
   padding: 10px;
