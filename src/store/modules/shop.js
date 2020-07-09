@@ -27,7 +27,6 @@ export default {
     },
     setShop (state, data) {
       state.shops = []
-      // mapでindexを取得し、indexが同じコメント数の値を取得,hashに追加する
       data.rest.map(function( value, index ) {
         const hash = {
           code: value.id,
@@ -39,7 +38,8 @@ export default {
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,
-          commentsCount: state.commentsCount[index]
+          commentsCount: state.commentsCount[index].count,
+          shopId: state.commentsCount[index].id
         }
         state.shops.push(hash)
       })
