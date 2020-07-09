@@ -82,7 +82,6 @@ export default {
     },
     // 店舗IDをAPI側にリクエスト → 各店舗のコメント数を期待
     async getCommentsCount ({commit}, shopCodes) {
-      console.log(shopCodes)
       return axios.post('http://192.168.100.100:8000/shops', shopCodes)
       .then(res => {
         commit('setCommentsCount', res.data)

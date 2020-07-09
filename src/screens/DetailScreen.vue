@@ -46,7 +46,7 @@
                 </nb-button>
                 <nb-button transparent class="fc-icons">
                   <nb-icon class="fc-icon" name="chatbubbles"></nb-icon>
-                  <nb-text class="fc-count" :style="{paddingLeft:4}">18</nb-text>
+                  <nb-text class="fc-count" :style="{paddingLeft:4}">{{ comments.length }}</nb-text>
                 </nb-button>
               </nb-left>
               <nb-right />
@@ -69,13 +69,18 @@
               </nb-form>
             </nb-body>
           </nb-list-item>
-          <nb-list-item :style="{paddingRight:14, paddingBottom:100}" avatar>
+          <nb-list-item
+            :style="{paddingRight:14, paddingBottom:100}"
+            avatar
+            v-for="comment in comments"
+            :key="comment.id"
+          >
             <nb-left>
               <nb-thumbnail small :source="require('../../assets/icon.png')"/>
             </nb-left>
             <nb-body>
               <nb-text>miku</nb-Text>
-              <nb-text note>美味しかったです！このお店おすすめ！！</nb-Text>
+              <nb-text note>{{ comment.text }}</nb-Text>
             </nb-body>
             <nb-right>
               <nb-text note>2020/07/09</nb-text>
@@ -144,6 +149,7 @@ export default {
         longitudeDelta: 0.003
       },
       url: "",
+      shopId: 0
     }
   },
   components: {
@@ -191,7 +197,19 @@ export default {
     this.coordinates.latitude = Number(store.state.shop.latitude)
     this.coordinates.longitude = Number(store.state.shop.longitude)
     this.url = shop.url
-  }
+    this.shopId = shop.shopId
+    // 店舗IDがAPIで登録されている場合、コメントを取得。
+    if (this.shopId != 0) {
+      store.dispatch('comment/getComments', this.shopId)
+    }else{
+      store.dispatch('comment/delComments')
+    }
+  },
+  computed: {
+    comments() {
+      return store.state.comment.comments
+    }
+  },
 }
 </script>
 
