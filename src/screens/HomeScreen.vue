@@ -2,6 +2,7 @@
   <nb-container class="home-container">
 
     <header
+      root
       :screen="title"
       :navigation="navigation"
     />

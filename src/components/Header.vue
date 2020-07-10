@@ -1,6 +1,14 @@
 <template>
   <nb-header class="header">
-    <nb-left class="header-left"/>
+    <nb-left class="header-left">
+      <nb-button
+        v-if="!root"
+        :on-press="goBack"
+        transparent
+      >
+        <nb-icon name="arrow-back" />
+      </nb-button>
+    </nb-left>
       <nb-body class="header-body">
         <nb-title class="header-title">{{ screen }}</nb-title>
       </nb-body>
@@ -34,7 +42,10 @@ export default {
     },
     navigation: {
       type: Object,
-    }
+    },
+    root: {
+      type: Boolean
+    },
   },
   computed: {
     optionCancelIndex () {
@@ -81,6 +92,9 @@ export default {
     pushMarker () {
      store.dispatch("shop/getShops")
     },
+    goBack () {
+      this.navigation.goBack()
+    }
   }
 }
 </script>

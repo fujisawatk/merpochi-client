@@ -2,6 +2,7 @@
   <nb-container class="search-container">
 
     <header
+      root
       :screen="title"
       :navigation="navigation"
     />

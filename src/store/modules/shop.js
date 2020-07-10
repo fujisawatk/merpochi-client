@@ -27,7 +27,6 @@ export default {
     },
     setShop (state, data) {
       state.shops = []
-      // mapでindexを取得し、indexが同じコメント数の値を取得,hashに追加する
       data.rest.map(function( value, index ) {
         const hash = {
           code: value.id,
@@ -39,7 +38,8 @@ export default {
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,
-          commentsCount: state.commentsCount[index]
+          commentsCount: state.commentsCount[index].count,
+          shopId: state.commentsCount[index].id
         }
         state.shops.push(hash)
       })
@@ -82,10 +82,19 @@ export default {
     },
     // 店舗IDをAPI側にリクエスト → 各店舗のコメント数を期待
     async getCommentsCount ({commit}, shopCodes) {
-      console.log(shopCodes)
       return axios.post('http://192.168.100.100:8000/shops', shopCodes)
       .then(res => {
         commit('setCommentsCount', res.data)
+      })
+    },
+    // 店舗IDを新規登録（初コメor初お気に入り時）
+    async saveShop ({commit}, shopCode) {
+      const shopData = {
+        code: shopCode
+      }
+      return axios.post('http://192.168.100.100:8000/shops/register', shopData)
+      .then(res => {
+        commit('comment/setCommentShopId', res.data.id, { root: true })
       })
     }
   }

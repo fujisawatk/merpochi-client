@@ -1,6 +1,10 @@
 <template>
   <nb-container class="mypage-container">
-    <header :screen="title" :navigation="navigation" />
+    <header
+      root
+      :screen="title"
+      :navigation="navigation"
+    />
 
     <nb-tabs>
       <nb-tab :heading="getAccountTab()">
