@@ -86,6 +86,16 @@ export default {
       .then(res => {
         commit('setCommentsCount', res.data)
       })
+    },
+    // 店舗IDを新規登録（初コメor初お気に入り時）
+    async saveShop ({commit}, shopCode) {
+      const shopData = {
+        code: shopCode
+      }
+      return axios.post('http://192.168.100.100:8000/shops/register', shopData)
+      .then(res => {
+        commit('comment/setCommentShopId', res.data.id, { root: true })
+      })
     }
   }
 }

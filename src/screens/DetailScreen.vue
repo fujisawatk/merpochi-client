@@ -62,8 +62,18 @@
             <nb-body>
               <nb-text>miku</nb-Text>
               <nb-form :style="{width:'100%',marginTop:8}">
-                <nb-textarea :rowSpan="3" :style="{paddingTop:8}" bordered placeholder="コメント..." />
-                  <nb-button :style="{width:60,marginTop: 9}" small>
+                <nb-textarea
+                  :rowSpan="3"
+                  :style="{paddingTop:8}"
+                  bordered
+                  placeholder="コメント..."
+                  v-model="newComment"
+                />
+                  <nb-button
+                    :style="{width:60,marginTop: 9}"
+                    small
+                    :on-press="addComment"
+                  >
                     <nb-text>追加</nb-text>
                   </nb-button>
               </nb-form>
@@ -149,7 +159,9 @@ export default {
         longitudeDelta: 0.003
       },
       url: "",
-      shopId: 0
+      shopId: 0,
+      newComment: "",
+      code: ""
     }
   },
   components: {
@@ -176,12 +188,27 @@ export default {
         </TabHeading>
       )
     },
-    openLink: function() {
+    openLink() {
       Linking
         .openURL(this.url)
         .catch(
           err => console.error('URLを開けませんでした。', err)
         )
+    },
+    addComment() {
+      const data = {
+        text: this.newComment,
+        shop_id: this.shopId,
+        code: this.code
+      } 
+      store.dispatch("comment/saveComment", data)
+        .then(res => {
+          this.shopId = store.state.comment.newCommentShopId
+          this.newComment = ""
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
     }
   },
   created () {
@@ -198,6 +225,7 @@ export default {
     this.coordinates.longitude = Number(store.state.shop.longitude)
     this.url = shop.url
     this.shopId = shop.shopId
+    this.code = code
     // 店舗IDがAPIで登録されている場合、コメントを取得。
     if (this.shopId != 0) {
       store.dispatch('comment/getComments', this.shopId)
