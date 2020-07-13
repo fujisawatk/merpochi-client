@@ -7,6 +7,7 @@
 <script>
 import Vue from "vue-native-core"
 import { VueNativeBase } from "native-base"
+import store from './store'
 
 import Navigator from "./navigator"
 
@@ -26,6 +27,10 @@ export default {
   components: {
     Navigator
   },
+  created () {
+    store.dispatch('auth/verifyUser')
+      .catch(() => {})
+  }
 };
 </script>
 
