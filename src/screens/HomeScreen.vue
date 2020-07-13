@@ -48,11 +48,11 @@ export default {
   },
   methods: {
     changeDetail(code) {
-      // if (store.state.auth.isAuthResolved == true) {
+      if (store.state.auth.isAuthResolved == true) {
         this.navigation.navigate('Detail', { code })
-      // } else {
-      //   this.navigation.navigate('Signin')
-      // }
+      } else {
+        this.navigation.navigate('Signin')
+      }
     }
   }
 }

@@ -53,14 +53,21 @@
             </nb-item>
           </nb-list>
 
-          
-
-          <nb-list-item :style="{paddingRight:14}" transparent no-shadow avatar>
+          <nb-list-item
+            v-if="isAuth"
+            :style="{paddingRight:14}"
+            transparent
+            no-shadow
+            avatar
+          >
             <nb-left>
-              <nb-thumbnail small :source="require('../../assets/icon.png')"/>
+              <nb-thumbnail
+                small
+                :source="require('../../assets/icon.png')"
+              />
             </nb-left>
             <nb-body>
-              <nb-text>miku</nb-Text>
+              <nb-text>{{ currentUser.nickname }}</nb-Text>
               <nb-form :style="{width:'100%',marginTop:8}">
                 <nb-textarea
                   :rowSpan="3"
@@ -236,6 +243,12 @@ export default {
   computed: {
     comments() {
       return store.state.comment.comments
+    },
+    currentUser() {
+      return store.state.auth.user
+    },
+    isAuth() {
+      return store.state.auth.isAuthResolved
     }
   },
 }
