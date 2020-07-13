@@ -7,7 +7,6 @@ import service from '../../services/axios'
 const isTokenValid = (token) => {
   if (token) {
     const decodedToken = jwtDecode(token)
-    console.log((decodedToken.exp * 1000) > new Date().getTime())
     return decodedToken && (decodedToken.exp * 1000) > new Date().getTime()
   }
   return false
@@ -64,7 +63,6 @@ export default {
       if (jwt && isTokenValid(jwt)) {
         const user = await dispatch('fetchCurrentUser')
         commit('resolveAuth')
-        console.log(user)
         return user ? Promise.resolve(jwt) : Promise.reject('ログインユーザーを取得できません')
       } else {
         return Promise.reject('トークンの有効期限が切れています')
