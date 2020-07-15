@@ -96,7 +96,7 @@
               <nb-thumbnail small :source="require('../../assets/icon.png')"/>
             </nb-left>
             <nb-body>
-              <nb-text>miku</nb-Text>
+              <nb-text>{{ comment.user.nickname }}</nb-Text>
               <nb-text note>{{ comment.text }}</nb-Text>
             </nb-body>
             <nb-right>
