@@ -206,7 +206,8 @@ export default {
       const data = {
         text: this.newComment,
         shop_id: this.shopId,
-        code: this.code
+        code: this.code,
+        user_id: store.state.auth.user.id
       } 
       store.dispatch("comment/saveComment", data)
         .then(res => {
