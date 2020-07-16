@@ -96,7 +96,7 @@
               <nb-thumbnail small :source="require('../../assets/icon.png')"/>
             </nb-left>
             <nb-body>
-              <nb-text>miku</nb-Text>
+              <nb-text>{{ comment.user.nickname }}</nb-Text>
               <nb-text note>{{ comment.text }}</nb-Text>
             </nb-body>
             <nb-right>
@@ -206,7 +206,8 @@ export default {
       const data = {
         text: this.newComment,
         shop_id: this.shopId,
-        code: this.code
+        code: this.code,
+        user_id: store.state.auth.user.id
       } 
       store.dispatch("comment/saveComment", data)
         .then(res => {
