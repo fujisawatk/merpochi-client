@@ -10,6 +10,7 @@ import { VueNativeBase } from "native-base"
 import store from './store'
 
 import Navigator from "./navigator"
+import Vuelidate from 'vuelidate'
 
 import Header from "./components/Header.vue"
 import Item from "./components/Item.vue"
@@ -17,6 +18,7 @@ import Footer from "./components/Footer.vue"
 
 // プラグインの登録
 Vue.use(VueNativeBase)
+Vue.use(Vuelidate)
 
 // コンポーネントの登録
 Vue.component("Header", Header)
