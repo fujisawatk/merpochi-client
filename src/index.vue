@@ -15,6 +15,7 @@ import Vuelidate from 'vuelidate'
 import Header from "./components/Header.vue"
 import Item from "./components/Item.vue"
 import Footer from "./components/Footer.vue"
+import InputWithError from './components/InputWithError.vue'
 
 // プラグインの登録
 Vue.use(VueNativeBase)
@@ -24,6 +25,7 @@ Vue.use(Vuelidate)
 Vue.component("Header", Header)
 Vue.component("Item", Item)
 Vue.component("Footer", Footer)
+Vue.component('InputWithError', InputWithError)
 
 export default {
   components: {
