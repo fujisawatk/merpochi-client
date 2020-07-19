@@ -26,10 +26,10 @@ export default {
 
 <style>
 .err-area {
-  height: 7%;
+  height: 25px;
 }
 .error {
   color: red;
-  font-size: 12;
+  font-size: 14;
 }
 </style>

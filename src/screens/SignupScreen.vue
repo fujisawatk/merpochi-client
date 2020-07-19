@@ -84,8 +84,6 @@
           <nb-text>戻る</nb-text>
         </nb-button>
       </view>
-        
-      <!-- <view class="form-bottom" /> -->
 
   </nb-container>
 </template>
@@ -169,7 +167,7 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  height: 25%;
+  height: 30%;
 }
 .logo-image {
   width: 120;
@@ -204,5 +202,6 @@ export default {
   flex: 1;
   justify-content: center;
   width: 100%;              /* iOS用 */
+  max-height: 50px;
 }
 </style>
