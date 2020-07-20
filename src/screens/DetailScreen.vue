@@ -76,18 +76,24 @@
                   placeholder="コメント..."
                   v-model="newComment"
                 />
-                  <nb-button
-                    :style="{width:60,marginTop: 9}"
-                    small
-                    :on-press="addComment"
-                  >
-                    <nb-text>追加</nb-text>
-                  </nb-button>
+                <input-with-error
+                  :error="$v.newComment.$dirty && (!$v.newComment.required || !$v.newComment.minLength || !$v.newComment.maxLength)"
+                  message="コメントは1〜255文字で入力してください"
+                />
+                <nb-button
+                  :style="{width:60}"
+                  small
+                  :on-press="addComment"
+                  auto-capitalize="none"
+                  :on-blur="() => $v.newComment.$touch()"
+                >
+                  <nb-text>追加</nb-text>
+                </nb-button>
               </nb-form>
             </nb-body>
           </nb-list-item>
           <nb-list-item
-            :style="{paddingRight:14, paddingBottom:100}"
+            :style="{paddingRight:14}"
             avatar
             v-for="comment in comments"
             :key="comment.id"
@@ -103,6 +109,9 @@
               <nb-text note>2020/07/09</nb-text>
             </nb-right>
           </nb-list-item>
+
+          <nb-list-item class="dummy-area" />
+
         </scroll-view>
 
         <view class="detail-footer">
@@ -143,6 +152,11 @@ import React from "react"
 import { TabHeading, Text } from "native-base"
 import MapView from 'react-native-maps'
 import store from '../store'
+import {
+  required,
+  minLength,
+  maxLength
+} from 'vuelidate/lib/validators'
 
 export default {
   data: function() {
@@ -169,6 +183,13 @@ export default {
       shopId: 0,
       newComment: "",
       code: ""
+    }
+  },
+  validations: {
+    newComment: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(255)
     }
   },
   components: {
@@ -203,20 +224,25 @@ export default {
         )
     },
     addComment() {
-      const data = {
-        text: this.newComment,
-        shop_id: this.shopId,
-        code: this.code,
-        user_id: store.state.auth.user.id
-      } 
-      store.dispatch("comment/saveComment", data)
-        .then(res => {
-          this.shopId = store.state.comment.newCommentShopId
-          this.newComment = ""
-        })
-        .catch(() => {
-          console.log("保存に失敗しました")
-        })
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        const data = {
+          text: this.newComment,
+          shop_id: this.shopId,
+          code: this.code,
+          user_id: store.state.auth.user.id
+        } 
+        store.dispatch("comment/saveComment", data)
+          .then(res => {
+            this.shopId = store.state.comment.newCommentShopId
+            this.newComment = ""
+            // $dirtyをfalseに設定（コメント入力欄アクティブリセット）
+            this.$v.newComment.$reset()
+          })
+          .catch(() => {
+            console.log("保存に失敗しました")
+          })
+      }
     }
   },
   created () {
@@ -322,5 +348,8 @@ export default {
 }
 .map-container {
   flex: 1;
+}
+.dummy-area {
+  height: 100px;
 }
 </style>
