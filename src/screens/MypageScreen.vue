@@ -14,26 +14,26 @@
                 <nb-thumbnail square :source="require('../../assets/icon.png')"/>
             </nb-left>
             <nb-body>
-                <nb-text class="nickname">{{ user[0].nickname }}</nb-Text>
+                <nb-text class="nickname">{{ userNickname }}</nb-Text>
             </nb-body>
           </nb-list-item>
 
           <nb-label class="email-section">
               <nb-icon active class="icon" name="person"/>
-              <nb-text class="email">&nbsp;&nbsp; {{ user[0].email }}</nb-text>
+              <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
           </nb-label>
           <nb-label class="password-section">
               <nb-icon active class="icon" name="person"/>
-              <nb-text class="password">&nbsp;&nbsp; {{ user[0].password }}</nb-text>
+              <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
           </nb-label>
           <nb-label class="favorite-section">
             <nb-label>
               <nb-icon active class="icon" name="heart"/>
-              <nb-text class="favorite">&nbsp;&nbsp; {{ user[0].favorite }} &nbsp;&nbsp;</nb-text>
+              <nb-text class="favorite">&nbsp;&nbsp; 0 &nbsp;&nbsp;</nb-text>
             </nb-label>
             <nb-label>
               <nb-icon active class="icon" name="chatboxes"/>
-              <nb-text class="favorite">&nbsp;&nbsp; {{ user[0].comment }}</nb-text>
+              <nb-text class="favorite">&nbsp; {{ items.length }} &nbsp; </nb-text>
             </nb-label>
           </nb-label>
           <nb-button :style="{marginTop:10}" small block dark>
@@ -46,15 +46,19 @@
       </nb-tab>
 
       <nb-tab :heading="getFavoritedTab()">
-        <view v-for="item in items" :key="item.id">
-          <item :item="item" />
-        </view>
+        <nb-content>
+          <view v-for="item in items" :key="item.id">
+            <item :item="item" />
+          </view>
+        </nb-content>
       </nb-tab>
 
       <nb-tab :heading="getCommentedTab()">
-        <view v-for="item in items" :key="item.id">
-          <item :item="item" />
-        </view>
+        <nb-content>
+          <view v-for="item in items" :key="item.id">
+            <item mypage :item="item" />
+          </view>
+        </nb-content>
       </nb-tab>
     </nb-tabs>
 
@@ -68,6 +72,8 @@
 import store from "../store"
 import React from "react"
 import { TabHeading, Text } from "native-base"
+import axios from 'axios'
+import service from '../services/axios'
 
 export default {
   data: function() {
@@ -76,10 +82,7 @@ export default {
       user: [
         {id: 0, nickname: "miku", email: "miku@email.com", password: "********", favorite: 1, comment: 1}
       ],
-      items: [
-        { id: 0, name: "鳥貴族", category: "焼鳥", like: 3 },
-        { id: 1, name: "笑笑", category: "洋風居酒屋", like: 2 }
-      ]
+      items: []
     };
   },
   props: {
@@ -109,6 +112,23 @@ export default {
         </TabHeading>
       )
     }
+  },
+  computed: {
+    userNickname() {
+      return store.state.auth.user.nickname
+    },
+    userEmail() {
+      return store.state.auth.user.email
+    },
+  },
+  created () {
+    return axios.get('http://192.168.100.100:8000/users/' + String(store.state.auth.user.id) + '/commentedshops')
+    .then(res => {
+        this.items = res.data
+        // 店舗IDのみだと、取得した店舗の数だけ外部APIに通信しないといけない
+        // DBにはリストで表示するデータも保管するようにする
+        // 画像、コメント数
+      })
   }
 };
 </script>

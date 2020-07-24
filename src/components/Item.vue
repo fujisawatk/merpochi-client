@@ -27,7 +27,10 @@
         </nb-text>
     </nb-body>
 
-    <nb-right class="item-right">
+    <nb-right
+      v-if="!mypage"
+      class="item-right"
+    >
       <nb-button
         transparent
         class="list-icon"
@@ -55,6 +58,11 @@
       </nb-button>
     </nb-right>
 
+    <nb-right
+      v-else
+      class="item-right"
+    >
+
   </nb-list-item>
 </template>
 
@@ -66,7 +74,10 @@ export default {
       type: Object
     },
     changeDetail: Function,
-    selCode: String
+    selCode: String,
+    mypage: {
+      type: Boolean
+    },
   },
   methods: {
     itemsPress: function() {
