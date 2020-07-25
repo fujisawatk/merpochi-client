@@ -54,6 +54,9 @@ export default {
         this.navigation.navigate('Signin')
       }
     }
+  },
+  created () {
+    store.dispatch("shop/getShops")
   }
 }
 </script>

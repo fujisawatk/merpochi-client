@@ -64,6 +64,7 @@ export default {
             this.errorMessage = "Permission to access location was denied"
           } else if (status.granted) {
             Location.getCurrentPositionAsync({}).then(location => {
+              console.log(location)
               commit('setGeolocation', location)
             })
           }
