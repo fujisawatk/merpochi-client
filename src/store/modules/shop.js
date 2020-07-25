@@ -11,12 +11,16 @@ export default {
     gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
     keyid: "980bec359baeb39b9866300dd9a38675",                // ぐるなびAPIのキーID
     shops: [],                                                // 取得した店舗情報
-    commentsCount: ""                                         // 各店舗のコメント数
+    commentsCount: "",                                        // 各店舗のコメント数
+    commentedShops: ""                                        // ログインユーザーがコメントした店舗情報
   },
   getters: {
     // 指定IDの店舗情報をstate.restsから取得
     getShop: (state) => (code) => {
       return state.shops.find(shop => shop.code === code)
+    },
+    getCommentedShop: (state) => (code) => {
+      return state.commentedShops.find(shop => shop.code === code)
     }
   }, 
   mutations: {
@@ -46,6 +50,9 @@ export default {
     },
     setCommentsCount (state, data) {
       state.commentsCount = data
+    },
+    setCommentedShops (state, data) {
+      state.commentedShops = data
     }
   },
   actions: {
@@ -88,13 +95,25 @@ export default {
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
-    async saveShop ({commit}, shopCode) {
+    async saveShop ({commit}, data) {
       const shopData = {
-        code: shopCode
+        code: data.code,
+        name: data.name,
+        category: data.category,
+        img: data.img,
       }
       return axios.post('http://192.168.100.100:8000/shops/register', shopData)
       .then(res => {
         commit('comment/setCommentShopId', res.data.id, { root: true })
+      })
+    },
+    getCommentedShops ({commit}, uid) {
+      return axios.get('http://192.168.100.100:8000/users/' + String(uid) + '/commentedshops')
+    .then(res => {
+        commit('setCommentedShops',res.data)
+        // 店舗IDのみだと、取得した店舗の数だけ外部APIに通信しないといけない
+        // DBにはリストで表示するデータも保管するようにする
+        // 画像、コメント数
       })
     }
   }

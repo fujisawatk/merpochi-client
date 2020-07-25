@@ -157,11 +157,14 @@ import {
   minLength,
   maxLength
 } from 'vuelidate/lib/validators'
+import axios from 'axios'
+import service from '../services/axios'
 
 export default {
   data: function() {
     return {
       name: "",
+      category: "",
       opentime: "",
       budget: "",
       img: "",
@@ -229,8 +232,11 @@ export default {
         const data = {
           text: this.newComment,
           shop_id: this.shopId,
+          user_id: store.state.auth.user.id,
           code: this.code,
-          user_id: store.state.auth.user.id
+          name: this.name,
+          category: this.category,
+          img:     this.img,
         } 
         store.dispatch("comment/saveComment", data)
           .then(res => {
@@ -245,21 +251,51 @@ export default {
       }
     }
   },
-  created () {
+  async created () {
     const code = this.navigation.getParam('code')
+    // 外部APIで取得したデータ値から検索
     const shop = store.getters['shop/getShop'](code)
-    this.name = shop.name
-    this.opentime = shop.opentime
-    this.budget = shop.budget
-    this.img = shop.img
-    this.marker.description = shop.category
-    this.marker.coordinate.latitude = Number(shop.latitude)
-    this.marker.coordinate.longitude = Number(shop.longitude)
-    this.coordinates.latitude = Number(store.state.shop.latitude)
-    this.coordinates.longitude = Number(store.state.shop.longitude)
-    this.url = shop.url
-    this.shopId = shop.shopId
-    this.code = code
+    // マイページでの呼び出し
+    if (shop == undefined) {
+      // DBの店舗ID取得用
+      const commentedShop = store.getters['shop/getCommentedShop'](code)
+      // マイページからの詳細ページアクセスは、外部APIで必要なデータを取得する必要がある。
+      const requestUrl = store.state.shop.gnaviApiUrl + "?keyid=" + store.state.shop.keyid + "&id=" + code
+      await axios
+        .get(requestUrl)
+        .then((res) => {
+          this.name = res.data.rest[0].name
+          this.category = res.data.rest[0].category
+          this.opentime = res.data.rest[0].opentime
+          this.budget = res.data.rest[0].budget
+          this.img = res.data.rest[0].image_url.shop_image1
+          this.marker.description = res.data.rest[0].category
+          this.marker.coordinate.latitude = Number(res.data.rest[0].latitude)
+          this.marker.coordinate.longitude = Number(res.data.rest[0].longitude)
+          this.coordinates.latitude = Number(store.state.shop.latitude)
+          this.coordinates.longitude = Number(store.state.shop.longitude)
+          this.url = res.data.rest[0].url
+          this.shopId = Number(commentedShop.id)
+          this.code = code
+        })
+        .catch(() => undefined)
+    // 既に取得してある店舗データの場合（付近店舗一覧画面）
+    }else{
+      this.name = shop.name
+      this.category = shop.category
+      this.opentime = shop.opentime
+      this.budget = shop.budget
+      this.img = shop.img
+      this.marker.description = shop.category
+      this.marker.coordinate.latitude = Number(shop.latitude)
+      this.marker.coordinate.longitude = Number(shop.longitude)
+      this.coordinates.latitude = Number(store.state.shop.latitude)
+      this.coordinates.longitude = Number(store.state.shop.longitude)
+      this.url = shop.url
+      this.shopId = shop.shopId
+      this.code = code
+    }
+    console.log(this.shopId)
     // 店舗IDがAPIで登録されている場合、コメントを取得。
     if (this.shopId != 0) {
       store.dispatch('comment/getComments', this.shopId)

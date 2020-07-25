@@ -56,7 +56,12 @@
       <nb-tab :heading="getCommentedTab()">
         <nb-content>
           <view v-for="item in items" :key="item.id">
-            <item mypage :item="item" />
+            <item
+              mypage
+              :item="item"
+              :sel-code="item.code"
+              :change-detail="changeDetail"
+            />
           </view>
         </nb-content>
       </nb-tab>
@@ -78,11 +83,7 @@ import service from '../services/axios'
 export default {
   data: function() {
     return {
-      title: "マイページ",
-      user: [
-        {id: 0, nickname: "miku", email: "miku@email.com", password: "********", favorite: 1, comment: 1}
-      ],
-      items: []
+      title: "マイページ"
     };
   },
   props: {
@@ -111,6 +112,9 @@ export default {
           <Text style={{color:'#444444', fontSize:13}}>コメントした店舗</Text>
         </TabHeading>
       )
+    },
+    changeDetail(code) {
+      return this.navigation.navigate('Detail', { code })
     }
   },
   computed: {
@@ -120,15 +124,12 @@ export default {
     userEmail() {
       return store.state.auth.user.email
     },
+    items() {
+      return store.state.shop.commentedShops
+    },
   },
   created () {
-    return axios.get('http://192.168.100.100:8000/users/' + String(store.state.auth.user.id) + '/commentedshops')
-    .then(res => {
-        this.items = res.data
-        // 店舗IDのみだと、取得した店舗の数だけ外部APIに通信しないといけない
-        // DBにはリストで表示するデータも保管するようにする
-        // 画像、コメント数
-      })
+    store.dispatch('shop/getCommentedShops', store.state.auth.user.id)
   }
 };
 </script>
