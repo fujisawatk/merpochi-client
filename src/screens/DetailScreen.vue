@@ -157,11 +157,14 @@ import {
   minLength,
   maxLength
 } from 'vuelidate/lib/validators'
+import axios from 'axios'
+import service from '../services/axios'
 
 export default {
   data: function() {
     return {
       name: "",
+      category: "",
       opentime: "",
       budget: "",
       img: "",
@@ -227,11 +230,22 @@ export default {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         const data = {
-          text: this.newComment,
-          shop_id: this.shopId,
-          code: this.code,
-          user_id: store.state.auth.user.id
-        } 
+          shopData: {
+            code: this.code,
+            name: this.name,
+            category: this.category,
+            opentime: this.opentime,
+            budget:   this.budget,
+            img:     this.img,
+            latitude: this.marker.coordinate.latitude,
+            longitude: this.marker.coordinate.longitude,
+          },
+          commentData: {
+            text: this.newComment,
+            shop_id: this.shopId,
+            user_id: store.state.auth.user.id,
+          }
+        }
         store.dispatch("comment/saveComment", data)
           .then(res => {
             this.shopId = store.state.comment.newCommentShopId
@@ -245,21 +259,43 @@ export default {
       }
     }
   },
-  created () {
+  async created () {
     const code = this.navigation.getParam('code')
+    // 付近にある店舗情報一覧ページの取得値から取得
     const shop = store.getters['shop/getShop'](code)
-    this.name = shop.name
-    this.opentime = shop.opentime
-    this.budget = shop.budget
-    this.img = shop.img
-    this.marker.description = shop.category
-    this.marker.coordinate.latitude = Number(shop.latitude)
-    this.marker.coordinate.longitude = Number(shop.longitude)
-    this.coordinates.latitude = Number(store.state.shop.latitude)
-    this.coordinates.longitude = Number(store.state.shop.longitude)
-    this.url = shop.url
-    this.shopId = shop.shopId
-    this.code = code
+    // 店舗情報が未取得だった場合
+    if (shop == undefined) {
+      // DBの店舗ID取得用
+      const commentedShop = store.getters['shop/getCommentedShop'](code)
+      this.name = commentedShop.name
+      this.category = commentedShop.category
+      this.opentime = commentedShop.opentime
+      this.budget = commentedShop.budget
+      this.img = commentedShop.img
+      this.marker.description = commentedShop.category
+      this.marker.coordinate.latitude = commentedShop.latitude
+      this.marker.coordinate.longitude = commentedShop.longitude
+      this.coordinates.latitude = Number(store.state.shop.latitude)
+      this.coordinates.longitude = Number(store.state.shop.longitude)
+      this.url = commentedShop.url
+      this.shopId = commentedShop.id
+      this.code = code
+    // 既に取得してある店舗データの場合（付近店舗一覧画面）
+    }else{
+      this.name = shop.name
+      this.category = shop.category
+      this.opentime = shop.opentime
+      this.budget = Number(shop.budget)
+      this.img = shop.img
+      this.marker.description = shop.category
+      this.marker.coordinate.latitude = Number(shop.latitude)
+      this.marker.coordinate.longitude = Number(shop.longitude)
+      this.coordinates.latitude = Number(store.state.shop.latitude)
+      this.coordinates.longitude = Number(store.state.shop.longitude)
+      this.url = shop.url
+      this.shopId = shop.shopId
+      this.code = code
+    }
     // 店舗IDがAPIで登録されている場合、コメントを取得。
     if (this.shopId != 0) {
       store.dispatch('comment/getComments', this.shopId)

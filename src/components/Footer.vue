@@ -9,7 +9,9 @@
         <nb-icon name="bicycle"/>
         <nb-text>Search</nb-text>
       </nb-button>
-      <nb-button :active="inMypage" :on-press="goMypage">
+      
+      <!-- ログイン状態ならマイページタブを表示 -->
+      <nb-button v-if="isAuth" :active="inMypage" :on-press="goMypage">
         <nb-icon name="contact"/>
         <nb-text>Mypage</nb-text>
       </nb-button>
@@ -35,6 +37,9 @@ export default {
     },
     inMypage() {
       return store.state.auth.mypageTab
+    },
+    isAuth() {
+      return store.state.auth.isAuthResolved
     }
   },
   methods: {
