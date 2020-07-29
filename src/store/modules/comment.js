@@ -37,16 +37,11 @@ export default {
     // コメント保存
     async saveComment ({commit, dispatch, state}, data) {
       // 店舗が未登録なら、先に店舗を登録する
-      if (data.shop_id == 0) {
-        await dispatch('shop/saveShop', data, { root: true })
-        data['shop_id'] = state.newCommentShopId
+      if (data.commentData.shop_id == 0) {
+        await dispatch('shop/saveShop', data.shopData, { root: true })
+        data.commentData['shop_id'] = state.newCommentShopId
       }
-      const commentData = {
-        text: data.text,
-        shop_id: data.shop_id,
-        user_id: data.user_id,
-      }
-      return axios.post('http://192.168.100.100:8000/comments', commentData)
+      return axios.post('http://192.168.100.100:8000/comments', data.commentData)
       .then(res => {
         const newComment = res.data
         // 処理が成功したら、stateにコメント追加。

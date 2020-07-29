@@ -230,14 +230,22 @@ export default {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         const data = {
-          text: this.newComment,
-          shop_id: this.shopId,
-          user_id: store.state.auth.user.id,
-          code: this.code,
-          name: this.name,
-          category: this.category,
-          img:     this.img,
-        } 
+          shopData: {
+            code: this.code,
+            name: this.name,
+            category: this.category,
+            opentime: this.opentime,
+            budget:   this.budget,
+            img:     this.img,
+            latitude: this.marker.coordinate.latitude,
+            longitude: this.marker.coordinate.longitude,
+          },
+          commentData: {
+            text: this.newComment,
+            shop_id: this.shopId,
+            user_id: store.state.auth.user.id,
+          }
+        }
         store.dispatch("comment/saveComment", data)
           .then(res => {
             this.shopId = store.state.comment.newCommentShopId
@@ -253,38 +261,31 @@ export default {
   },
   async created () {
     const code = this.navigation.getParam('code')
-    // 外部APIで取得したデータ値から検索
+    // 付近にある店舗情報一覧ページの取得値から取得
     const shop = store.getters['shop/getShop'](code)
-    // マイページでの呼び出し
+    // 店舗情報が未取得だった場合
     if (shop == undefined) {
       // DBの店舗ID取得用
       const commentedShop = store.getters['shop/getCommentedShop'](code)
-      // マイページからの詳細ページアクセスは、外部APIで必要なデータを取得する必要がある。
-      const requestUrl = store.state.shop.gnaviApiUrl + "?keyid=" + store.state.shop.keyid + "&id=" + code
-      await axios
-        .get(requestUrl)
-        .then((res) => {
-          this.name = res.data.rest[0].name
-          this.category = res.data.rest[0].category
-          this.opentime = res.data.rest[0].opentime
-          this.budget = res.data.rest[0].budget
-          this.img = res.data.rest[0].image_url.shop_image1
-          this.marker.description = res.data.rest[0].category
-          this.marker.coordinate.latitude = Number(res.data.rest[0].latitude)
-          this.marker.coordinate.longitude = Number(res.data.rest[0].longitude)
-          this.coordinates.latitude = Number(store.state.shop.latitude)
-          this.coordinates.longitude = Number(store.state.shop.longitude)
-          this.url = res.data.rest[0].url
-          this.shopId = Number(commentedShop.id)
-          this.code = code
-        })
-        .catch(() => undefined)
+      this.name = commentedShop.name
+      this.category = commentedShop.category
+      this.opentime = commentedShop.opentime
+      this.budget = commentedShop.budget
+      this.img = commentedShop.img
+      this.marker.description = commentedShop.category
+      this.marker.coordinate.latitude = commentedShop.latitude
+      this.marker.coordinate.longitude = commentedShop.longitude
+      this.coordinates.latitude = Number(store.state.shop.latitude)
+      this.coordinates.longitude = Number(store.state.shop.longitude)
+      this.url = commentedShop.url
+      this.shopId = commentedShop.id
+      this.code = code
     // 既に取得してある店舗データの場合（付近店舗一覧画面）
     }else{
       this.name = shop.name
       this.category = shop.category
       this.opentime = shop.opentime
-      this.budget = shop.budget
+      this.budget = Number(shop.budget)
       this.img = shop.img
       this.marker.description = shop.category
       this.marker.coordinate.latitude = Number(shop.latitude)
@@ -295,7 +296,6 @@ export default {
       this.shopId = shop.shopId
       this.code = code
     }
-    console.log(this.shopId)
     // 店舗IDがAPIで登録されている場合、コメントを取得。
     if (this.shopId != 0) {
       store.dispatch('comment/getComments', this.shopId)

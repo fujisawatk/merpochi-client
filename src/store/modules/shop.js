@@ -64,7 +64,6 @@ export default {
             this.errorMessage = "Permission to access location was denied"
           } else if (status.granted) {
             Location.getCurrentPositionAsync({}).then(location => {
-              console.log(location)
               commit('setGeolocation', location)
             })
           }
@@ -97,24 +96,16 @@ export default {
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
     async saveShop ({commit}, data) {
-      const shopData = {
-        code: data.code,
-        name: data.name,
-        category: data.category,
-        img: data.img,
-      }
-      return axios.post('http://192.168.100.100:8000/shops/register', shopData)
+      return axios.post('http://192.168.100.100:8000/shops/register', data)
       .then(res => {
         commit('comment/setCommentShopId', res.data.id, { root: true })
       })
     },
+    // ユーザーがコメントした店舗情報を取得
     getCommentedShops ({commit}, uid) {
       return axios.get('http://192.168.100.100:8000/users/' + String(uid) + '/commentedshops')
     .then(res => {
         commit('setCommentedShops',res.data)
-        // 店舗IDのみだと、取得した店舗の数だけ外部APIに通信しないといけない
-        // DBにはリストで表示するデータも保管するようにする
-        // 画像、コメント数
       })
     }
   }
