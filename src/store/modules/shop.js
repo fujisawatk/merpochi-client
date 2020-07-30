@@ -11,8 +11,8 @@ export default {
     gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
     keyid: "980bec359baeb39b9866300dd9a38675",                // ぐるなびAPIのキーID
     shops: [],                                                // 取得した店舗情報
-    commentsCount: "",                                        // 各店舗のコメント数
-    commentedShops: ""                                        // ログインユーザーがコメントした店舗情報
+    count: "",                                                // 各店舗のコメント数、いいね数
+    commentedShops: "",                                       // ログインユーザーがコメントした店舗情報
   },
   getters: {
     // 指定IDの店舗情報をstate.restsから取得
@@ -42,14 +42,15 @@ export default {
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,
-          commentsCount: state.commentsCount[index].count,
-          shopId: state.commentsCount[index].id
+          commentsCount: state.count[index].comments_count,
+          favoritesCount: state.count[index].favorites_count,
+          shopId: state.count[index].id
         }
         state.shops.push(hash)
       })
     },
-    setCommentsCount (state, data) {
-      state.commentsCount = data
+    setCommentsAndFavoritesCount (state, data) {
+      state.count = data
     },
     setCommentedShops (state, data) {
       state.commentedShops = data
@@ -82,16 +83,16 @@ export default {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getCommentsCount', shopCodes)
+          await dispatch('getCommentsAndFavoritesCount', shopCodes)
           commit('setShop', res.data)
         })
         .catch(() => undefined)
     },
-    // 店舗IDをAPI側にリクエスト → 各店舗のコメント数を期待
-    async getCommentsCount ({commit}, shopCodes) {
+    // 各店舗のコメント数、いいね数を取得
+    async getCommentsAndFavoritesCount ({commit}, shopCodes) {
       return axios.post('http://192.168.100.100:8000/shops', shopCodes)
       .then(res => {
-        commit('setCommentsCount', res.data)
+        commit('setCommentsAndFavoritesCount', res.data)
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
