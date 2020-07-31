@@ -41,7 +41,7 @@
           class="icon"
         />
         <nb-text class="icon-count">
-          +{{ item.commentsCount }}
+          +{{ item.favoritesCount }}
         </nb-text>
       </nb-button>
       <nb-button

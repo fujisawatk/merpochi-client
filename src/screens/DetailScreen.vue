@@ -42,7 +42,7 @@
               <nb-left class="fc-left">
                 <nb-button transparent class="fc-icons">
                   <nb-icon class="fc-icon" name="thumbs-up"></nb-icon>
-                  <nb-text class="fc-count" :style="{paddingLeft:4}">9</nb-text>
+                  <nb-text class="fc-count" :style="{paddingLeft:4}">{{ favorites.length }}</nb-text>
                 </nb-button>
                 <nb-button transparent class="fc-icons">
                   <nb-icon class="fc-icon" name="chatbubbles"></nb-icon>
@@ -185,7 +185,7 @@ export default {
       url: "",
       shopId: 0,
       newComment: "",
-      code: ""
+      code: "",
     }
   },
   validations: {
@@ -299,13 +299,18 @@ export default {
     // 店舗IDがAPIで登録されている場合、コメントを取得。
     if (this.shopId != 0) {
       store.dispatch('comment/getComments', this.shopId)
+      store.dispatch('favorite/getFavorites', this.shopId)
     }else{
       store.dispatch('comment/delComments')
+      store.dispatch('favorite/delFavorites')
     }
   },
   computed: {
     comments() {
       return store.state.comment.comments
+    },
+    favorites() {
+      return store.state.favorite.favorites
     },
     currentUser() {
       return store.state.auth.user
