@@ -25,7 +25,7 @@ export default {
     // 指定の店舗IDに紐付いたコメントを取得
     getComments ({commit}, shopId) {
       const strId = String(shopId)
-      return axios.get('http://192.168.100.100:8000/shops/' + strId)
+      return axios.get('http://192.168.100.100:8000/shops/' + strId + '/comments')
       .then(res => {
         commit('setComments', res.data)
       })
