@@ -4,7 +4,13 @@ export default {
   namespaced: true,
   state: {
     favorites: [],
+    favoriteUser: false,
   },
+  getters: {
+    checkFavoriteUser: (state) => (id) => {
+      return state.favorites.find(shop => shop.user_id === id)
+    }
+  }, 
   mutations: {
     setFavorites (state, data) {
       state.favorites = data
@@ -14,6 +20,12 @@ export default {
     },
     setNewFavorite (state, data) {
       state.favorites.push(data)
+    },
+    setFavoriteUser (state) {
+      state.favoriteUser = true
+    },
+    resetFavoriteUser (state) {
+      state.favoriteUser = false
     }
   },
   actions: {
@@ -30,7 +42,7 @@ export default {
       return commit('resetFavorites')
     },
     // お気に入り保存
-    async saveFavorite ({commit, dispatch, state}, data) {
+    async saveFavorite ({commit, dispatch, state, getters}, data) {
       // 店舗が未登録なら、先に店舗を登録する
       if (data.favoriteData.shop_id == 0) {
         await dispatch('shop/saveShop', data.shopData, { root: true })
@@ -45,6 +57,12 @@ export default {
       .catch(err => {
         console.log(err)
       })
+    },
+    pressedFavoriteBtn ({commit}) {
+      return commit('setFavoriteUser')
+    },
+    notPressedFavoriteBtn ({commit}) {
+      return commit('resetFavoriteUser')
     }
   }
 }
