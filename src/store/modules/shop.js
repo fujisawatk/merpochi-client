@@ -13,6 +13,7 @@ export default {
     shops: [],                                                // 取得した店舗情報
     count: "",                                                // 各店舗のコメント数、いいね数
     commentedShops: "",                                       // ログインユーザーがコメントした店舗情報
+    shopId: 0,
   },
   getters: {
     // 指定IDの店舗情報をstate.restsから取得
@@ -54,7 +55,10 @@ export default {
     },
     setCommentedShops (state, data) {
       state.commentedShops = data
-    }
+    },
+    setShopId (state, shopId) {
+      state.ShopId = shopId
+    },
   },
   actions: {
     // 現在位置情報取得
@@ -96,10 +100,10 @@ export default {
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
-    async saveShop ({commit}, data) {
+    saveShop ({commit}, data) {
       return axios.post('http://192.168.100.100:8000/shops/register', data)
       .then(res => {
-        commit('comment/setCommentShopId', res.data.id, { root: true })
+        commit('setShopId', res.data.id)
       })
     },
     // ユーザーがコメントした店舗情報を取得

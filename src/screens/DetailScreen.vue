@@ -115,7 +115,7 @@
         </scroll-view>
 
         <view class="detail-footer">
-          <nb-button warning class="like-button">
+          <nb-button warning class="like-button" :on-press="favoriteBtnPress">
             <nb-icon active type="AntDesign" name="like1" />
             <nb-text>お気に入り</nb-text>
           </nb-button>
@@ -257,6 +257,31 @@ export default {
             console.log("保存に失敗しました")
           })
       }
+    },
+    favoriteBtnPress() {
+      const data = {
+          shopData: {
+            code: this.code,
+            name: this.name,
+            category: this.category,
+            opentime: this.opentime,
+            budget:   this.budget,
+            img:     this.img,
+            latitude: this.marker.coordinate.latitude,
+            longitude: this.marker.coordinate.longitude,
+          },
+          favoriteData: {
+            shop_id: this.shopId,
+            user_id: store.state.auth.user.id,
+          }
+        }
+        store.dispatch("favorite/saveFavorite", data)
+          .then(res => {
+            console.log("お気に入り登録しました")
+          })
+          .catch(() => {
+            console.log("保存に失敗しました")
+          })
     }
   },
   async created () {

@@ -12,6 +12,9 @@ export default {
     resetFavorites (state) {
       state.favorites = []
     },
+    setNewFavorite (state, data) {
+      state.favorites.push(data)
+    }
   },
   actions: {
     // 指定の店舗IDに紐付いたお気に入り数を取得
@@ -26,5 +29,22 @@ export default {
     delFavorites ({commit}) {
       return commit('resetFavorites')
     },
+    // お気に入り保存
+    async saveFavorite ({commit, dispatch, state}, data) {
+      // 店舗が未登録なら、先に店舗を登録する
+      if (data.favoriteData.shop_id == 0) {
+        await dispatch('shop/saveShop', data.shopData, { root: true })
+        data.favoriteData.shop_id = state.shop.ShopId
+      }
+      const strId = String(data.favoriteData.shop_id)
+      delete data.favoriteData.shop_id
+      return axios.post('http://192.168.100.100:8000/shops/' + strId + '/favorites', data.favoriteData)
+      .then(res => {
+        commit('setNewFavorite', res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
   }
 }
