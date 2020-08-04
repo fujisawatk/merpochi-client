@@ -20,11 +20,18 @@ export default {
     },
     setNewFavorite (state, data) {
       state.favorites.push(data)
+      state.favoriteUser = true
     },
     setFavoriteUser (state) {
       state.favoriteUser = true
     },
     resetFavoriteUser (state) {
+      state.favoriteUser = false
+    },
+    resetFavorite (state, uid) {
+      state.favorites.some(function(v, i){
+        if (v.user_id==uid) state.favorites.splice(i,1)
+      })
       state.favoriteUser = false
     }
   },
@@ -63,6 +70,20 @@ export default {
     },
     notPressedFavoriteBtn ({commit}) {
       return commit('resetFavoriteUser')
-    }
+    },
+    // お気に入り解除
+    delFavorite ({commit}, data) {
+      const strId = String(data.shop_id)
+      delete data.shop_id
+      return axios.delete('http://192.168.100.100:8000/shops/' + strId + '/favorites', {
+        data: data
+      })
+      .then(res => {
+        commit('resetFavorite', data.user_id)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
   }
 }

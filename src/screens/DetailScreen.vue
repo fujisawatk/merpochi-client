@@ -128,7 +128,7 @@
           <nb-button
             warning
             class="like-button"
-            :on-press="favoriteBtnPress"
+            :on-press="cancelFavoriteBtnPress"
             v-else
           >
             <nb-icon active type="AntDesign" name="like1" />
@@ -298,6 +298,15 @@ export default {
           .catch(() => {
             console.log("保存に失敗しました")
           })
+    },
+    cancelFavoriteBtnPress() {
+      // APIに削除する店舗IDを投げる
+      const data = {
+        shop_id: this.shopId,
+        user_id: store.state.auth.user.id,
+      }
+      store.dispatch("favorite/delFavorite", data)
+      // stateから該当するデータを取り除く
     }
   },
   async created () {
