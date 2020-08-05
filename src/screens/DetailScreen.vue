@@ -115,10 +115,26 @@
         </scroll-view>
 
         <view class="detail-footer">
-          <nb-button warning class="like-button">
+          <nb-button
+            warning
+            class="like-button"
+            :on-press="favoriteBtnPress"
+            v-if="!favoriteUser"
+          >
             <nb-icon active type="AntDesign" name="like1" />
             <nb-text>お気に入り</nb-text>
           </nb-button>
+
+          <nb-button
+            warning
+            class="like-button"
+            :on-press="cancelFavoriteBtnPress"
+            v-else
+          >
+            <nb-icon active type="AntDesign" name="like1" />
+            <nb-text>お気に入り解除</nb-text>
+          </nb-button>
+
           <nb-button warning class="like-button" :on-press="openLink">
             <nb-icon active type="Entypo" name="phone" />
             <nb-text>予約</nb-text>
@@ -257,6 +273,40 @@ export default {
             console.log("保存に失敗しました")
           })
       }
+    },
+    favoriteBtnPress() {
+      const data = {
+          shopData: {
+            code: this.code,
+            name: this.name,
+            category: this.category,
+            opentime: this.opentime,
+            budget:   this.budget,
+            img:     this.img,
+            latitude: this.marker.coordinate.latitude,
+            longitude: this.marker.coordinate.longitude,
+          },
+          favoriteData: {
+            shop_id: this.shopId,
+            user_id: store.state.auth.user.id,
+          }
+        }
+        store.dispatch("favorite/saveFavorite", data)
+          .then(res => {
+            console.log("お気に入り登録しました")
+          })
+          .catch(() => {
+            console.log("保存に失敗しました")
+          })
+    },
+    cancelFavoriteBtnPress() {
+      // APIに削除する店舗IDを投げる
+      const data = {
+        shop_id: this.shopId,
+        user_id: store.state.auth.user.id,
+      }
+      store.dispatch("favorite/delFavorite", data)
+      // stateから該当するデータを取り除く
     }
   },
   async created () {
@@ -296,13 +346,21 @@ export default {
       this.shopId = shop.shopId
       this.code = code
     }
-    // 店舗IDがAPIで登録されている場合、コメントを取得。
+    // 店舗IDがAPIで登録されている場合、コメント情報とお気に入り数を取得。
     if (this.shopId != 0) {
       store.dispatch('comment/getComments', this.shopId)
-      store.dispatch('favorite/getFavorites', this.shopId)
+      await store.dispatch('favorite/getFavorites', this.shopId)
+      // カレントユーザーが既にお気に入り登録しているか確認（登録の有無でボタン切り替え）
+      const user = store.getters['favorite/checkFavoriteUser'](store.state.auth.user.id)
+        if (user) {
+          store.dispatch('favorite/pressedFavoriteBtn')
+        }else{
+          store.dispatch('favorite/notPressedFavoriteBtn')
+        }
     }else{
       store.dispatch('comment/delComments')
       store.dispatch('favorite/delFavorites')
+      store.dispatch('favorite/notPressedFavoriteBtn')
     }
   },
   computed: {
@@ -317,6 +375,9 @@ export default {
     },
     isAuth() {
       return store.state.auth.isAuthResolved
+    },
+    favoriteUser() {
+      return store.state.favorite.favoriteUser
     }
   },
 }

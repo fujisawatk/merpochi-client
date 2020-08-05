@@ -3,8 +3,7 @@ import axios from 'axios'
 export default {
   namespaced: true,
   state: {
-    comments: [],
-    newCommentShopId: 0
+    comments: []
   },
   mutations: {
     setComments (state, data) {
@@ -13,9 +12,6 @@ export default {
     },
     resetComments (state) {
       state.comments = []
-    },
-    setCommentShopId (state, shopId) {
-      state.newCommentShopId = shopId
     },
     setNewComment (state, data) {
       state.comments.push(data)
@@ -39,7 +35,7 @@ export default {
       // 店舗が未登録なら、先に店舗を登録する
       if (data.commentData.shop_id == 0) {
         await dispatch('shop/saveShop', data.shopData, { root: true })
-        data.commentData['shop_id'] = state.newCommentShopId
+        data.commentData['shop_id'] = state.shop.ShopId
       }
       return axios.post('http://192.168.100.100:8000/comments', data.commentData)
       .then(res => {
