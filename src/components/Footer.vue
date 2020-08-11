@@ -53,7 +53,7 @@ export default {
       store.state.auth.homeTab = false
       store.state.auth.searchTab = true
       store.state.auth.mypageTab = false
-      this.navigation.navigate("Search");
+      this.navigation.navigate("Mylist");
     },
     goMypage() {
       store.state.auth.homeTab = false
