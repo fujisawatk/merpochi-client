@@ -2,16 +2,16 @@
   <nb-footer>
     <nb-footer-tab>
       <nb-button :active="inHome" :on-press="pressedHomeTab">
-        <nb-icon name="apps"/>
-        <nb-text>Home</nb-text>
+        <nb-icon name="search"/>
+        <nb-text>さがす</nb-text>
       </nb-button>
       <nb-button :active="inMylist" :on-press="pressedMylistTab">
-        <nb-icon name="bicycle"/>
-        <nb-text>Search</nb-text>
+        <nb-icon name="heart"/>
+        <nb-text>マイリスト</nb-text>
       </nb-button>
       <nb-button :active="inMypage" :on-press="pressedMypageTab">
         <nb-icon name="contact"/>
-        <nb-text>Mypage</nb-text>
+        <nb-text>マイページ</nb-text>
       </nb-button>
     </nb-footer-tab>
   </nb-footer>
