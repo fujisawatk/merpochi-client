@@ -18,7 +18,7 @@ export default {
     user: null,               // ユーザー値
     isAuthResolved: false,    // 認証が許可されているか判定
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
-    searchTab: false,
+    mylistTab: false,
     mypageTab: false,
   },
   mutations: {
