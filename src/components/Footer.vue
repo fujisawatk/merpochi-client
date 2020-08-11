@@ -1,17 +1,17 @@
 <template>
   <nb-footer>
     <nb-footer-tab>
-      <nb-button :active="inHome" :on-press="goHome">
+      <nb-button :active="inHome" :on-press="pressedHomeTab">
         <nb-icon name="apps"/>
         <nb-text>Home</nb-text>
       </nb-button>
-      <nb-button :active="inSearch" :on-press="goSearch">
+      <nb-button :active="inMylist" :on-press="pressedMylistTab">
         <nb-icon name="bicycle"/>
         <nb-text>Search</nb-text>
       </nb-button>
       
       <!-- ログイン状態ならマイページタブを表示 -->
-      <nb-button v-if="isAuth" :active="inMypage" :on-press="goMypage">
+      <nb-button v-if="isAuth" :active="inMypage" :on-press="pressedMypageTab">
         <nb-icon name="contact"/>
         <nb-text>Mypage</nb-text>
       </nb-button>
@@ -32,8 +32,8 @@ export default {
     inHome() {
       return store.state.auth.homeTab
     },
-    inSearch() {
-      return store.state.auth.searchTab
+    inMylist() {
+      return store.state.auth.mylistTab
     },
     inMypage() {
       return store.state.auth.mypageTab
@@ -43,23 +43,23 @@ export default {
     }
   },
   methods: {
-    goHome() {
+    pressedHomeTab() {
       store.state.auth.homeTab = true
-      store.state.auth.searchTab = false
+      store.state.auth.mylistTab = false
       store.state.auth.mypageTab = false
-      this.navigation.navigate("Home");
+      this.navigation.navigate("Home")
     },
-    goSearch() {
+    pressedMylistTab() {
       store.state.auth.homeTab = false
-      store.state.auth.searchTab = true
+      store.state.auth.mylistTab = true
       store.state.auth.mypageTab = false
-      this.navigation.navigate("Mylist");
+      this.navigation.navigate("Mylist")
     },
-    goMypage() {
+    pressedMypageTab() {
       store.state.auth.homeTab = false
-      store.state.auth.searchTab = false
+      store.state.auth.mylistTab = false
       store.state.auth.mypageTab = true
-      this.navigation.navigate("Mypage");
+      this.navigation.navigate("Mypage")
     },
   }
 }
