@@ -9,7 +9,7 @@ import HomeScreen from "./screens/HomeScreen.vue"
 import SigninScreen from "./screens/SigninScreen.vue"
 import SignupScreen from "./screens/SignupScreen.vue"
 import DetailScreen from "./screens/DetailScreen.vue"
-import SearchScreen from "./screens/SearchScreen.vue"
+import MylistScreen from "./screens/MylistScreen.vue"
 import MypageScreen from "./screens/MypageScreen.vue"
 import { Root } from "native-base"
 
@@ -24,7 +24,7 @@ const StackNavigator = createStackNavigator(
     Home: HomeScreen,
     Signin: SigninScreen,
     Signup: SignupScreen,
-    Search: SearchScreen,
+    Mylist: MylistScreen,
     Mypage: MypageScreen,
     Detail: DetailScreen
   },
