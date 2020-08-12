@@ -6,7 +6,7 @@
       :navigation="navigation"
     />
 
-      <nb-content padder class="mypage-account">
+      <nb-content padder class="mypage-account" v-if="isAuth">
         <nb-list-item thumbnail>
           <nb-left>
               <nb-thumbnail square :source="require('../../assets/icon.png')"/>
@@ -29,6 +29,29 @@
         </nb-button>
         <nb-button :style="{marginTop:20}" small block danger>
             <nb-text>ログアウト</nb-text>
+        </nb-button>
+      </nb-content>
+
+      <nb-content padder class="mypage-account" v-else>
+        <nb-list-item thumbnail>
+          <nb-left>
+              <nb-thumbnail square :source="require('../../assets/icon.png')"/>
+          </nb-left>
+          <nb-body>
+              <nb-text class="nickname">未登録ユーザー</nb-Text>
+          </nb-body>
+        </nb-list-item>
+
+        <view class="show-no-login">
+          <nb-text class="no-login-text">
+            お気に入りのお店を登録したり、
+          </nb-text>
+          <nb-text class="no-login-text">
+            好みに合ったお店が見つけやすくなります。
+          </nb-text>
+        </view>
+        <nb-button class="login-btn" block :on-press="pressedRoginBtn">
+            <nb-text>ログインする</nb-text>
         </nb-button>
       </nb-content>
 
@@ -59,6 +82,14 @@ export default {
     },
     userEmail() {
       return store.state.auth.user.email
+    },
+    isAuth() {
+      return store.state.auth.isAuthResolved
+    },
+  },
+  methods: {
+    pressedRoginBtn() {
+      this.navigation.navigate('Signin')
     }
   }
 }
@@ -85,5 +116,17 @@ export default {
 .password {
   color: gray;
   font-weight: bold;
+}
+.show-no-login {
+  height: 100px;
+  width: 100%;
+  padding-top: 25px;
+}
+.no-login-text {
+  font-size: 20;
+  text-align: center;
+}
+.login-btn {
+  background-color: #FFCC33;
 }
 </style>
