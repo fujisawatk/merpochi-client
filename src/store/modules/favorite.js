@@ -49,11 +49,11 @@ export default {
       return commit('resetFavorites')
     },
     // お気に入り保存
-    async saveFavorite ({commit, dispatch, state, getters}, data) {
+    async saveFavorite ({commit, dispatch, rootState, getters}, data) {
       // 店舗が未登録なら、先に店舗を登録する
       if (data.favoriteData.shop_id == 0) {
         await dispatch('shop/saveShop', data.shopData, { root: true })
-        data.favoriteData.shop_id = state.shop.ShopId
+        data.favoriteData.shop_id = rootState.shop.ShopId
       }
       const strId = String(data.favoriteData.shop_id)
       delete data.favoriteData.shop_id
