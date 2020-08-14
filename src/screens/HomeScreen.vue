@@ -15,10 +15,13 @@
         >
           <nb-input
             placeholder="店名・キーワード"
+            v-model="search.keyword"
+            auto-capitalize="none"
           />
           <nb-icon
             active
             name='search'
+            :on-press="pressedSearchIcon"
           />
         </nb-item> 
       </nb-form>
@@ -61,6 +64,9 @@ export default {
       dataArray: [
         { title: "", content: "" },
       ],
+      search: {
+        keyword: ""
+      }
     }
   },
   props: {
@@ -81,7 +87,7 @@ export default {
         this.navigation.navigate('Signin')
       }
     },
-    _renderContent: function() {
+    _renderContent() {
       return (
         <View style={{ flex: 1, backgroundColor: "#EEEEEE" }}>
           <View style={{ flex: 1, padding: 10 }}>
@@ -106,7 +112,7 @@ export default {
         </View>
       );
     },
-    _renderHeader: function(title, expanded) {
+    _renderHeader(expanded) {
       return (
         <View
           style={{ flexDirection: "row", padding: 15, justifyContent: "space-between", alignItems: "center", backgroundColor: "#CCCCCC"}}
@@ -120,10 +126,10 @@ export default {
           }
         </View>
       );
+    },
+    pressedSearchIcon() {
+      store.dispatch("shop/keywordSearch", this.search.keyword)
     }
-  },
-  created () {
-    store.dispatch("shop/getShops")
   }
 }
 </script>

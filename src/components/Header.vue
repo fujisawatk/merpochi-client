@@ -94,7 +94,6 @@ export default {
     },
     goBack () {
       this.navigation.goBack()
-      store.dispatch("shop/getShops")
     }
   }
 }
