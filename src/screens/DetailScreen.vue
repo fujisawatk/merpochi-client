@@ -264,7 +264,7 @@ export default {
         }
         store.dispatch("comment/saveComment", data)
           .then(res => {
-            this.shopId = store.state.comment.newCommentShopId
+            this.shopId = store.state.shop.shopId
             this.newComment = ""
             // $dirtyをfalseに設定（コメント入力欄アクティブリセット）
             this.$v.newComment.$reset()
@@ -293,6 +293,7 @@ export default {
         }
         store.dispatch("favorite/saveFavorite", data)
           .then(res => {
+            this.shopId = store.state.shop.shopId
             console.log("お気に入り登録しました")
           })
           .catch(() => {
