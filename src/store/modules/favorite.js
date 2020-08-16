@@ -53,7 +53,7 @@ export default {
       // 店舗が未登録なら、先に店舗を登録する
       if (data.favoriteData.shop_id == 0) {
         await dispatch('shop/saveShop', data.shopData, { root: true })
-        data.favoriteData.shop_id = rootState.shop.ShopId
+        data.favoriteData.shop_id = rootState.shop.shopId
       }
       const strId = String(data.favoriteData.shop_id)
       delete data.favoriteData.shop_id

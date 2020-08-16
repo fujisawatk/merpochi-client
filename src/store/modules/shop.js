@@ -57,7 +57,7 @@ export default {
       state.commentedShops = data
     },
     setShopId (state, shopId) {
-      state.ShopId = shopId
+      state.shopId = shopId
     },
   },
   actions: {
