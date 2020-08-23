@@ -112,6 +112,20 @@ export default {
     .then(res => {
         commit('setCommentedShops',res.data)
       })
+    },
+    // 店名・キーワード検索
+    keywordSearch ({dispatch, state, commit}, keyword) {
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword
+      axios
+        .get(requestUrl)
+        .then(async (res) => {
+          const shopCodes = res.data.rest.map(function( value ) {
+            return value.id
+          })
+          await dispatch('getCommentsAndFavoritesCount', shopCodes)
+          commit('setShop', res.data)
+        })
+        .catch(() => undefined)
     }
   }
 }
