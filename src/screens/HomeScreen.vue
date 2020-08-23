@@ -3,6 +3,7 @@
 
     <header
       root
+      home
       :screen="title"
       :navigation="navigation"
     />
@@ -59,7 +60,7 @@ import { View, Text, Icon, Input, Item, Button, Image } from "native-base";
 export default {
   data: function() {
     return {
-      title: "付近の店舗一覧",
+      title: "店舗一覧",
       // 定義しないとNativeBaseテンプレートが読み込まれないため設置。
       dataArray: [
         { title: "", content: "" },

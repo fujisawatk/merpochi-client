@@ -2,6 +2,22 @@
   <nb-header class="header">
     <nb-left class="header-left">
       <nb-button
+        iconLeft
+        rounded
+        bordered
+        dark
+        v-if="home"
+      >
+        <nb-icon
+          type="Fontisto"
+          name="map-marker-alt"
+          :on-press="pushMarker"
+          class="geolocation-icon"
+        />
+        <nb-text class="geolocation-title">近くのお店</nb-text>
+      </nb-button>
+
+      <nb-button
         v-if="!root"
         :on-press="goBack"
         transparent
@@ -13,14 +29,7 @@
         <nb-title class="header-title">{{ screen }}</nb-title>
       </nb-body>
       <nb-right class="header-right">
-        <nb-button transparent class="header-icon">
-          <nb-icon
-            type="Fontisto"
-            name="map-marker-alt"
-            class="map-icon"
-            :on-press="pushMarker"  
-          />
-        </nb-button>
+        
         <nb-button transparent
           class="header-icon"
           :on-press="displayActionSheet"
@@ -46,6 +55,9 @@ export default {
     root: {
       type: Boolean
     },
+    home: {
+      type: Boolean
+    }
   },
   computed: {
     optionCancelIndex () {
@@ -103,25 +115,32 @@ export default {
 .header {
   background-color: #FFCC33;
 }
-.header-left,
-.header-right {
-  flex: 5;
+.header-left {
+  flex: 1;
+}
+.geolocation-icon {
+  font-size: 20;
+}
+.geolocation-title {
+  font-size: 13;
 }
 .header-body {
-  flex: 9;
+  flex: 1;
   justify-content: center;
   align-items: center;
+}
+.header-right {
+  flex: 1;
 }
 .header-title {
   color: #111;
   font-weight: bold;
 }
 .header-icon {
-  flex: 1;
+  margin-right: 10;
 }
-.map-icon,
+
 .user-icon {
-  flex: 1;
   color: #111;
   font-size: 20;
 }
