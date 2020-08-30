@@ -67,7 +67,7 @@ export default {
       ],
       search: {
         keyword: ""
-      }
+      },
     }
   },
   props: {
@@ -94,8 +94,12 @@ export default {
           <View style={{ flex: 1, padding: 10 }}>
             <Item rounded>
               <Icon active name='train' />
-              <Input placeholder='エリア・駅' />
+              <Input placeholder='エリア・駅'/>
             </Item>
+            <Button
+              onPress={this.selectedStationWordInput}
+              style={{ flex: 1, width: "100%", height: "100%", position: "absolute", opacity: 0, top: 10, left: 10 }}
+            />
           </View>
 
           <View style={{ flex: 1, padding: 10 }}>
@@ -130,7 +134,10 @@ export default {
     },
     pressedSearchIcon() {
       store.dispatch("shop/keywordSearch", this.search.keyword)
-    }
+    },
+    selectedStationWordInput() {
+      this.navigation.navigate('StationSearch')
+    },
   }
 }
 </script>
