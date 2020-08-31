@@ -13,10 +13,13 @@
       >
         <nb-input
           placeholder="例：東京、しぶや、新宿駅"
+          v-model="search.keyword"
+          auto-capitalize="none"
         />
         <nb-icon
           active
           name='search'
+          :on-press="pressedStationSearchIcon"
         />
       </nb-item> 
     </nb-form>
@@ -41,9 +44,9 @@ export default {
   data: function() {
     return {
       title: "駅名から探す",
-      stations: [
-        {id: 0, station_name: "鶴見駅", prefucture: "神奈川県横浜市鶴見区", line_one: "ＪＲ東日本　東海道本線", line_two: "ＪＲ東日本　鶴見線"},
-      ]
+      search: {
+        keyword: ""
+      },
     }
   },
   props: {
@@ -52,11 +55,22 @@ export default {
     }
   },
   methods: {
-    pressedStationList() {
+    pressedStationList(id) {
        // APIから取得した駅名をVuexで管理。
        // 特定の駅名リストが選択されたら、選択したリストのIDのデータを取得(getter)
        // 取得したリストの駅名をHome画面の駅名検索に表示させる
-      this.navigation.navigate('Home')
+      this.navigation.navigate('Home', { id })
+    },
+    pressedStationSearchIcon() {
+      const data = { 
+        search_word: this.search.keyword
+        }
+      store.dispatch("station/searchStations")
+    }
+  },
+  computed: {
+    stations() {
+      return store.state.station.stations
     },
   }
 }
