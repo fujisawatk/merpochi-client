@@ -12,7 +12,7 @@ export default {
       state.stations = data
     },
     setStationName (state, name) {
-      state.selectedStationName = name + "駅"
+      state.selectedStationName = name
     },
     resetStationList (state) {
       state.stations = []

@@ -77,11 +77,16 @@ export default {
     keyword(val, prev) {
       if (!isEmpty(val)) {
         this.searchWithInterval()
+      }else{
+        store.dispatch("station/delStationList")
       }
     }
   },
   created() {
     //APIの実行を0.5秒に1回に制限
+    if (store.state.station.selectedStationName != "") {
+      this.keyword = store.state.station.selectedStationName
+    }
     store.dispatch("station/delStationList")
     this.searchWithInterval = throttle(this.searchStations, 500)
   },

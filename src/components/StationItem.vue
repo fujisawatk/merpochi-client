@@ -18,7 +18,9 @@ export default {
   },
   methods: {
     pressedStationList() {
-      this.selectedStationList(this.station.station_name)
+      if (this.station.station_name != "該当なし"){
+        this.selectedStationList(this.station.station_name)
+      }
     }
   }
 }
