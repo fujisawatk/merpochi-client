@@ -4,12 +4,16 @@ export default {
   namespaced: true,
   state: {
     stations: [],
+    selectedStationName: ""
   },
   getters: {}, 
   mutations: {
     setStations (state, data) {
       state.stations = data
     },
+    setStationName (state, name) {
+      state.selectedStationName = name
+    }
   },
   actions: {
     // 指定の店舗IDに紐付いたお気に入り数を取得
@@ -19,5 +23,8 @@ export default {
         commit('setStations', res.data)
       })
     },
+    selectedStationList ({commit}, name) {
+      return commit('setStationName', name)
+    }
   }
 }

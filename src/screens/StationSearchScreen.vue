@@ -27,12 +27,10 @@
     <nb-list 
       v-for="station in stations"
       :key="station.id">
-        <nb-list-item :on-press="pressedStationList">
-          <nb-body>
-            <nb-text>{{ station.station_name }}</nb-text>
-            <nb-text note class="list-sub-text">{{ station.prefucture }} {{ station.line_one }} {{ station.line_two }}</nb-Text>
-          </nb-body>
-        </nb-list-item>
+      <station-item
+        :station="station"
+        :selected-station-list="selectedStationList"
+      />
     </nb-list>
 
   </nb-container>
@@ -55,17 +53,15 @@ export default {
     }
   },
   methods: {
-    pressedStationList(id) {
-       // APIから取得した駅名をVuexで管理。
-       // 特定の駅名リストが選択されたら、選択したリストのIDのデータを取得(getter)
-       // 取得したリストの駅名をHome画面の駅名検索に表示させる
-      this.navigation.navigate('Home', { id })
+    selectedStationList(name) {
+      store.dispatch("station/selectedStationList", name)
+      this.navigation.navigate('Home')
     },
     pressedStationSearchIcon() {
       const data = { 
         search_word: this.search.keyword
         }
-      store.dispatch("station/searchStations")
+      store.dispatch("station/searchStations", data)
     }
   },
   computed: {
@@ -86,8 +82,5 @@ export default {
 .station-search-input {
   padding-left: 10px;
   padding-right: 10px;
-}
-.list-sub-text {
-  font-size: 12;
 }
 </style> 
