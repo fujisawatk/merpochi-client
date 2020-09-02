@@ -66,7 +66,11 @@
           </view>
 
           <view class="detail-search-item">
-            <nb-button danger class="detail-search-btn">
+            <nb-button
+              danger
+              class="detail-search-btn"
+              :on-press="pressedDetailSearchBtn"
+            >
               <nb-text> 検索する </nb-text>
             </nb-button>
           </view>
@@ -138,6 +142,9 @@ export default {
     selectedStationWordInput() {
       this.navigation.navigate('StationSearch')
     },
+    pressedDetailSearchBtn() {
+      store.dispatch("shop/detailSearch", this.search.keyword)
+    }
   }
 }
 </script>
