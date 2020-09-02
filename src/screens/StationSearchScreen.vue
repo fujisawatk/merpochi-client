@@ -54,7 +54,13 @@ export default {
   methods: {
     selectedStationList(name) {
       store.dispatch("station/selectedStationList", name)
-      this.navigation.navigate('Home')
+        .then(res => {
+          store.dispatch("station/delStationList")
+          this.navigation.navigate('Home')
+        })
+        .catch(() => {
+          console.log("選択されていません")
+        })
     },
     searchStations() {
       const data = {
