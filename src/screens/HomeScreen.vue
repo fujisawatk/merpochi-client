@@ -27,11 +27,55 @@
         </nb-item> 
       </nb-form>
 
-      <nb-accordion
-        :dataArray="dataArray"
-        :renderHeader="_renderHeader"
-        :renderContent="_renderContent"
-      />
+      <view class="detail-search-section">
+        <nb-button
+          :on-press="pressedDetailSearchBar"
+          class="detail-search-bar"
+        >
+          <nb-text>詳細検索</nb-text>
+        </nb-button>
+
+        <view
+          v-if="activeDetailSearchForm"
+          class="detail-search-form"
+        >
+          <view class="detail-search-item">
+            <nb-item rounded >
+              <nb-icon name='train'/>
+              <nb-input
+                placeholder="エリア・駅"
+                v-model="selectedStationName"
+              />
+            </nb-item>
+            <nb-button
+              :on-press="selectedStationWordInput"
+              class="input-cover"
+            />
+          </view>
+
+          <view class="detail-search-item">
+            <nb-item
+              rounded
+            >
+              <nb-icon name='restaurant'/>
+              <nb-input
+                placeholder="ジャンル"
+                auto-capitalize="none"
+              />
+            </nb-item>
+          </view>
+
+          <view class="detail-search-item">
+            <nb-button
+              danger
+              class="detail-search-btn"
+              :on-press="pressedDetailSearchBtn"
+            >
+              <nb-text> 検索する </nb-text>
+            </nb-button>
+          </view>
+        </view>
+      </view>
 
       <view
         v-for="item in items"
@@ -54,20 +98,15 @@
 
 <script>
 import store from '../store'
-import React from "react";
-import { View, Text, Icon, Input, Item, Button, Image } from "native-base";
 
 export default {
   data: function() {
     return {
       title: "店舗一覧",
-      // 定義しないとNativeBaseテンプレートが読み込まれないため設置。
-      dataArray: [
-        { title: "", content: "" },
-      ],
       search: {
-        keyword: ""
-      }
+        keyword: "",
+      },
+      detailSearchForm: false,
     }
   },
   props: {
@@ -78,6 +117,12 @@ export default {
   computed: {
     items() {
       return store.state.shop.shops
+    },
+    selectedStationName() {
+      return store.state.station.selectedStationName
+    },
+    activeDetailSearchForm() {
+      return this.detailSearchForm
     }
   },
   methods: {
@@ -88,48 +133,17 @@ export default {
         this.navigation.navigate('Signin')
       }
     },
-    _renderContent() {
-      return (
-        <View style={{ flex: 1, backgroundColor: "#EEEEEE" }}>
-          <View style={{ flex: 1, padding: 10 }}>
-            <Item rounded>
-              <Icon active name='train' />
-              <Input placeholder='エリア・駅' />
-            </Item>
-          </View>
-
-          <View style={{ flex: 1, padding: 10 }}>
-            <Item rounded>
-              <Icon active name='restaurant' />
-              <Input placeholder='ジャンル' />
-            </Item>
-          </View>
-
-          <View style={{ flex: 1, padding: 10 }}>
-            <Button danger style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
-              <Text> 検索する </Text>
-            </Button>
-          </View>
-        </View>
-      );
-    },
-    _renderHeader(expanded) {
-      return (
-        <View
-          style={{ flexDirection: "row", padding: 15, justifyContent: "space-between", alignItems: "center", backgroundColor: "#CCCCCC"}}
-        >
-          <Text style={{ fontWeight: "600" }}>
-            詳細検索
-          </Text>
-          {expanded
-            ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
-            : <Icon style={{ fontSize: 18 }} name="add-circle" />
-          }
-        </View>
-      );
+    pressedDetailSearchBar() {
+      return this.detailSearchForm = !this.detailSearchForm
     },
     pressedSearchIcon() {
       store.dispatch("shop/keywordSearch", this.search.keyword)
+    },
+    selectedStationWordInput() {
+      this.navigation.navigate('StationSearch')
+    },
+    pressedDetailSearchBtn() {
+      store.dispatch("shop/detailSearch", this.search.keyword)
     }
   }
 }
@@ -145,5 +159,32 @@ export default {
 .search-input {
   padding-left: 10px;
   padding-right: 10px;
+}
+.detail-search-bar {
+  height: 50;
+  width: 100%;
+  background-color: #CCCCCC;
+}
+.detail-search-form {
+  flex: 1;
+  background-color: #EEEEEE;
+}
+.detail-search-item {
+  flex: 1;
+  padding: 10;
+}
+.input-cover {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+  top: 10;
+  left: 10;
+}
+.detail-search-btn {
+  flex: 1;
+  flex-direction: row;
+  justify-content: center; 
 }
 </style>

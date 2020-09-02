@@ -4,6 +4,7 @@ import auth from './modules/auth'
 import shop from './modules/shop'
 import comment from './modules/comment'
 import favorite from './modules/favorite'
+import station from './modules/station'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ export default new Vuex.Store({
     auth,
     shop,
     comment,
-    favorite
+    favorite,
+    station
   },
   state: {},
   getters: {}, 

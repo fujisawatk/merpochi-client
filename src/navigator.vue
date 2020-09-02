@@ -5,12 +5,13 @@
 </template>
 
 <script>
-import HomeScreen from "./screens/HomeScreen.vue"
-import SigninScreen from "./screens/SigninScreen.vue"
-import SignupScreen from "./screens/SignupScreen.vue"
-import DetailScreen from "./screens/DetailScreen.vue"
-import MylistScreen from "./screens/MylistScreen.vue"
-import MypageScreen from "./screens/MypageScreen.vue"
+import HomeScreen from "./screens/HomeScreen"
+import SigninScreen from "./screens/SigninScreen"
+import SignupScreen from "./screens/SignupScreen"
+import DetailScreen from "./screens/DetailScreen"
+import MylistScreen from "./screens/MylistScreen"
+import MypageScreen from "./screens/MypageScreen"
+import StationSearchScreen from "./screens/StationSearchScreen"
 import { Root } from "native-base"
 
 import {
@@ -26,7 +27,8 @@ const StackNavigator = createStackNavigator(
     Signup: SignupScreen,
     Mylist: MylistScreen,
     Mypage: MypageScreen,
-    Detail: DetailScreen
+    Detail: DetailScreen,
+    StationSearch: StationSearchScreen
   },
   {
     initialRouteName: 'Home',

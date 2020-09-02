@@ -126,6 +126,19 @@ export default {
           commit('setShop', res.data)
         })
         .catch(() => undefined)
+    },
+    detailSearch ({dispatch, state, commit, rootState}, keyword) {
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&freeword=" + rootState.station.selectedStationName + "駅"
+      axios
+        .get(requestUrl)
+        .then(async (res) => {
+          const shopCodes = res.data.rest.map(function( value ) {
+            return value.id
+          })
+          await dispatch('getCommentsAndFavoritesCount', shopCodes)
+          commit('setShop', res.data)
+        })
+        .catch(() => undefined)
     }
   }
 }
