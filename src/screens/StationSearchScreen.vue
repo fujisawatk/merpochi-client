@@ -13,13 +13,12 @@
       >
         <nb-input
           placeholder="例：東京、しぶや、新宿駅"
-          v-model="search.keyword"
+          v-model="keyword"
           auto-capitalize="none"
         />
         <nb-icon
           active
           name='search'
-          :on-press="pressedStationSearchIcon"
         />
       </nb-item> 
     </nb-form>
@@ -38,13 +37,13 @@
 
 <script>
 import store from '../store'
+import { throttle, isEmpty } from "lodash"
+
 export default {
   data: function() {
     return {
       title: "駅名から探す",
-      search: {
-        keyword: ""
-      },
+      keyword: ""
     }
   },
   props: {
@@ -57,9 +56,9 @@ export default {
       store.dispatch("station/selectedStationList", name)
       this.navigation.navigate('Home')
     },
-    pressedStationSearchIcon() {
-      const data = { 
-        search_word: this.search.keyword
+    searchStations() {
+      const data = {
+        search_word: this.keyword
         }
       store.dispatch("station/searchStations", data)
     }
@@ -68,7 +67,18 @@ export default {
     stations() {
       return store.state.station.stations
     },
-  }
+  },
+  watch: {
+    keyword(val, prev) {
+      if (!isEmpty(val)) {
+        this.searchWithInterval()
+      }
+    }
+  },
+  created() {
+    //APIの実行を0.5秒に1回に制限
+    this.searchWithInterval = throttle(this.searchStations, 500)
+  },
 }
 </script>
 
