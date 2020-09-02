@@ -23,7 +23,7 @@
       </nb-item> 
     </nb-form>
 
-    <nb-list 
+    <nb-list
       v-for="station in stations"
       :key="station.id">
       <station-item
@@ -55,7 +55,6 @@ export default {
     selectedStationList(name) {
       store.dispatch("station/selectedStationList", name)
         .then(res => {
-          store.dispatch("station/delStationList")
           this.navigation.navigate('Home')
         })
         .catch(() => {
@@ -83,6 +82,7 @@ export default {
   },
   created() {
     //APIの実行を0.5秒に1回に制限
+    store.dispatch("station/delStationList")
     this.searchWithInterval = throttle(this.searchStations, 500)
   },
 }

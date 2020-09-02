@@ -23,7 +23,16 @@ export default {
     searchStations ({commit}, keyword) {
       return axios.post('http://192.168.100.100:8000/stations/search', keyword)
       .then(res => {
-        commit('setStations', res.data)
+        if (res.data.length != 0) {
+          commit('setStations', res.data)
+        }else{
+          const notData = [
+            {
+              station_name: "該当なし"
+            }
+          ]
+          commit('setStations', notData)
+        }
       })
     },
     selectedStationList ({commit}, name) {
