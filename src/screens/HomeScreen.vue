@@ -63,6 +63,10 @@
                 auto-capitalize="none"
               />
             </nb-item>
+            <nb-button
+              :on-press="selectedGenreInput"
+              class="input-cover"
+            />
           </view>
 
           <view class="detail-search-item">
@@ -144,6 +148,9 @@ export default {
     },
     pressedDetailSearchBtn() {
       store.dispatch("shop/detailSearch", this.search.keyword)
+    },
+    selectedGenreInput() {
+      this.navigation.navigate('GenreSearch')
     }
   }
 }
