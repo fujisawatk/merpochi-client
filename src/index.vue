@@ -17,6 +17,7 @@ import Item from "./components/Item.vue"
 import Footer from "./components/Footer.vue"
 import InputWithError from './components/InputWithError.vue'
 import StationItem from "./components/StationItem.vue"
+import GenreItem from "./components/GenreItem.vue"
 
 // プラグインの登録
 Vue.use(VueNativeBase)
@@ -28,6 +29,8 @@ Vue.component("Item", Item)
 Vue.component("Footer", Footer)
 Vue.component('InputWithError', InputWithError)
 Vue.component("StationItem", StationItem)
+Vue.component("GenreItem", GenreItem)
+
 
 export default {
   components: {

@@ -60,7 +60,7 @@
               <nb-icon name='restaurant'/>
               <nb-input
                 placeholder="ジャンル"
-                auto-capitalize="none"
+                v-model="selectedGenre"
               />
             </nb-item>
             <nb-button
@@ -127,7 +127,10 @@ export default {
     },
     activeDetailSearchForm() {
       return this.detailSearchForm
-    }
+    },
+    selectedGenre() {
+      return store.state.genre.selectedGenre
+    },
   },
   methods: {
     changeDetail(code) {

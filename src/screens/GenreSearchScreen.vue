@@ -9,11 +9,10 @@
     <nb-list
       v-for="genre in genres"
       :key="genre">
-      <nb-list-item>
-        <nb-body>
-          <nb-text>{{ genre }}</nb-text>
-        </nb-body>
-      </nb-list-item>
+      <genre-item
+        :genre="genre"
+        :selected-genre-list="selectedGenreList"
+      />
     </nb-list>
 
   </nb-container>
@@ -40,6 +39,17 @@ export default {
       type: Object
     }
   },
+  methods: {
+    selectedGenreList(genre) {
+      store.dispatch("genre/selectedGenreList", genre)
+        .then(res => {
+          this.navigation.navigate('Home')
+        })
+        .catch(() => {
+          console.log("選択されていません")
+        })
+    },
+  }
 }
 </script>
 
