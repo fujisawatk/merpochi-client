@@ -128,7 +128,7 @@ export default {
         .catch(() => undefined)
     },
     detailSearch ({dispatch, state, commit, rootState}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&freeword=" + rootState.station.selectedStationName + "駅"
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&freeword=" + rootState.station.selectedStationName + "駅" + "," + rootState.genre.selectedGenre
       axios
         .get(requestUrl)
         .then(async (res) => {

@@ -6,31 +6,33 @@
       :navigation="navigation"
     />
 
-    <nb-list
-      v-for="genre in genres"
-      :key="genre">
-      <genre-item
-        :genre="genre"
-        :selected-genre-list="selectedGenreList"
-      />
-    </nb-list>
+    <scroll-view>
+      <nb-list
+        v-for="genre in genres"
+        :key="genre">
+        <genre-item
+          :genre="genre"
+          :selected-genre-list="selectedGenreList"
+        />
+      </nb-list>
+    </scroll-view>
 
   </nb-container>
 </template>
 
 <script>
 import store from '../store'
+import { ScrollView } from 'react-native'
 
 export default {
   data: function() {
     return {
       title: "ジャンルを指定する",
       genres: [
-        "居酒屋", "焼き鳥", "和食", "寿司（すし）", "焼肉・ホルモン・鉄板焼き",
-        "イタリアン・フレンチ", "バイキング（ビュッフェ）", "カレー",
-        "中華", "洋食・西洋料理", "鍋", "アジア・エスニック料理", "ラーメン・つけ麺",
-        "バー・バル・ダイニングバー", "カフェスイーツ", "宴会・カラオケ・エンターテイメント",
-        "ファミレス・ファーストフード"
+        "居酒屋", "焼き鳥", "海鮮", "和食", "寿司", "焼肉", "しゃぶしゃぶ", "鉄板焼き",
+        "イタリアン", "フレンチ", "バイキング", "カレー", "ステーキ", "お好み焼き",
+        "中華", "鍋", "韓国料理", "ラーメン", "そば", "うどん", "ピザ",
+        "バー", "カフェ", "ファミレス", "ファーストフード"
       ]
     }
   },
