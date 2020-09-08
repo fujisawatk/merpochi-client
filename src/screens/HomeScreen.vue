@@ -46,6 +46,12 @@
                 placeholder="エリア・駅"
                 v-model="selectedStationName"
               />
+              <nb-icon
+                type="MaterialIcons"
+                name="cancel"
+                :on-press="pressedCancelStationName"
+                v-if="selectedStationName"
+              />
             </nb-item>
             <nb-button
               :on-press="selectedStationWordInput"
@@ -61,6 +67,12 @@
               <nb-input
                 placeholder="ジャンル"
                 v-model="selectedGenre"
+              />
+              <nb-icon
+                type="MaterialIcons"
+                name="cancel"
+                :on-press="pressedCancelGenre"
+                v-if="selectedGenre"
               />
             </nb-item>
             <nb-button
@@ -154,6 +166,12 @@ export default {
     },
     selectedGenreInput() {
       this.navigation.navigate('GenreSearch')
+    },
+    pressedCancelStationName() {
+      store.dispatch("station/delStationName")
+    },
+    pressedCancelGenre() {
+      store.dispatch("genre/delGenre")
     }
   }
 }
@@ -185,7 +203,7 @@ export default {
 }
 .input-cover {
   flex: 1;
-  width: 100%;
+  width: 95%;
   height: 100%;
   position: absolute;
   opacity: 0;
