@@ -151,7 +151,7 @@ export default {
       }
     },
     navigateToSignin() {
-      this.navigation.navigate('Signin')
+      this.navigation.navigate('Signin', { message: 'ユーザー登録が完了しました。ログインできます。' })
     }
   },
 }

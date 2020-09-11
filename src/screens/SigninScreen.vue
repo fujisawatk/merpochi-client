@@ -61,6 +61,7 @@
 <script>
 import axios from 'axios'
 import store from '../store'
+import { Toast } from 'native-base'
 import {
   required,
   email,
@@ -112,6 +113,18 @@ export default {
         })
       }
     }
+  },
+  created() {
+    const message = this.navigation.getParam('message')
+      if (message) {
+        Toast.show({
+          text: message,
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+      }
   }
 }
 </script>
