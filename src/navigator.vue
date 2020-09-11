@@ -12,6 +12,7 @@ import DetailScreen from "./screens/DetailScreen"
 import MylistScreen from "./screens/MylistScreen"
 import MypageScreen from "./screens/MypageScreen"
 import StationSearchScreen from "./screens/StationSearchScreen"
+import GenreSearchScreen from "./screens/GenreSearchScreen"
 import { Root } from "native-base"
 
 import {
@@ -28,7 +29,8 @@ const StackNavigator = createStackNavigator(
     Mylist: MylistScreen,
     Mypage: MypageScreen,
     Detail: DetailScreen,
-    StationSearch: StationSearchScreen
+    StationSearch: StationSearchScreen,
+    GenreSearch: GenreSearchScreen
   },
   {
     initialRouteName: 'Home',

@@ -46,6 +46,12 @@
                 placeholder="エリア・駅"
                 v-model="selectedStationName"
               />
+              <nb-icon
+                type="MaterialIcons"
+                name="cancel"
+                :on-press="pressedCancelStationName"
+                v-if="selectedStationName"
+              />
             </nb-item>
             <nb-button
               :on-press="selectedStationWordInput"
@@ -60,9 +66,19 @@
               <nb-icon name='restaurant'/>
               <nb-input
                 placeholder="ジャンル"
-                auto-capitalize="none"
+                v-model="selectedGenre"
+              />
+              <nb-icon
+                type="MaterialIcons"
+                name="cancel"
+                :on-press="pressedCancelGenre"
+                v-if="selectedGenre"
               />
             </nb-item>
+            <nb-button
+              :on-press="selectedGenreInput"
+              class="input-cover"
+            />
           </view>
 
           <view class="detail-search-item">
@@ -123,7 +139,10 @@ export default {
     },
     activeDetailSearchForm() {
       return this.detailSearchForm
-    }
+    },
+    selectedGenre() {
+      return store.state.genre.selectedGenre
+    },
   },
   methods: {
     changeDetail(code) {
@@ -144,6 +163,15 @@ export default {
     },
     pressedDetailSearchBtn() {
       store.dispatch("shop/detailSearch", this.search.keyword)
+    },
+    selectedGenreInput() {
+      this.navigation.navigate('GenreSearch')
+    },
+    pressedCancelStationName() {
+      store.dispatch("station/delStationName")
+    },
+    pressedCancelGenre() {
+      store.dispatch("genre/delGenre")
     }
   }
 }
@@ -175,7 +203,7 @@ export default {
 }
 .input-cover {
   flex: 1;
-  width: 100%;
+  width: 95%;
   height: 100%;
   position: absolute;
   opacity: 0;

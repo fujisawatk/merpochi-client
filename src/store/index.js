@@ -5,6 +5,7 @@ import shop from './modules/shop'
 import comment from './modules/comment'
 import favorite from './modules/favorite'
 import station from './modules/station'
+import genre from './modules/genre'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
     shop,
     comment,
     favorite,
-    station
+    station,
+    genre
   },
   state: {},
   getters: {}, 

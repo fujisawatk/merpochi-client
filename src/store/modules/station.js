@@ -16,6 +16,9 @@ export default {
     },
     resetStationList (state) {
       state.stations = []
+    },
+    resetStationName (state) {
+      state.selectedStationName = ""
     }
   },
   actions: {
@@ -40,6 +43,9 @@ export default {
     },
     delStationList ({commit}) {
       return commit('resetStationList')
+    },
+    delStationName ({commit}) {
+      return commit('resetStationName')
     }
   }
 }
