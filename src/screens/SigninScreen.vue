@@ -106,7 +106,7 @@ export default {
       if (!this.$v.form.$invalid) {
         store.dispatch("auth/loginOne", this.form)
         .then(user => {
-          this.navigation.navigate('Home', { loginMessage: 'ログインしました' })
+          this.navigation.navigate('Home', { message: 'ログインしました' })
         })
         .catch(() => {
           console.log("ログインに失敗しました")

@@ -176,7 +176,7 @@ export default {
     },
   },
   updated () {
-    const message = this.navigation.getParam('loginMessage')
+    const message = this.navigation.getParam('message')
     if (store.state.auth.modalMessage == true) {
       Toast.show({
         text: message,

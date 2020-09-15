@@ -31,6 +31,7 @@ export default {
     setLogout (state, delUser) {
       state.user = delUser
       state.isAuthResolved = false
+      state.modalMessage = true
     },
     setAuthUser (state, user) {
       state.user = user

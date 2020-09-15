@@ -94,7 +94,7 @@ export default {
         case 'ログアウト':
           store.dispatch('auth/logout')
             .then(() => {
-              this.navigation.navigate('Home')
+              this.navigation.navigate('Home', { message: 'ログアウトしました' })
             })
           break
         default:
