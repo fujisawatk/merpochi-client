@@ -114,6 +114,7 @@
 
 <script>
 import store from '../store'
+import { Toast } from 'native-base'
 
 export default {
   data: function() {
@@ -172,6 +173,23 @@ export default {
     },
     pressedCancelGenre() {
       store.dispatch("genre/delGenre")
+    },
+  },
+  updated () {
+    const message = this.navigation.getParam('loginMessage')
+    if (store.state.auth.modalMessage == true) {
+      Toast.show({
+        text: message,
+        buttonText: 'Ok',
+        type: 'success',
+        position: 'bottom',
+        duration: 5000
+      })
+      // 他のデータ更新でモーダルが表示させないようにするため、0.5秒有効。
+      setTimeout(
+        function() {
+          store.dispatch("auth/delModalMessage")
+        }, 500 );
     }
   }
 }

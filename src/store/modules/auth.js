@@ -20,11 +20,13 @@ export default {
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
     mylistTab: false,
     mypageTab: false,
+    modalMessage: false,
   },
   mutations: {
     login (state, user) {
       state.user = user
       state.isAuthResolved = true
+      state.modalMessage = true
     },
     setLogout (state, delUser) {
       state.user = delUser
@@ -35,6 +37,9 @@ export default {
     },
     resolveAuth (state) {
       state.isAuthResolved = true
+    },
+    resetModalMessage (state) {
+      state.modalMessage = false
     }
   },
   actions: {
@@ -79,5 +84,8 @@ export default {
         })
         .catch(() => undefined)
     },
+    delModalMessage ({commit}) {
+      return commit('resetModalMessage')
+    }
   }
 }
