@@ -1,6 +1,8 @@
 <template>
   <nb-container class="home-container">
 
+    <navigation-events :on-did-focus="checkForMessage" />
+
     <header
       root
       home
@@ -174,22 +176,19 @@ export default {
     pressedCancelGenre() {
       store.dispatch("genre/delGenre")
     },
-  },
-  updated () {
-    const message = this.navigation.getParam('message')
-    if (store.state.auth.modalMessage == true) {
-      Toast.show({
-        text: message,
-        buttonText: 'Ok',
-        type: 'success',
-        position: 'bottom',
-        duration: 5000
-      })
-      // 他のデータ更新でモーダルが表示させないようにするため、0.5秒有効。
-      setTimeout(
-        function() {
-          store.dispatch("auth/delModalMessage")
-        }, 500 );
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if ( message ) {
+        Toast.show({
+          text: message,
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+        // ナビゲーションパラメータ初期化
+        this.navigation.setParams({ message: null })
+      }
     }
   }
 }

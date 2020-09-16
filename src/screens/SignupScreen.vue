@@ -138,13 +138,15 @@ export default {
   },
   methods: {
     changeHome() {
-      this.navigation.navigate("Home")
+      this.navigation.navigate("Home", { message: null })
     },
     register() {
       this.$v.form.$touch()
       if (!this.$v.form.$invalid) {
         store.dispatch("auth/register", this.form)
-        .then(() => this.navigateToSignin())
+        .then(() => {
+          this.navigateToSignin()
+          })
         .catch(() => {
             console.log("登録出来ませんでした")
       })

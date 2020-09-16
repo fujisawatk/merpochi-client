@@ -1,5 +1,6 @@
 <template>
   <nb-container class="signin-container">
+    <navigation-events :on-did-focus="checkForMessage" />
     <view class="logo">
       <image
         class="logo-image"
@@ -112,11 +113,10 @@ export default {
           console.log("ログインに失敗しました")
         })
       }
-    }
-  },
-  created() {
-    const message = this.navigation.getParam('message')
-      if (message) {
+    },
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if ( message ) {
         Toast.show({
           text: message,
           buttonText: 'Ok',
@@ -125,7 +125,8 @@ export default {
           duration: 5000
         })
       }
-  }
+    }
+  },
 }
 </script>
 
