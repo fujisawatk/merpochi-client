@@ -35,7 +35,7 @@ export default {
     },
     resolveAuth (state) {
       state.isAuthResolved = true
-    }
+    },
   },
   actions: {
     loginOne ({commit}, userData) {
@@ -78,6 +78,6 @@ export default {
           return state.user
         })
         .catch(() => undefined)
-    },
+    }
   }
 }

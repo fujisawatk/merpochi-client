@@ -1,6 +1,8 @@
 <template>
   <nb-container class="home-container">
 
+    <navigation-events :on-did-focus="checkForMessage" />
+
     <header
       root
       home
@@ -114,6 +116,7 @@
 
 <script>
 import store from '../store'
+import { Toast } from 'native-base'
 
 export default {
   data: function() {
@@ -172,6 +175,20 @@ export default {
     },
     pressedCancelGenre() {
       store.dispatch("genre/delGenre")
+    },
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if ( message ) {
+        Toast.show({
+          text: message,
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+        // ナビゲーションパラメータ初期化
+        this.navigation.setParams({ message: null })
+      }
     }
   }
 }

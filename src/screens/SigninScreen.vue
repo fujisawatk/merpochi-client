@@ -1,5 +1,6 @@
 <template>
   <nb-container class="signin-container">
+    <navigation-events :on-did-focus="checkForMessage" />
     <view class="logo">
       <image
         class="logo-image"
@@ -61,6 +62,7 @@
 <script>
 import axios from 'axios'
 import store from '../store'
+import { Toast } from 'native-base'
 import {
   required,
   email,
@@ -105,14 +107,26 @@ export default {
       if (!this.$v.form.$invalid) {
         store.dispatch("auth/loginOne", this.form)
         .then(user => {
-          this.navigation.navigate('Home')
+          this.navigation.navigate('Home', { message: 'ログインしました' })
         })
         .catch(() => {
           console.log("ログインに失敗しました")
         })
       }
+    },
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if ( message ) {
+        Toast.show({
+          text: message,
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+      }
     }
-  }
+  },
 }
 </script>
 

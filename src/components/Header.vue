@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { ActionSheet } from 'native-base'
+import { ActionSheet, Toast } from 'native-base'
 import store from '../store'
 
 export default {
@@ -94,7 +94,13 @@ export default {
         case 'ログアウト':
           store.dispatch('auth/logout')
             .then(() => {
-              this.navigation.navigate('Home')
+              Toast.show({
+                text: 'ログアウトしました。',
+                buttonText: 'Ok',
+                type: 'success',
+                position: 'bottom',
+                duration: 5000
+              })
             })
           break
         default:

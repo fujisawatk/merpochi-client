@@ -19,6 +19,9 @@ import InputWithError from './components/InputWithError.vue'
 import StationItem from "./components/StationItem.vue"
 import GenreItem from "./components/GenreItem.vue"
 
+import React from 'react'
+import { NavigationEvents } from 'react-navigation'
+
 // プラグインの登録
 Vue.use(VueNativeBase)
 Vue.use(Vuelidate)
@@ -30,6 +33,7 @@ Vue.component("Footer", Footer)
 Vue.component('InputWithError', InputWithError)
 Vue.component("StationItem", StationItem)
 Vue.component("GenreItem", GenreItem)
+Vue.component("NavigationEvents", NavigationEvents)
 
 
 export default {
