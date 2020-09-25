@@ -94,7 +94,7 @@ export default {
     },
     // 各店舗のコメント数、いいね数を取得
     async getCommentsAndFavoritesCount ({commit}, shopCodes) {
-      return axios.post('http://192.168.100.100:8000/shops', shopCodes)
+      return axios.post('http://192.168.100.100:8000/shops/search', shopCodes)
       .then(res => {
         commit('setCommentsAndFavoritesCount', res.data)
       })
