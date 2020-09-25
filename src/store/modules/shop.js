@@ -101,7 +101,7 @@ export default {
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
     saveShop ({commit}, data) {
-      return axios.post('http://192.168.100.100:8000/shops/register', data)
+      return axios.post('http://192.168.100.100:8000/shops', data)
       .then(res => {
         commit('setShopId', res.data.id)
       })
