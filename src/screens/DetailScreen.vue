@@ -264,7 +264,10 @@ export default {
         }
         store.dispatch("comment/saveComment", data)
           .then(res => {
-            this.shopId = store.state.shop.shopId
+            // 店舗新規登録時だけstateのshopIdから値を代入する
+            if (this.shopId == 0) {
+              this.shopId = store.state.shop.shopId
+            }
             this.newComment = ""
             // $dirtyをfalseに設定（コメント入力欄アクティブリセット）
             this.$v.newComment.$reset()
@@ -293,7 +296,10 @@ export default {
         }
         store.dispatch("favorite/saveFavorite", data)
           .then(res => {
-            this.shopId = store.state.shop.shopId
+            // 店舗新規登録時だけstateのshopIdから値を代入する
+            if (this.shopId == 0) {
+              this.shopId = store.state.shop.shopId
+            }
             console.log("お気に入り登録しました")
           })
           .catch(() => {
