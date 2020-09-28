@@ -43,6 +43,9 @@ export default {
       .then(res => {
         commit('setFavorites', res.data)
       })
+      .catch(err => {
+        console.log(err)
+      })
     },
     // お気に入り登録がない店舗情報を呼び出した際のリセット用
     delFavorites ({commit}) {

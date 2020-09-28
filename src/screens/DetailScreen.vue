@@ -255,6 +255,7 @@ export default {
             img:     this.img,
             latitude: this.marker.coordinate.latitude,
             longitude: this.marker.coordinate.longitude,
+            url: this.url
           },
           commentData: {
             text: this.newComment,
@@ -288,6 +289,7 @@ export default {
             img:     this.img,
             latitude: this.marker.coordinate.latitude,
             longitude: this.marker.coordinate.longitude,
+            url: this.url
           },
           favoriteData: {
             shop_id: this.shopId,
@@ -318,12 +320,44 @@ export default {
   },
   async created () {
     const code = this.navigation.getParam('code')
-    // 付近にある店舗情報一覧ページの取得値から取得
-    const shop = store.getters['shop/getShop'](code)
-    // 店舗情報が未取得だった場合
-    if (shop == undefined) {
-      // DBの店舗ID取得用
-      const commentedShop = store.getters['shop/getCommentedShop'](code)
+    // マイリスト表示
+    const commentedShop = store.getters['shop/getCommentedShop'](code)
+    if (commentedShop == undefined) {
+      const favoritedShop = store.getters['shop/getFavoritedShop'](code)
+      if (favoritedShop == undefined) {
+        // 付近にある店舗情報一覧ページの取得値から取得
+        const shop = store.getters['shop/getShop'](code)
+        this.name = shop.name
+        this.category = shop.category
+        this.opentime = shop.opentime
+        this.budget = Number(shop.budget)
+        this.img = shop.img
+        this.marker.description = shop.category
+        this.marker.coordinate.latitude = Number(shop.latitude)
+        this.marker.coordinate.longitude = Number(shop.longitude)
+        this.coordinates.latitude = Number(store.state.shop.latitude)
+        this.coordinates.longitude = Number(store.state.shop.longitude)
+        this.url = shop.url
+        this.shopId = shop.shopId
+        this.code = code
+      }else{
+        // お気に入りした店舗を選択
+        this.name = favoritedShop.name
+        this.category = favoritedShop.category
+        this.opentime = favoritedShop.opentime
+        this.budget = favoritedShop.budget
+        this.img = favoritedShop.img
+        this.marker.description = favoritedShop.category
+        this.marker.coordinate.latitude = favoritedShop.latitude
+        this.marker.coordinate.longitude = favoritedShop.longitude
+        this.coordinates.latitude = Number(store.state.shop.latitude)
+        this.coordinates.longitude = Number(store.state.shop.longitude)
+        this.url = favoritedShop.url
+        this.shopId = favoritedShop.id
+        this.code = code
+      }
+    }else{
+      // コメントした店舗を選択
       this.name = commentedShop.name
       this.category = commentedShop.category
       this.opentime = commentedShop.opentime
@@ -336,21 +370,6 @@ export default {
       this.coordinates.longitude = Number(store.state.shop.longitude)
       this.url = commentedShop.url
       this.shopId = commentedShop.id
-      this.code = code
-    // 既に取得してある店舗データの場合（付近店舗一覧画面）
-    }else{
-      this.name = shop.name
-      this.category = shop.category
-      this.opentime = shop.opentime
-      this.budget = Number(shop.budget)
-      this.img = shop.img
-      this.marker.description = shop.category
-      this.marker.coordinate.latitude = Number(shop.latitude)
-      this.marker.coordinate.longitude = Number(shop.longitude)
-      this.coordinates.latitude = Number(store.state.shop.latitude)
-      this.coordinates.longitude = Number(store.state.shop.longitude)
-      this.url = shop.url
-      this.shopId = shop.shopId
       this.code = code
     }
     // 店舗IDがAPIで登録されている場合、コメント情報とお気に入り数を取得。

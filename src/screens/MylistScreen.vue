@@ -8,9 +8,14 @@
 
     <nb-tabs>
       <nb-tab :heading="getFavoritedTab()">
-        <nb-content v-if="(items.length > 0)">
-          <view v-for="item in items" :key="item.id">
-            <item :item="item" />
+        <nb-content v-if="(favoriteItems.length > 0)">
+          <view v-for="item in favoriteItems" :key="item.id">
+            <item
+              mypage
+              :item="item"
+              :sel-code="item.code"
+              :change-detail="changeDetail"
+            />
           </view>
         </nb-content>
 
@@ -22,8 +27,8 @@
       </nb-tab>
 
       <nb-tab :heading="getCommentedTab()">
-        <nb-content v-if="(items.length > 0)">
-          <view v-for="item in items" :key="item.id">
+        <nb-content v-if="(commentItems.length > 0)">
+          <view v-for="item in commentItems" :key="item.id">
             <item
               mypage
               :item="item"
@@ -85,8 +90,11 @@ export default {
     }
   },
   computed: {
-    items() {
+    commentItems() {
       return store.state.shop.commentedShops
+    },
+    favoriteItems() {
+      return store.state.shop.favoritedShops
     },
     isAuth() {
       return store.state.auth.isAuthResolved
@@ -94,9 +102,9 @@ export default {
   },
   created() {
     if (this.isAuth) {
-      store.dispatch('shop/getCommentedShops', store.state.auth.user.id)
+      store.dispatch('shop/getCommentedAndFavoritedShops', store.state.auth.user.id)
     }else{
-      store.dispatch('shop/getCommentedShops', 0)
+      store.dispatch('shop/getCommentedAndFavoritedShops', 0)
     }
   }
 };

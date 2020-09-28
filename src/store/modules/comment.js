@@ -25,6 +25,9 @@ export default {
       .then(res => {
         commit('setComments', res.data)
       })
+      .catch(err => {
+        console.log(err)
+      })
     },
     // コメントがない店舗情報を呼び出した際のリセット用
     delComments ({commit}) {
