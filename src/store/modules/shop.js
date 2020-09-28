@@ -13,6 +13,7 @@ export default {
     shops: [],                                                // 取得した店舗情報
     count: "",                                                // 各店舗のコメント数、いいね数
     commentedShops: "",                                       // ログインユーザーがコメントした店舗情報
+    favoritedShops: "",                                       // ログインユーザーがお気に入りした店舗情報
     shopId: 0,
   },
   getters: {
@@ -22,6 +23,9 @@ export default {
     },
     getCommentedShop: (state) => (code) => {
       return state.commentedShops.find(shop => shop.code === code)
+    },
+    getFavoritedShop: (state) => (code) => {
+      return state.favoritedShops.find(shop => shop.code === code)
     }
   }, 
   mutations: {
@@ -53,8 +57,9 @@ export default {
     setCommentsAndFavoritesCount (state, data) {
       state.count = data
     },
-    setCommentedShops (state, data) {
-      state.commentedShops = data
+    setCommentedAndFavoritedShops (state, data) {
+      state.commentedShops = data.commented_shops
+      state.favoritedShops = data.favorited_shops
     },
     setShopId (state, shopId) {
       state.shopId = shopId
@@ -94,24 +99,24 @@ export default {
     },
     // 各店舗のコメント数、いいね数を取得
     async getCommentsAndFavoritesCount ({commit}, shopCodes) {
-      return axios.post('http://192.168.100.100:8000/shops', shopCodes)
+      return axios.post('http://192.168.100.100:8000/shops/search', shopCodes)
       .then(res => {
         commit('setCommentsAndFavoritesCount', res.data)
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
     saveShop ({commit}, data) {
-      return axios.post('http://192.168.100.100:8000/shops/register', data)
+      return axios.post('http://192.168.100.100:8000/shops', data)
       .then(res => {
         commit('setShopId', res.data.id)
       })
     },
-    // ユーザーがコメントした店舗情報を取得
-    getCommentedShops ({commit}, uid) {
-      return axios.get('http://192.168.100.100:8000/users/' + String(uid) + '/commentedshops')
-    .then(res => {
-        commit('setCommentedShops',res.data)
-      })
+    // ユーザーがコメント・お気に入りした店舗情報を取得
+    getCommentedAndFavoritedShops ({commit}, uid) {
+      return axios.post('http://192.168.100.100:8000/shops/me', { user_id: uid })
+      .then(res => {
+          commit('setCommentedAndFavoritedShops',res.data)
+        })
     },
     // 店名・キーワード検索
     keywordSearch ({dispatch, state, commit}, keyword) {
