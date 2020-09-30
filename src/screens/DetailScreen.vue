@@ -259,9 +259,8 @@ export default {
           },
           commentData: {
             text: this.newComment,
-            shop_id: this.shopId,
-            user_id: store.state.auth.user.id,
-          }
+          },
+          shop_id: this.shopId
         }
         store.dispatch("comment/saveComment", data)
           .then(res => {
