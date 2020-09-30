@@ -290,10 +290,7 @@ export default {
             longitude: this.marker.coordinate.longitude,
             url: this.url
           },
-          favoriteData: {
-            shop_id: this.shopId,
-            user_id: store.state.auth.user.id,
-          }
+          shop_id: this.shopId,
         }
         store.dispatch("favorite/saveFavorite", data)
           .then(res => {
@@ -308,13 +305,7 @@ export default {
           })
     },
     cancelFavoriteBtnPress() {
-      // APIに削除する店舗IDを投げる
-      const data = {
-        shop_id: this.shopId,
-        user_id: store.state.auth.user.id,
-      }
-      store.dispatch("favorite/delFavorite", data)
-      // stateから該当するデータを取り除く
+      store.dispatch("favorite/delFavorite", this.shopId)
     }
   },
   async created () {
