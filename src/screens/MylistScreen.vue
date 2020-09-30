@@ -101,11 +101,7 @@ export default {
     },
   },
   created() {
-    if (this.isAuth) {
-      store.dispatch('shop/getCommentedAndFavoritedShops', store.state.auth.user.id)
-    }else{
-      store.dispatch('shop/getCommentedAndFavoritedShops', 0)
-    }
+    store.dispatch('shop/getCommentedAndFavoritedShops')
   }
 };
 </script>

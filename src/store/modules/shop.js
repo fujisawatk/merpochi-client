@@ -112,8 +112,8 @@ export default {
       })
     },
     // ユーザーがコメント・お気に入りした店舗情報を取得
-    getCommentedAndFavoritedShops ({commit}, uid) {
-      return axios.post('http://192.168.100.100:8000/shops/me', { user_id: uid })
+    getCommentedAndFavoritedShops ({commit}) {
+      return axios.get('http://192.168.100.100:8000/shops/me')
       .then(res => {
           commit('setCommentedAndFavoritedShops',res.data)
         })
