@@ -43,6 +43,8 @@ export default {
   created () {
     store.dispatch('auth/verifyUser')
       .catch(() => {})
+    store.dispatch("shop/getShops")
+      .catch(() => {})
   }
 };
 </script>
