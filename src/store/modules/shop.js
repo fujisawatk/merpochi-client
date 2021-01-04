@@ -15,8 +15,8 @@ export default {
     keyid: "ae0f4e85e8ca70ba78e7ef73bd1db6b9",                // ぐるなびAPIのキーID
     shops: [],                                                // 取得した店舗情報
     count: "",                                                // 各店舗のコメント数、いいね数
-    commentedShops: "",                                       // ログインユーザーがコメントした店舗情報
-    favoritedShops: "",                                       // ログインユーザーがお気に入りした店舗情報
+    commentedShops: [],                                       // ログインユーザーがコメントした店舗情報
+    favoritedShops: [],                                       // ログインユーザーがお気に入りした店舗情報
     shopId: 0,
   },
   getters: {
@@ -86,11 +86,11 @@ export default {
         }) 
     },
     // 付近の店舗情報取得
-    async getShops ({dispatch, state, commit}) {
+    async getShops ({dispatch, state, commit}, genre) {
       await dispatch('getGeolocation')
       // 0.5sec遅延して、commit後のstateを読込
       setTimeout(() => {
-        const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
+        const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude + "&freeword=" + genre
         axios
         .get(requestUrl)
         .then(async (res) => {

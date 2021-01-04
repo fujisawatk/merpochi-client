@@ -99,7 +99,7 @@ export default {
       }
     },
     pushMarker () {
-     store.dispatch("shop/getShops")
+     this.navigation.navigate('GeolocationSearch')
     },
     goBack () {
       this.navigation.goBack()
@@ -123,7 +123,7 @@ export default {
   font-size: 13;
 }
 .header-body {
-  flex: 1;
+  flex: 2;
   justify-content: center;
   align-items: center;
 }
