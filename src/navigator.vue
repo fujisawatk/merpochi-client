@@ -13,6 +13,7 @@ import MylistScreen from "./screens/MylistScreen"
 import MypageScreen from "./screens/MypageScreen"
 import StationSearchScreen from "./screens/StationSearchScreen"
 import GenreSearchScreen from "./screens/GenreSearchScreen"
+import GeolocationSearchScreen from "./screens/GeolocationSearchScreen"
 import { Root } from "native-base"
 
 import {
@@ -30,7 +31,8 @@ const StackNavigator = createStackNavigator(
     Mypage: MypageScreen,
     Detail: DetailScreen,
     StationSearch: StationSearchScreen,
-    GenreSearch: GenreSearchScreen
+    GenreSearch: GenreSearchScreen,
+    GeolocationSearch: GeolocationSearchScreen
   },
   {
     initialRouteName: 'Home',

@@ -86,11 +86,11 @@ export default {
         }) 
     },
     // 付近の店舗情報取得
-    async getShops ({dispatch, state, commit}) {
+    async getShops ({dispatch, state, commit}, genre) {
       await dispatch('getGeolocation')
       // 0.5sec遅延して、commit後のstateを読込
       setTimeout(() => {
-        const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
+        const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude + "&freeword=" + genre
         axios
         .get(requestUrl)
         .then(async (res) => {
