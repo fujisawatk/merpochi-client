@@ -1,21 +1,13 @@
 <template>
   <nb-header class="header">
     <nb-left class="header-left">
-      <nb-button
-        iconLeft
-        rounded
-        bordered
-        dark
+      <nb-icon
+        type="Fontisto"
+        name="map-marker-alt"
+        :on-press="pushMarker"
+        class="geolocation-icon"
         v-if="home"
-      >
-        <nb-icon
-          type="Fontisto"
-          name="map-marker-alt"
-          :on-press="pushMarker"
-          class="geolocation-icon"
-        />
-        <nb-text class="geolocation-title">近くのお店</nb-text>
-      </nb-button>
+      />
 
       <nb-button
         v-if="!root"
@@ -25,19 +17,18 @@
         <nb-icon name="arrow-back" />
       </nb-button>
     </nb-left>
-      <nb-body class="header-body">
-        <nb-title class="header-title">{{ screen }}</nb-title>
-      </nb-body>
-      <nb-right class="header-right">
-        
-        <nb-button transparent
-          class="header-icon"
-          :on-press="displayActionSheet"
-        >
-          <nb-icon type="Entypo" name="user" class="user-icon"/>
-        </nb-button>
-      </nb-right>
-    </nb-header>
+    <nb-body class="header-body">
+      <nb-title class="header-title">{{ screen }}</nb-title>
+    </nb-body>
+    <nb-right class="header-right">
+      
+      <nb-button transparent
+        :on-press="displayActionSheet"
+      >
+        <nb-icon type="Entypo" name="user" class="user-icon"/>
+      </nb-button>
+    </nb-right>
+  </nb-header>
 </template>
 
 <script>
@@ -123,6 +114,7 @@ export default {
 }
 .header-left {
   flex: 1;
+  margin-left: 10;
 }
 .geolocation-icon {
   font-size: 20;
@@ -137,15 +129,12 @@ export default {
 }
 .header-right {
   flex: 1;
+  margin-right: 10;
 }
 .header-title {
   color: #111;
   font-weight: bold;
 }
-.header-icon {
-  margin-right: 10;
-}
-
 .user-icon {
   color: #111;
   font-size: 20;
