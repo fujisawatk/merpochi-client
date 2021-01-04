@@ -12,7 +12,7 @@ export default {
     longitude: "",                                            // 現在位置経度
     errorMessage: "",                                         // 現在位置取得時のエラーメッセージ
     gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
-    keyid: "980bec359baeb39b9866300dd9a38675",                // ぐるなびAPIのキーID
+    keyid: "ae0f4e85e8ca70ba78e7ef73bd1db6b9",                // ぐるなびAPIのキーID
     shops: [],                                                // 取得した店舗情報
     count: "",                                                // 各店舗のコメント数、いいね数
     commentedShops: "",                                       // ログインユーザーがコメントした店舗情報
@@ -88,8 +88,10 @@ export default {
     // 付近の店舗情報取得
     async getShops ({dispatch, state, commit}) {
       await dispatch('getGeolocation')
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
-      axios
+      // 0.5sec遅延して、commit後のstateを読込
+      setTimeout(() => {
+        const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude
+        axios
         .get(requestUrl)
         .then(async (res) => {
           const shopCodes = res.data.rest.map(function( value ) {
@@ -99,6 +101,7 @@ export default {
           commit('setShop', res.data)
         })
         .catch(() => undefined)
+      }, 500)
     },
     // 各店舗のコメント数、いいね数を取得
     async getCommentsAndFavoritesCount ({commit}, shopCodes) {
