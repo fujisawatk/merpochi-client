@@ -2,6 +2,7 @@ import axios from 'axios'
 import { AsyncStorage } from 'react-native'
 import jwtDecode from 'jwt-decode'
 import service from '../../services/axios'
+import { ENV } from "../../services/environment"
 
 // トークンの有効期限検証
 const isTokenValid = (token) => {
@@ -11,6 +12,8 @@ const isTokenValid = (token) => {
   }
   return false
 }
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   namespaced: true,
@@ -39,7 +42,7 @@ export default {
   },
   actions: {
     loginOne ({commit}, userData) {
-      return axios.post('http://192.168.100.100:8000/login', userData)
+      return axios.post( baseApiUrl + '/login', userData)
       .then(res => {
         const user = res.data
         AsyncStorage.setItem('merpochi-jwt', user.token)
@@ -47,7 +50,7 @@ export default {
       })
     },
     register ({commit}, userData) {
-      return axios.post('http://192.168.100.100:8000/users', userData)
+      return axios.post( baseApiUrl + '/users', userData)
     },
     logout ({commit}) {
       return new Promise((resolve) => {
@@ -70,7 +73,7 @@ export default {
     },
     // ログインユーザーのデータ取得 & トークン更新
     fetchCurrentUser ({ commit, state }) {
-      return axios.get('http://192.168.100.100:8000/verify')
+      return axios.get( baseApiUrl + '/verify')
         .then(res => {
           const user = res.data
           AsyncStorage.setItem('merpochi-jwt', user.token)

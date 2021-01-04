@@ -1,6 +1,9 @@
 import axios from 'axios'
 import * as Location from "expo-location"
 import * as Permissions from "expo-permissions"
+import { ENV } from "../../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   namespaced: true,
@@ -99,21 +102,21 @@ export default {
     },
     // 各店舗のコメント数、いいね数を取得
     async getCommentsAndFavoritesCount ({commit}, shopCodes) {
-      return axios.post('http://192.168.100.100:8000/shops/search', shopCodes)
+      return axios.post( baseApiUrl + '/shops/search', shopCodes)
       .then(res => {
         commit('setCommentsAndFavoritesCount', res.data)
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
     saveShop ({commit}, data) {
-      return axios.post('http://192.168.100.100:8000/shops', data)
+      return axios.post( baseApiUrl + '/shops', data)
       .then(res => {
         commit('setShopId', res.data.id)
       })
     },
     // ユーザーがコメント・お気に入りした店舗情報を取得
     getCommentedAndFavoritedShops ({commit}) {
-      return axios.get('http://192.168.100.100:8000/shops/me')
+      return axios.get( baseApiUrl + '/shops/me')
       .then(res => {
           commit('setCommentedAndFavoritedShops',res.data)
         })
