@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { ENV } from "../../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   namespaced: true,
@@ -39,7 +42,7 @@ export default {
     // 指定の店舗IDに紐付いたお気に入り数を取得
     getFavorites ({commit}, shopId) {
       const strId = String(shopId)
-      return axios.get('http://192.168.100.100:8000/shops/' + strId + '/favorites')
+      return axios.get( baseApiUrl + '/shops/' + strId + '/favorites')
       .then(res => {
         commit('setFavorites', res.data)
       })
@@ -59,7 +62,7 @@ export default {
         data.shop_id = rootState.shop.shopId
       }
       const strId = String(data.shop_id)
-      return axios.post('http://192.168.100.100:8000/shops/' + strId + '/favorites')
+      return axios.post( baseApiUrl + '/shops/' + strId + '/favorites')
       .then(res => {
         commit('setNewFavorite', res.data)
       })
@@ -76,7 +79,7 @@ export default {
     // お気に入り解除
     delFavorite ({commit, rootState}, shopId) {
       const strId = String(shopId)
-      return axios.delete('http://192.168.100.100:8000/shops/' + strId + '/favorites')
+      return axios.delete( baseApiUrl + '/shops/' + strId + '/favorites')
       .then(res => {
         commit('resetFavorite', rootState.auth.user.user_id)
       })

@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { ENV } from "../../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   namespaced: true,
@@ -21,7 +24,7 @@ export default {
     // 指定の店舗IDに紐付いたコメントを取得
     getComments ({commit}, shopId) {
       const strId = String(shopId)
-      return axios.get('http://192.168.100.100:8000/shops/' + strId + '/comments')
+      return axios.get( baseApiUrl + '/shops/' + strId + '/comments')
       .then(res => {
         commit('setComments', res.data)
       })
@@ -41,7 +44,7 @@ export default {
         data.shop_id = rootState.shop.shopId
       }
       const strId = String(data.shop_id)
-      return axios.post('http://192.168.100.100:8000/shops/' + strId + '/comments', data.commentData)
+      return axios.post( baseApiUrl + '/shops/' + strId + '/comments', data.commentData)
       .then(res => {
         const newComment = res.data
         // 処理が成功したら、stateにコメント追加。

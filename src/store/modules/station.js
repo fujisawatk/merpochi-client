@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { ENV } from "../../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   namespaced: true,
@@ -24,7 +27,7 @@ export default {
   actions: {
     // 指定の店舗IDに紐付いたお気に入り数を取得
     searchStations ({commit}, keyword) {
-      return axios.post('http://192.168.100.100:8000/stations/search', keyword)
+      return axios.post( baseApiUrl + '/stations/search', keyword)
       .then(res => {
         if (res.data.length != 0) {
           commit('setStations', res.data)
