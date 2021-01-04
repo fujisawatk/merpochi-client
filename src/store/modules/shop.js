@@ -15,8 +15,8 @@ export default {
     keyid: "ae0f4e85e8ca70ba78e7ef73bd1db6b9",                // ぐるなびAPIのキーID
     shops: [],                                                // 取得した店舗情報
     count: "",                                                // 各店舗のコメント数、いいね数
-    commentedShops: "",                                       // ログインユーザーがコメントした店舗情報
-    favoritedShops: "",                                       // ログインユーザーがお気に入りした店舗情報
+    commentedShops: [],                                       // ログインユーザーがコメントした店舗情報
+    favoritedShops: [],                                       // ログインユーザーがお気に入りした店舗情報
     shopId: 0,
   },
   getters: {
