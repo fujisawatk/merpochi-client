@@ -87,7 +87,7 @@ export default {
       return store.state.auth.isAuthResolved
     },
     image() {
-      return store.state.image.selectedImage
+      return store.state.image.userImage
     }
   },
   methods: {
