@@ -79,11 +79,12 @@ export default {
       }
     },
     // ログインユーザーのデータ取得 & トークン更新
-    fetchCurrentUser ({ commit, state }) {
+    fetchCurrentUser ({ commit, state, dispatch }) {
       return axios.get( baseApiUrl + '/verify')
         .then(res => {
           const user = res.data
           AsyncStorage.setItem('merpochi-jwt', user.token)
+          dispatch('image/getUserImage', user.id, { root: true })
           commit('setAuthUser', user)
           return state.user
         })
