@@ -8,12 +8,16 @@ export default {
   state: {
     selectedImage: {
       uri: ""
-    }
+    },
+    userImage: ""
   },
   getters: {}, 
   mutations: {
     setImage (state, image) {
       state.selectedImage = image
+    },
+    setUserImage (state, image) {
+      state.userImage = image
     },
   },
   actions: {
@@ -50,6 +54,12 @@ export default {
       else {
         return undefined
       }
+    },
+    getUserImage ({commit}, uid) {
+      return axios.get( baseApiUrl + '/users/' + String(uid) + '/image')
+      .then(res => {
+        commit('setUserImage',res.data)
+      })
     }
   }
 }
