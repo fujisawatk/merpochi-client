@@ -24,6 +24,7 @@
       
       <nb-button transparent
         :on-press="displayActionSheet"
+        v-if="!auth"
       >
         <nb-icon type="Entypo" name="user" class="user-icon"/>
       </nb-button>
@@ -47,6 +48,9 @@ export default {
       type: Boolean
     },
     home: {
+      type: Boolean
+    },
+    auth: {
       type: Boolean
     }
   },
