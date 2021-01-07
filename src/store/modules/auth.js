@@ -51,6 +51,12 @@ export default {
     },
     register ({commit}, userData) {
       return axios.post( baseApiUrl + '/users', userData)
+        .then(res => {
+          const user = res.data
+          commit('setAuthUser', user)
+          return state.user
+        })
+        .catch(() => undefined)
     },
     logout ({commit}) {
       return new Promise((resolve) => {

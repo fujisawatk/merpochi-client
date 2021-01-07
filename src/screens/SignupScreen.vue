@@ -155,10 +155,11 @@ export default {
       if (!this.$v.form.$invalid) {
         store.dispatch("auth/register", this.form)
         .then(() => {
+          store.dispatch("image/saveImage")
           this.navigateToSignin()
-          })
+        })
         .catch(() => {
-            console.log("登録出来ませんでした")
+          console.log("登録出来ませんでした")
       })
       }
     },
