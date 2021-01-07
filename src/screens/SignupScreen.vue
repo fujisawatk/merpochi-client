@@ -1,16 +1,23 @@
 <template>
   <nb-container class="signup-container">
-      <view class="logo">
-        
-        <image
-          class="logo-image"
-          :source="require('../../assets/icons/logo.png')"
-        />
-        <text class="logo-title">merpochi</text>
-      </view>
-
+    <header
+      auth
+      :screen="title"
+      :navigation="navigation"
+    />
+    <scroll-view>
       <nb-form class="form">
-        <nb-item rounded class="form-input">
+        <view class="form-image-input">
+          <view class="input-image">
+            <image
+              class="image-cover"
+              :source="require('../../assets/icon.png')"
+            />
+            <nb-icon active class="image-icon" type="MaterialIcons" name="add-a-photo"/>
+          </view>
+          <text class="image-text">プロフィール写真設定</text>
+        </view>
+        <nb-item fixedLabel class="form-input">
           <nb-icon active type="Entypo" name="user"/>
           <nb-input
             placeholder="ユーザー名"
@@ -24,7 +31,7 @@
           message="ユーザー名は1〜20文字で入力してください"
         />
         
-        <nb-item rounded class="form-input">
+        <nb-item fixedLabel class="form-input">
           <nb-icon active type="Entypo" name="mail"/>
           <nb-input
             placeholder="メールアドレス"
@@ -38,7 +45,7 @@
           message="形式が正しくありません"
         />
 
-        <nb-item rounded class="form-input">
+        <nb-item fixedLabel class="form-input">
           <nb-icon active type="Entypo" name="key"/>
           <nb-input
             placeholder="パスワード"
@@ -53,7 +60,7 @@
           message="パスワード6〜20文字で入力してください"
         />
 
-        <nb-item rounded class="form-input">
+        <nb-item fixedLabel class="form-input">
           <nb-icon active type="Entypo" name="key"/>
           <nb-input
             placeholder="パスワード(確認)"
@@ -70,25 +77,21 @@
       </nb-form>
 
       <view class="form-btn">
-        <nb-button rounded dark
-          class="send-btn"
+        <nb-button rounded
+          class="send-btn" danger
           :on-press="register"
         >
-          <nb-text class="btn-text">アカウント登録</nb-text>
+          <nb-text class="btn-text">完了</nb-text>
         </nb-button>
 
-        <nb-button rounded dark
-          class="send-btn"
-          :on-press="changeHome"
-        >
-          <nb-text>戻る</nb-text>
-        </nb-button>
       </view>
+    </scroll-view>
 
   </nb-container>
 </template>
 
 <script>
+import { ScrollView } from 'react-native'
 import store from '../store';
 import {
   required,
@@ -101,6 +104,7 @@ import {
 export default {
   data () {
     return {
+      title: "アカウント登録",
       form: {
         nickname: '',
         email: '',
@@ -160,50 +164,47 @@ export default {
 </script>
 
 <style>
-.signup-container {
-  flex: 1;
-  background-color: #FFCC33;
-  width: 100%;
-}
-.logo {
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 30%;
-}
-.logo-image {
-  width: 120;
-  height: 120;
-  position: absolute;
-  top: 30;
-}
-.logo-title {
-  font-size: 30;
-  font-family: DancingScript-Bold;
-  position: absolute;
-  top: 130;
-
-}
 .form {
   align-items: center;
-  max-height: 450px;
+}
+.form-image-input {
+  height: 200;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.input-image {
+  width: 80;
+  height: 80;
+  position: relative;
+}
+.image-cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.image-icon {
+  position: absolute;
+  top: 20;
+  left: 20;
+  color: #cccccc;
+  font-size: 40;
+}
+.image-text {
+  margin-top: 20;
+  text-align: center;
+  width: 100%;
 }
 .form-input {
-  background-color: beige;
   max-width: 350px;
-  margin-bottom: 10;
 }
 .form-btn {
-  max-height: 70%;
+  height: 300;
   align-items: center;
-  flex: 1;
 }
 .send-btn {
-  margin-bottom: 10;
   max-width: 350px;
-  flex: 1;
   justify-content: center;
-  width: 100%;              /* iOS用 */
-  max-height: 50px;
+  width: 100%;
 }
 </style>
