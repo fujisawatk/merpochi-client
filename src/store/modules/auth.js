@@ -41,11 +41,12 @@ export default {
     },
   },
   actions: {
-    loginOne ({commit}, userData) {
+    loginOne ({commit, dispatch}, userData) {
       return axios.post( baseApiUrl + '/login', userData)
       .then(res => {
         const user = res.data
         AsyncStorage.setItem('merpochi-jwt', user.token)
+        dispatch('image/getUserImage', user.id, { root: true })
         commit('login', user)
       })
     },

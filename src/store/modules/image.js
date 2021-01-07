@@ -50,6 +50,12 @@ export default {
       else {
         return undefined
       }
+    },
+    getUserImage ({commit}, uid) {
+      return axios.get( baseApiUrl + '/users/' + String(uid) + '/image')
+      .then(res => {
+        commit('setImage',res.data)
+      })
     }
   }
 }

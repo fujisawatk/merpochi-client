@@ -9,7 +9,7 @@
       <nb-content padder class="mypage-account" v-if="isAuth">
         <nb-list-item thumbnail>
           <nb-left>
-              <nb-thumbnail square :source="require('../../assets/icon.png')"/>
+              <nb-thumbnail square :source="{uri: image}"/>
           </nb-left>
           <nb-body>
               <nb-text class="nickname">{{ userNickname }}</nb-Text>
@@ -86,6 +86,9 @@ export default {
     isAuth() {
       return store.state.auth.isAuthResolved
     },
+    image() {
+      return store.state.image.selectedImage
+    }
   },
   methods: {
     pressedRoginBtn() {
