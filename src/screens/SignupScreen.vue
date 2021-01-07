@@ -11,9 +11,9 @@
           <view class="input-image">
             <image
               class="image-cover"
-              :source="require('../../assets/icon.png')"
+              :source="{uri: image}"
             />
-            <nb-icon active class="image-icon" type="MaterialIcons" name="add-a-photo"/>
+            <nb-icon active class="image-icon" type="MaterialIcons" name="add-a-photo" :on-press="pickImage"/>
           </view>
           <text class="image-text">プロフィール写真設定</text>
         </view>
@@ -93,6 +93,7 @@
 <script>
 import { ScrollView } from 'react-native'
 import store from '../store';
+import * as ImagePicker from 'expo-image-picker';
 import {
   required,
   email,
@@ -140,6 +141,11 @@ export default {
       type: Object,
     }
   },
+  computed: {
+    image() {
+      return store.state.image.selectedImage.uri
+    }
+  },
   methods: {
     changeHome() {
       this.navigation.navigate("Home", { message: null })
@@ -158,6 +164,14 @@ export default {
     },
     navigateToSignin() {
       this.navigation.navigate('Signin', { message: 'ユーザー登録が完了しました。ログインできます。' })
+    },
+    async pickImage() {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 1,
+      })
+      store.dispatch("image/selectedImage", result)
     }
   },
 }
@@ -177,6 +191,7 @@ export default {
   width: 80;
   height: 80;
   position: relative;
+  background-color: aliceblue;
 }
 .image-cover {
   width: 100%;
@@ -187,7 +202,8 @@ export default {
   position: absolute;
   top: 20;
   left: 20;
-  color: #cccccc;
+  color: #dddddd;
+  opacity: 0.3;
   font-size: 40;
 }
 .image-text {

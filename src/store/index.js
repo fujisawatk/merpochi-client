@@ -6,6 +6,7 @@ import comment from './modules/comment'
 import favorite from './modules/favorite'
 import station from './modules/station'
 import genre from './modules/genre'
+import image from './modules/image'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     comment,
     favorite,
     station,
-    genre
+    genre,
+    image
   },
   state: {},
   getters: {}, 
