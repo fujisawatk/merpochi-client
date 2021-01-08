@@ -28,10 +28,19 @@
             <nb-icon active class="icon" name="person"/>
             <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
         </nb-label>
-        <nb-button :style="{marginTop:10}" small block dark :on-press="pressedEditBtn">
+        <nb-button
+          rounded
+          dark
+          class="edit-btn"
+          :on-press="pressedEditBtn"
+        >
             <nb-text>編集</nb-text>
         </nb-button>
-        <nb-button :style="{marginTop:20}" small block danger>
+        <nb-button
+          rounded
+          danger
+          class="logout-btn"
+        >
             <nb-text>ログアウト</nb-text>
         </nb-button>
       </nb-content>
@@ -54,7 +63,10 @@
             好みに合ったお店が見つけやすくなります。
           </nb-text>
         </view>
-        <nb-button class="login-btn" block :on-press="pressedRoginBtn">
+        <nb-button
+          rounded
+           class="login-btn"
+          :on-press="pressedRoginBtn">
             <nb-text>ログインする</nb-text>
         </nb-button>
       </nb-content>
@@ -162,5 +174,18 @@ export default {
 }
 .login-btn {
   background-color: #FFCC33;
+  margin-top: 30;
+  justify-content: center;
+  max-width: 350px;
+}
+.edit-btn {
+  margin-top: 30;
+  justify-content: center;
+  max-width: 350px;
+}
+.logout-btn {
+  margin-top: 10;
+  justify-content: center;
+  max-width: 350px;
 }
 </style>
