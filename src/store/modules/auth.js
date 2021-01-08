@@ -22,7 +22,7 @@ export default {
     isAuthResolved: false,    // 認証が許可されているか判定
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
     mylistTab: false,
-    mypageTab: false,
+    myAccountTab: false,
   },
   mutations: {
     login (state, user) {

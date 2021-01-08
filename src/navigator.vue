@@ -10,11 +10,11 @@ import SigninScreen from "./screens/SigninScreen"
 import SignupScreen from "./screens/SignupScreen"
 import DetailScreen from "./screens/DetailScreen"
 import MylistScreen from "./screens/MylistScreen"
-import MypageScreen from "./screens/MypageScreen"
+import MyAccountScreen from "./screens/MyAccountScreen"
+import EditAccountScreen from "./screens/EditAccountScreen"
 import StationSearchScreen from "./screens/StationSearchScreen"
 import GenreSearchScreen from "./screens/GenreSearchScreen"
 import GeolocationSearchScreen from "./screens/GeolocationSearchScreen"
-import EditAccountScreen from "./screens/EditAccountScreen"
 import { Root } from "native-base"
 
 import {
@@ -28,13 +28,13 @@ const StackNavigator = createStackNavigator(
     Home: HomeScreen,
     Signin: SigninScreen,
     Signup: SignupScreen,
-    Mylist: MylistScreen,
-    Mypage: MypageScreen,
     Detail: DetailScreen,
+    Mylist: MylistScreen,
+    MyAccount: MyAccountScreen,
+    EditAccount: EditAccountScreen,
     StationSearch: StationSearchScreen,
     GenreSearch: GenreSearchScreen,
     GeolocationSearch: GeolocationSearchScreen,
-    EditAccount: EditAccountScreen,
   },
   {
     initialRouteName: 'Home',
