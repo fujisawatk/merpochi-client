@@ -14,6 +14,7 @@ import MypageScreen from "./screens/MypageScreen"
 import StationSearchScreen from "./screens/StationSearchScreen"
 import GenreSearchScreen from "./screens/GenreSearchScreen"
 import GeolocationSearchScreen from "./screens/GeolocationSearchScreen"
+import EditAccountScreen from "./screens/EditAccountScreen"
 import { Root } from "native-base"
 
 import {
@@ -32,7 +33,8 @@ const StackNavigator = createStackNavigator(
     Detail: DetailScreen,
     StationSearch: StationSearchScreen,
     GenreSearch: GenreSearchScreen,
-    GeolocationSearch: GeolocationSearchScreen
+    GeolocationSearch: GeolocationSearchScreen,
+    EditAccount: EditAccountScreen,
   },
   {
     initialRouteName: 'Home',
