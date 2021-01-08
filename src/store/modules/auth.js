@@ -22,7 +22,7 @@ export default {
     isAuthResolved: false,    // 認証が許可されているか判定
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
     mylistTab: false,
-    mypageTab: false,
+    myAccountTab: false,
   },
   mutations: {
     login (state, user) {
@@ -38,6 +38,10 @@ export default {
     },
     resolveAuth (state) {
       state.isAuthResolved = true
+    },
+    setUpdateUser (state, user) {
+      state.user.nickname = user.nickname
+      state.user.email = user.email
     },
   },
   actions: {
@@ -65,6 +69,13 @@ export default {
         commit('setLogout', null)
         resolve(true)
       })
+    },
+    updateUser ({commit, state, dispatch}, data) {
+      return axios.put( baseApiUrl + '/users/' + String(state.user.id), data.userData)
+        .then(async res => {
+          await dispatch("image/updateUserImage", data.image, { root: true })
+          commit('setUpdateUser', data.userData)
+        })
     },
     // ユーザー確認（認証済ユーザーかどうか）
     async verifyUser ({ dispatch, commit }) {

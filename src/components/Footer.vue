@@ -9,7 +9,7 @@
         <nb-icon name="heart"/>
         <nb-text>マイリスト</nb-text>
       </nb-button>
-      <nb-button :active="inMypage" :on-press="pressedMypageTab">
+      <nb-button :active="inMyAccount" :on-press="pressedMyAccountTab">
         <nb-icon name="contact"/>
         <nb-text>マイページ</nb-text>
       </nb-button>
@@ -33,28 +33,28 @@ export default {
     inMylist() {
       return store.state.auth.mylistTab
     },
-    inMypage() {
-      return store.state.auth.mypageTab
+    inMyAccount() {
+      return store.state.auth.myAccountTab
     }
   },
   methods: {
     pressedHomeTab() {
       store.state.auth.homeTab = true
       store.state.auth.mylistTab = false
-      store.state.auth.mypageTab = false
+      store.state.auth.myAccountTab = false
       this.navigation.navigate("Home")
     },
     pressedMylistTab() {
       store.state.auth.homeTab = false
       store.state.auth.mylistTab = true
-      store.state.auth.mypageTab = false
+      store.state.auth.myAccountTab = false
       this.navigation.navigate("Mylist")
     },
-    pressedMypageTab() {
+    pressedMyAccountTab() {
       store.state.auth.homeTab = false
       store.state.auth.mylistTab = false
-      store.state.auth.mypageTab = true
-      this.navigation.navigate("Mypage")
+      store.state.auth.myAccountTab = true
+      this.navigation.navigate("MyAccount")
     },
   }
 }

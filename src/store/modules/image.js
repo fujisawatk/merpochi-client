@@ -46,6 +46,31 @@ export default {
       };
       return axios(config)
     },
+    async updateUserImage ({state, rootState, dispatch, commit}, image) {
+      const data = new FormData();
+      let extention = state.selectedImage.uri.split(".")[1]
+      var mineType = await dispatch('mineType', extention)
+      data.append('image',
+        {
+          uri: image,
+          name: String(rootState.auth.user.id) + '-image.' + extention,
+          type: mineType
+        }
+      )
+      var config = {
+        method: 'put',
+        url: baseApiUrl + '/users/'+ String(rootState.auth.user.id) + '/image',
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+        },
+        data: data,
+      };
+      return axios(config)
+      .then(res => {
+        commit('setUserImage', image)
+      })
+    },
     mineType ({}, extention) {
       let allow = {"png":"image/png","pdf":"image/gif","jpeg":"image/jpeg", "jpg":"image/jpg"};
       if (allow[extention] !== undefined){

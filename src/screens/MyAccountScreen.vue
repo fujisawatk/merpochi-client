@@ -1,5 +1,6 @@
 <template>
   <nb-container class="mypage-container">
+
     <header
       root
       :screen="title"
@@ -7,6 +8,9 @@
     />
 
       <nb-content padder class="mypage-account" v-if="isAuth">
+
+        <navigation-events :on-did-focus="checkForMessage" />
+
         <nb-list-item thumbnail>
           <nb-left>
               <nb-thumbnail square :source="{uri: image}"/>
@@ -24,10 +28,19 @@
             <nb-icon active class="icon" name="person"/>
             <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
         </nb-label>
-        <nb-button :style="{marginTop:10}" small block dark>
+        <nb-button
+          rounded
+          dark
+          class="edit-btn"
+          :on-press="pressedEditBtn"
+        >
             <nb-text>編集</nb-text>
         </nb-button>
-        <nb-button :style="{marginTop:20}" small block danger>
+        <nb-button
+          rounded
+          danger
+          class="logout-btn"
+        >
             <nb-text>ログアウト</nb-text>
         </nb-button>
       </nb-content>
@@ -50,7 +63,10 @@
             好みに合ったお店が見つけやすくなります。
           </nb-text>
         </view>
-        <nb-button class="login-btn" block :on-press="pressedRoginBtn">
+        <nb-button
+          rounded
+           class="login-btn"
+          :on-press="pressedRoginBtn">
             <nb-text>ログインする</nb-text>
         </nb-button>
       </nb-content>
@@ -64,6 +80,7 @@
 <script>
 import store from "../store"
 import React from "react"
+import { Toast } from 'native-base'
 
 export default {
   data: function() {
@@ -93,6 +110,32 @@ export default {
   methods: {
     pressedRoginBtn() {
       this.navigation.navigate('Signin')
+    },
+    pressedEditBtn() {
+      this.navigation.navigate('EditAccount')
+    },
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if ( message == 'success' ) {
+        Toast.show({
+          text: 'アカウント情報を更新しました。',
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+      }else if ( message == 'failure' ){
+        Toast.show({
+          text: '更新に失敗しました。',
+          buttonText: 'Ok',
+          type: 'danger',
+          position: 'bottom',
+          duration: 5000
+        })
+      }else{
+        return null
+      }
+      this.navigation.setParams({ message: null })
     }
   }
 }
@@ -131,5 +174,18 @@ export default {
 }
 .login-btn {
   background-color: #FFCC33;
+  margin-top: 30;
+  justify-content: center;
+  max-width: 350px;
+}
+.edit-btn {
+  margin-top: 30;
+  justify-content: center;
+  max-width: 350px;
+}
+.logout-btn {
+  margin-top: 10;
+  justify-content: center;
+  max-width: 350px;
 }
 </style>
