@@ -50,6 +50,7 @@ export default {
           url: value.url,
           latitude: value.latitude,
           longitude: value.longitude,
+          access: value.access,
           commentsCount: state.count[index].comments_count,
           favoritesCount: state.count[index].favorites_count,
           shopId: state.count[index].id

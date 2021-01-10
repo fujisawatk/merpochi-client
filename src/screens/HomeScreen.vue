@@ -99,7 +99,7 @@
         v-for="item in items"
         :key="item.code"
       >
-        <item
+        <shop-item
           :item="item"
           :sel-code="item.code"
           :change-detail="changeDetail"

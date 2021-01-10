@@ -14,6 +14,7 @@ import Vuelidate from 'vuelidate'
 
 import Header from "./components/Header.vue"
 import Item from "./components/Item.vue"
+import ShopItem from "./components/ShopItem.vue"
 import Footer from "./components/Footer.vue"
 import InputWithError from './components/InputWithError.vue'
 import StationItem from "./components/StationItem.vue"
@@ -29,6 +30,7 @@ Vue.use(Vuelidate)
 // コンポーネントの登録
 Vue.component("Header", Header)
 Vue.component("Item", Item)
+Vue.component("ShopItem", ShopItem)
 Vue.component("Footer", Footer)
 Vue.component('InputWithError', InputWithError)
 Vue.component("StationItem", StationItem)
