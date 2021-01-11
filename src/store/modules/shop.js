@@ -51,14 +51,14 @@ export default {
           latitude: value.latitude,
           longitude: value.longitude,
           access: value.access,
-          commentsCount: state.count[index].comments_count,
-          favoritesCount: state.count[index].favorites_count,
+          ratingCount: state.count[index].rating_count,
+          bookmarksCount: state.count[index].bookmarks_count,
           shopId: state.count[index].id
         }
         state.shops.push(hash)
       })
     },
-    setCommentsAndFavoritesCount (state, data) {
+    setRatingAndBookmarksCount (state, data) {
       state.count = data
     },
     setCommentedAndFavoritedShops (state, data) {
@@ -98,17 +98,17 @@ export default {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getCommentsAndFavoritesCount', shopCodes)
+          await dispatch('getRatingAndBookmarksCount', shopCodes)
           commit('setShop', res.data)
         })
         .catch(() => undefined)
       }, 500)
     },
-    // 各店舗のコメント数、いいね数を取得
-    async getCommentsAndFavoritesCount ({commit}, shopCodes) {
+    // 各店舗の高評価数、ブックマーク数を取得
+    async getRatingAndBookmarksCount ({commit}, shopCodes) {
       return axios.post( baseApiUrl + '/shops/search', shopCodes)
       .then(res => {
-        commit('setCommentsAndFavoritesCount', res.data)
+        commit('setRatingAndBookmarksCount', res.data)
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）

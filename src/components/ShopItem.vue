@@ -41,11 +41,11 @@
         </nb-card-item>
         <nb-card-item class="card-bottom">
           <nb-left class="bottom-left">
-            <nb-text class="bottom-text">100 人がリピート希望！！</nb-text>
+            <nb-text class="bottom-text">{{ item.ratingCount }} 人がリピート希望！！</nb-text>
           </nb-left>
           <nb-right class="bottom-right">
             <nb-icon class="bookmark-icon" type="FontAwesome5" name="bookmark"/>
-            <nb-text class="bookmark-count">10</nb-text>
+            <nb-text class="bookmark-count">{{ item.bookmarksCount }}</nb-text>
           </nb-right>
         </nb-card-item>
       </nb-card>
@@ -147,7 +147,8 @@ export default {
   flex: 1;
   align-items: center;
 }
-.bottom-text {
+.bottom-text,
+.bookmark-count {
   font-weight: bold;
 }
 .bookmark-icon {
