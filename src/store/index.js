@@ -7,6 +7,7 @@ import favorite from './modules/favorite'
 import station from './modules/station'
 import genre from './modules/genre'
 import image from './modules/image'
+import bookmark from './modules/bookmark'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     favorite,
     station,
     genre,
-    image
+    image,
+    bookmark
   },
   state: {},
   getters: {}, 
