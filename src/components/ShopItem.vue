@@ -44,7 +44,7 @@
             <nb-text class="bottom-text">{{ shop.ratingCount }} 人がリピート希望！！</nb-text>
           </nb-left>
           <nb-right v-if="isBookmark" class="bottom-right">
-            <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark"/>
+            <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark" :on-press="pressedCancelBookmarkBtn"/>
             <nb-text class="bookmark-count">{{ shop.bookmarksCount }}</nb-text>
           </nb-right>
           <nb-right v-else class="bottom-right">
@@ -112,17 +112,28 @@ export default {
         shop_id: this.shop.shopId,
       }
       store.dispatch("bookmark/saveBookmark", data)
-        .then(res => {
-          // 店舗が新規登録の場合、店舗IDを取得
-          if (this.shop.shopId == 0) {
-            this.shop.shopId = store.state.shop.shopId
-          }
-          this.shop.bookmarksCount += 1
-          this.shop.bookmarkUser = true
-          console.log("ブックマーク登録しました")
+      .then(res => {
+        // 店舗が新規登録の場合、店舗IDを取得
+        if (this.shop.shopId == 0) {
+          this.shop.shopId = store.state.shop.shopId
+        }
+        this.shop.bookmarksCount += 1
+        this.shop.bookmarkUser = true
+        console.log("ブックマーク登録しました")
+      })
+      .catch(() => {
+        console.log("保存に失敗しました")
+      })
+    },
+    pressedCancelBookmarkBtn() {
+      store.dispatch("bookmark/delBookmark", this.shop.shopId)
+      .then(res => {
+          this.shop.bookmarksCount -= 1
+          this.shop.bookmarkUser = false
+          console.log("ブックマーク解除しました")
         })
         .catch(() => {
-          console.log("保存に失敗しました")
+          console.log("解除に失敗しました")
         })
     }
   }

@@ -22,5 +22,14 @@ export default {
         console.log(err)
       })
     },
+    // お気に入り解除
+    delBookmark ({}, shopId) {
+      const strId = String(shopId)
+      return axios.delete( baseApiUrl + '/shops/' + strId + '/bookmarks')
+      .then(res => {})
+      .catch(err => {
+        console.log(err)
+      })
+    },
   }
 }
