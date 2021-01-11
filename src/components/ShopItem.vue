@@ -1,8 +1,8 @@
 <template>
   <nb-container class="item-container">
     <nb-content padder>
-      <nb-card class="card" thumbnail :on-press="itemsPress">
-        <nb-card-item bordered>
+      <nb-card class="card">
+        <nb-card-item bordered button :on-press="itemsPress">
           <nb-left>
             <nb-body>
               <nb-text note>{{ shop.category }}</nb-text>
@@ -10,7 +10,7 @@
             </nb-body>
           </nb-left>
         </nb-card-item>
-        <nb-card-item>
+        <nb-card-item button :on-press="itemsPress">
           <nb-body class="card-body">
             <image 
               v-if="shop.img != ''"
