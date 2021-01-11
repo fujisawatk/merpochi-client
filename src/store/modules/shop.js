@@ -104,14 +104,14 @@ export default {
             shop_codes: shopCodes,
             user_id: rootState.auth.user.id
           }
-          await dispatch('getRatingAndBookmarksCount', data)
+          await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
           commit('setShop', res.data)
         })
         .catch(() => undefined)
       }, 500)
     },
     // 各店舗の高評価数、ブックマーク数を取得
-    async getRatingAndBookmarksCount ({commit}, data) {
+    async getRatingAndBookmarksAndFavoritesCount ({commit}, data) {
       return axios.post( baseApiUrl + '/shops/search', data)
       .then(res => {
         commit('setRatingAndBookmarksCount', res.data)
@@ -121,7 +121,6 @@ export default {
     saveShop ({commit}, data) {
       return axios.post( baseApiUrl + '/shops', data)
       .then(res => {
-        console.log(res.data.id)
         commit('setShopId', res.data.id)
       })
     },
