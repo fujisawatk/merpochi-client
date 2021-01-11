@@ -14,7 +14,7 @@ export default {
     gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
     keyid: "ae0f4e85e8ca70ba78e7ef73bd1db6b9",                // ぐるなびAPIのキーID
     shops: [],                                                // 取得した店舗情報
-    count: "",                                                // 各店舗のコメント数、いいね数
+    count: "",                                                // 各店舗のブックマーク数、いいね数
     commentedShops: [],                                       // ログインユーザーがコメントした店舗情報
     favoritedShops: [],                                       // ログインユーザーがお気に入りした店舗情報
     shopId: 0,
@@ -53,12 +53,14 @@ export default {
           access: value.access,
           ratingCount: state.count[index].rating_count,
           bookmarksCount: state.count[index].bookmarks_count,
-          shopId: state.count[index].id
+          shopId: state.count[index].id,
+          bookmarkUser: state.count[index].bookmark_user
         }
         state.shops.push(hash)
       })
     },
     setRatingAndBookmarksCount (state, data) {
+      console.log(data)
       state.count = data
     },
     setCommentedAndFavoritedShops (state, data) {
@@ -87,7 +89,7 @@ export default {
         }) 
     },
     // 付近の店舗情報取得
-    async getShops ({dispatch, state, commit}, genre) {
+    async getShops ({dispatch, state, commit, rootState}, genre) {
       await dispatch('getGeolocation')
       // 0.5sec遅延して、commit後のstateを読込
       setTimeout(() => {
@@ -98,15 +100,19 @@ export default {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getRatingAndBookmarksCount', shopCodes)
+          const data = {
+            shop_codes: shopCodes,
+            user_id: rootState.auth.user.id
+          }
+          await dispatch('getRatingAndBookmarksCount', data)
           commit('setShop', res.data)
         })
         .catch(() => undefined)
       }, 500)
     },
     // 各店舗の高評価数、ブックマーク数を取得
-    async getRatingAndBookmarksCount ({commit}, shopCodes) {
-      return axios.post( baseApiUrl + '/shops/search', shopCodes)
+    async getRatingAndBookmarksCount ({commit}, data) {
+      return axios.post( baseApiUrl + '/shops/search', data)
       .then(res => {
         commit('setRatingAndBookmarksCount', res.data)
       })
@@ -115,6 +121,7 @@ export default {
     saveShop ({commit}, data) {
       return axios.post( baseApiUrl + '/shops', data)
       .then(res => {
+        console.log(res.data.id)
         commit('setShopId', res.data.id)
       })
     },
