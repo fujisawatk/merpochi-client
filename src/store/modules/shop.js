@@ -60,7 +60,6 @@ export default {
       })
     },
     setRatingAndBookmarksCount (state, data) {
-      console.log(data)
       state.count = data
     },
     setCommentedAndFavoritedShops (state, data) {
@@ -70,6 +69,14 @@ export default {
     setShopId (state, shopId) {
       state.shopId = shopId
     },
+    setBookmark (state, code) {
+      state.shops.find(el => el.code == code).bookmarkUser = true
+      state.shops.find(el => el.code == code).bookmarksCount += 1
+    },
+    resetBookmark (state, code) {
+      state.shops.find(el => el.code == code).bookmarkUser = false
+      state.shops.find(el => el.code == code).bookmarksCount -= 1
+    }
   },
   actions: {
     // 現在位置情報取得
@@ -111,7 +118,7 @@ export default {
       }, 500)
     },
     // 各店舗の高評価数、ブックマーク数を取得
-    async getRatingAndBookmarksAndFavoritesCount ({commit}, data) {
+    getRatingAndBookmarksAndFavoritesCount ({commit}, data) {
       return axios.post( baseApiUrl + '/shops/search', data)
       .then(res => {
         commit('setRatingAndBookmarksCount', res.data)
@@ -157,6 +164,13 @@ export default {
           commit('setShop', res.data)
         })
         .catch(() => undefined)
+    },
+    // 店舗一覧ページのブックマーク更新
+    plusBookmark ({commit}, code) {
+      return commit('setBookmark', code)
+    },
+    minusBookmark ({commit}, code) {
+      return commit('resetBookmark', code)
     }
   }
 }

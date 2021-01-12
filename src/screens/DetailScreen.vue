@@ -83,7 +83,7 @@
             bordered
             class="like-button"
             :on-press="pressedBookmarkBtn"
-            v-if="!isBookmark"
+            v-if="isBookmark === false"
           >
             <nb-icon active class="btn-icon" type="FontAwesome" name="bookmark-o" />
             <nb-text class="btn-text">ブックマーク</nb-text>
@@ -104,7 +104,7 @@
             bordered
             class="like-button"
             :on-press="pressedFavoriteBtn"
-            v-if="!isFavorite"
+            v-if="isFavorite === false"
           >
             <nb-icon active class="btn-icon" type="MaterialIcons" name="favorite-border" />
             <nb-text class="btn-text">リピートしたい！</nb-text>
@@ -117,7 +117,7 @@
             v-else
           >
             <nb-icon active class="btn-icon" type="MaterialIcons" name="favorite" />
-            <nb-text class="btn-text">リピートしたい!!</nb-text>
+            <nb-text class="btn-text">リピートしたい！</nb-text>
           </nb-button>
 
         </view>    
@@ -276,6 +276,7 @@ export default {
         }
         this.bookmarksCount += 1
         this.bookmarkUser = true
+        store.dispatch('shop/plusBookmark', this.code)
         console.log("ブックマーク登録しました")
       })
       .catch(() => {
@@ -283,10 +284,11 @@ export default {
       })
     },
     pressedCancelBookmarkBtn() {
-      store.dispatch("bookmark/delBookmark", this.shopId)
+      store.dispatch('bookmark/delBookmark', this.shopId)
       .then(res => {
           this.bookmarksCount -= 1
           this.bookmarkUser = false
+          store.dispatch("shop/minusBookmark", this.code)
           console.log("ブックマーク解除しました")
         })
         .catch(() => {
@@ -309,18 +311,18 @@ export default {
           shop_id: this.shopId,
         }
         store.dispatch("favorite/saveFavorite", data)
-          .then(res => {
-            // 店舗新規登録時だけstateのshopIdから値を代入する
-            if (this.shopId == 0) {
-              this.shopId = store.state.shop.shopId
-            }
-            this.favoritesCount += 1
-            this.favoriteUser = true
-            console.log("お気に入り登録しました")
-          })
-          .catch(() => {
-            console.log("保存に失敗しました")
-          })
+        .then(res => {
+          // 店舗新規登録時だけstateのshopIdから値を代入する
+          if (this.shopId == 0) {
+            this.shopId = store.state.shop.shopId
+          }
+          this.favoritesCount += 1
+          this.favoriteUser = true
+          console.log("お気に入り登録しました")
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
     },
     pressedCancelFavoriteBtn() {
       store.dispatch("favorite/delFavorite", this.shopId)
@@ -352,7 +354,7 @@ export default {
       this.marker.coordinate.latitude = res.data.latitude
       this.marker.coordinate.longitude = res.data.longitude
       this.url = res.data.url
-      this.shopId = res.data.shop_id
+      this.shopId = res.data.id
     })
     // 未登録の場合
     .catch(() => {
@@ -373,7 +375,11 @@ export default {
       // 投稿情報取得
       axios.get( baseApiUrl + '/shops/' + String(this.shopId) + '/posts')
       .then(res => {
-        this.posts = res.data
+        if (res.data == null) {
+          this.posts = []
+        }else{
+          this.posts = res.data
+        } 
       })
       .catch(() => {})
       const data = {
@@ -383,11 +389,10 @@ export default {
       // ブックマーク、お気に入り情報取得
       axios.post( baseApiUrl + '/shops/search', data)
       .then(res => {
-        console.log(res.data)
         this.bookmarksCount = res.data[0].bookmarks_count
         this.bookmarkUser = res.data[0].bookmark_user
         this.favoritesCount = res.data[0].favorites_count
-        this.favoriteUser = res.data[0].faovorite_user
+        this.favoriteUser = res.data[0].favorite_user
       })
       .catch(() => {})
     }
