@@ -39,7 +39,7 @@
             </nb-button>
           </nb-left>
           <nb-right>
-            <nb-text>11h ago</nb-text>
+            <nb-text note>{{ post.time }}</nb-text>
           </nb-right>
         </nb-card-item>
       </nb-card>
