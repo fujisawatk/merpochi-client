@@ -40,16 +40,16 @@ export default {
   },
   actions: {
     // 指定の店舗IDに紐付いたお気に入り数を取得
-    getFavorites ({commit}, shopId) {
-      const strId = String(shopId)
-      return axios.get( baseApiUrl + '/shops/' + strId + '/favorites')
-      .then(res => {
-        commit('setFavorites', res.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    },
+    // getFavorites ({commit}, shopId) {
+    //   const strId = String(shopId)
+    //   return axios.get( baseApiUrl + '/shops/' + strId + '/favorites')
+    //   .then(res => {
+    //     commit('setFavorites', res.data)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+    // },
     // お気に入り登録がない店舗情報を呼び出した際のリセット用
     delFavorites ({commit}) {
       return commit('resetFavorites')
@@ -63,26 +63,16 @@ export default {
       }
       const strId = String(data.shop_id)
       return axios.post( baseApiUrl + '/shops/' + strId + '/favorites')
-      .then(res => {
-        commit('setNewFavorite', res.data)
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err)
       })
-    },
-    pressedFavoriteBtn ({commit}) {
-      return commit('setFavoriteUser')
-    },
-    notPressedFavoriteBtn ({commit}) {
-      return commit('resetFavoriteUser')
     },
     // お気に入り解除
     delFavorite ({commit, rootState}, shopId) {
       const strId = String(shopId)
       return axios.delete( baseApiUrl + '/shops/' + strId + '/favorites')
-      .then(res => {
-        commit('resetFavorite', rootState.auth.user.user_id)
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err)
       })

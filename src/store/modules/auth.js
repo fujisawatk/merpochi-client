@@ -18,7 +18,9 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   namespaced: true,
   state: {
-    user: null,               // ユーザー値
+    user: {
+      id: 0
+    },               // ユーザー値
     isAuthResolved: false,    // 認証が許可されているか判定
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
     mylistTab: false,

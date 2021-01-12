@@ -48,7 +48,7 @@ export default {
     },
     async updateUserImage ({state, rootState, dispatch, commit}, image) {
       const data = new FormData();
-      let extention = state.selectedImage.uri.split(".")[1]
+      let extention = image.split(".")[1]
       var mineType = await dispatch('mineType', extention)
       data.append('image',
         {

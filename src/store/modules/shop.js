@@ -60,7 +60,6 @@ export default {
       })
     },
     setRatingAndBookmarksCount (state, data) {
-      console.log(data)
       state.count = data
     },
     setCommentedAndFavoritedShops (state, data) {
@@ -70,6 +69,20 @@ export default {
     setShopId (state, shopId) {
       state.shopId = shopId
     },
+    setBookmark (state, code) {
+      state.shops.find(el => el.code == code).bookmarkUser = true
+      state.shops.find(el => el.code == code).bookmarksCount += 1
+    },
+    resetBookmark (state, code) {
+      state.shops.find(el => el.code == code).bookmarkUser = false
+      state.shops.find(el => el.code == code).bookmarksCount -= 1
+    },
+    setRating (state, code) {
+      state.shops.find(el => el.code == code).ratingCount += 1
+    },
+    resetRating (state, code) {
+      state.shops.find(el => el.code == code).ratingCount -= 1
+    }
   },
   actions: {
     // 現在位置情報取得
@@ -104,14 +117,14 @@ export default {
             shop_codes: shopCodes,
             user_id: rootState.auth.user.id
           }
-          await dispatch('getRatingAndBookmarksCount', data)
+          await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
           commit('setShop', res.data)
         })
         .catch(() => undefined)
       }, 500)
     },
     // 各店舗の高評価数、ブックマーク数を取得
-    async getRatingAndBookmarksCount ({commit}, data) {
+    getRatingAndBookmarksAndFavoritesCount ({commit}, data) {
       return axios.post( baseApiUrl + '/shops/search', data)
       .then(res => {
         commit('setRatingAndBookmarksCount', res.data)
@@ -121,7 +134,6 @@ export default {
     saveShop ({commit}, data) {
       return axios.post( baseApiUrl + '/shops', data)
       .then(res => {
-        console.log(res.data.id)
         commit('setShopId', res.data.id)
       })
     },
@@ -158,6 +170,20 @@ export default {
           commit('setShop', res.data)
         })
         .catch(() => undefined)
+    },
+    // 詳細ページ操作後に一覧ページのブックマーク数更新
+    plusBookmark ({commit}, code) {
+      return commit('setBookmark', code)
+    },
+    minusBookmark ({commit}, code) {
+      return commit('resetBookmark', code)
+    },
+    // 詳細ページ操作後に一覧ページのリピート数更新
+    plusRating ({commit}, code) {
+      return commit('setRating', code)
+    },
+    minusRating ({commit}, code) {
+      return commit('resetRating', code)
     }
   }
 }
