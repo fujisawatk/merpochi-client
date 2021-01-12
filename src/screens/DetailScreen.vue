@@ -4,7 +4,7 @@
 
     <nb-tabs>
       <nb-tab :heading="getDetailsTab()">
-        <scroll-view class="detail-card">
+        <scroll-view>
           <nb-card-item>
             <image
               v-if="img != ''"
@@ -72,6 +72,18 @@
             </nb-item>
           </nb-list>
 
+          <nb-separator bordered class="post-index">
+            <nb-text class="post-title">投稿一覧</nb-text>
+          </nb-separator>
+
+          <nb-list
+            v-for="post in posts"
+            :key="post.id"
+          >
+            <post-item
+              :post="post"
+            />
+          </nb-list>
 
           <nb-list-item class="dummy-area" />
 
@@ -406,9 +418,6 @@ export default {
 .detail-container {
   position: relative;
 }
-.detail-card {
-  padding: 10;
-}
 .card-image {
   height: 300;
   width: 100%;
@@ -454,6 +463,13 @@ export default {
   position: absolute;
   left: 40;
   color: #444;
+}
+.post-index {
+  height: 50px;
+  align-items: center;
+}
+.post-title {
+  font-size: 15;
 }
 .detail-footer {
   flex-direction: row;
