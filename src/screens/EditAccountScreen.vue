@@ -123,10 +123,10 @@ export default {
         }
         store.dispatch("auth/updateUser", data)
         .then(() => {
-          this.navigation.navigate("Mypage", { message: 'success' })
+          this.navigation.navigate("MyAccount", { message: 'success' })
         })
         .catch(() => {
-          this.navigation.navigate("Mypage", { message: 'failure' })
+          this.navigation.navigate("MyAccount", { message: 'failure' })
       })
       }
     },
