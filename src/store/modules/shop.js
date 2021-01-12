@@ -69,6 +69,9 @@ export default {
     setShopId (state, shopId) {
       state.shopId = shopId
     },
+    resetShopId (state) {
+      state.shopId = 0
+    },
     setBookmark (state, code) {
       state.shops.find(el => el.code == code).bookmarkUser = true
       state.shops.find(el => el.code == code).bookmarksCount += 1
@@ -184,6 +187,12 @@ export default {
     },
     minusRating ({commit}, code) {
       return commit('resetRating', code)
-    }
+    },
+    addShopId ({commit}, shopId) {
+      return commit('setShopId', shopId)
+    },
+    delShopId ({commit}) {
+      return commit('resetShopId')
+    },
   }
 }

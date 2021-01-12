@@ -82,6 +82,8 @@
           >
             <post-item
               :post="post"
+              :post-id="post.id"
+              :change-post-detail="changePostDetail"
             />
           </nb-list>
 
@@ -196,7 +198,6 @@ export default {
         longitudeDelta: 0.003
       },
       url: "",
-      shopId: 0,
       newComment: "",
       code: "",
       posts: [],
@@ -278,14 +279,14 @@ export default {
           latitude: Number(this.marker.coordinate.latitude),
           longitude: Number(this.marker.coordinate.longitude),
         },
-        shop_id: this.shopId,
+        shop_id: store.state.shop.shopId,
       }
       store.dispatch("bookmark/saveBookmark", data)
       .then(res => {
         // 店舗が新規登録の場合、店舗IDを取得
-        if (this.shopId == 0) {
-          this.shopId = store.state.shop.shopId
-        }
+        // if (this.shopId == 0) {
+        //   this.shopId = store.state.shop.shopId
+        // }
         this.bookmarksCount += 1
         this.bookmarkUser = true
         store.dispatch('shop/plusBookmark', this.code)
@@ -320,14 +321,14 @@ export default {
             longitude: this.marker.coordinate.longitude,
             url: this.url
           },
-          shop_id: this.shopId,
+          shop_id: store.state.shop.shopId,
         }
         store.dispatch("favorite/saveFavorite", data)
         .then(res => {
           // 店舗新規登録時だけstateのshopIdから値を代入する
-          if (this.shopId == 0) {
-            this.shopId = store.state.shop.shopId
-          }
+          // if (this.shopId == 0) {
+          //   this.shopId = store.state.shop.shopId
+          // }
           this.favoritesCount += 1
           this.favoriteUser = true
           store.dispatch('shop/plusRating', this.code)
@@ -349,6 +350,9 @@ export default {
           console.log("解除に失敗しました")
         })
     },
+    changePostDetail(id) {
+      this.navigation.navigate('PostDetail', { id })
+    },
   },
   async created () {
     const code = this.navigation.getParam('code')
@@ -368,7 +372,7 @@ export default {
       this.marker.coordinate.latitude = res.data.latitude
       this.marker.coordinate.longitude = res.data.longitude
       this.url = res.data.url
-      this.shopId = res.data.id
+      store.dispatch("shop/addShopId", res.data.id)
     })
     // 未登録の場合
     .catch(() => {
@@ -383,11 +387,12 @@ export default {
       this.marker.coordinate.latitude = Number(shop.latitude)
       this.marker.coordinate.longitude = Number(shop.longitude)
       this.url = shop.url
+      store.dispatch("shop/delShopId")
     })    
     // 店舗IDがAPIで登録されている場合
-    if (this.shopId != 0) {
+    if (store.state.shop.shopId != 0) {
       // 投稿情報取得
-      axios.get( baseApiUrl + '/shops/' + String(this.shopId) + '/posts')
+      axios.get( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts')
       .then(res => {
         if (res.data == null) {
           this.posts = []
