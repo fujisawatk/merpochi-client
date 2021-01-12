@@ -318,6 +318,7 @@ export default {
           }
           this.favoritesCount += 1
           this.favoriteUser = true
+          store.dispatch('shop/plusRating', this.code)
           console.log("お気に入り登録しました")
         })
         .catch(() => {
@@ -329,6 +330,7 @@ export default {
       .then(res => {
           this.favoritesCount -= 1
           this.favoriteUser = false
+          store.dispatch('shop/minusRating', this.code)
           console.log("お気に入り解除しました")
         })
         .catch(() => {

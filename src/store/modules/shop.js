@@ -76,6 +76,12 @@ export default {
     resetBookmark (state, code) {
       state.shops.find(el => el.code == code).bookmarkUser = false
       state.shops.find(el => el.code == code).bookmarksCount -= 1
+    },
+    setRating (state, code) {
+      state.shops.find(el => el.code == code).ratingCount += 1
+    },
+    resetRating (state, code) {
+      state.shops.find(el => el.code == code).ratingCount -= 1
     }
   },
   actions: {
@@ -165,12 +171,19 @@ export default {
         })
         .catch(() => undefined)
     },
-    // 店舗一覧ページのブックマーク更新
+    // 詳細ページ操作後に一覧ページのブックマーク数更新
     plusBookmark ({commit}, code) {
       return commit('setBookmark', code)
     },
     minusBookmark ({commit}, code) {
       return commit('resetBookmark', code)
+    },
+    // 詳細ページ操作後に一覧ページのリピート数更新
+    plusRating ({commit}, code) {
+      return commit('setRating', code)
+    },
+    minusRating ({commit}, code) {
+      return commit('resetRating', code)
     }
   }
 }
