@@ -83,17 +83,17 @@
         :style="{paddingRight:14}"	
         avatar	
         v-for="comment in comments"	
-        :key="comment.id"	
+        :key="comment.id"
       >	
         <nb-left>	
-          <nb-thumbnail small :source="require('../../assets/icon.png')"/>	
+          <nb-thumbnail small :source="{uri: comment.user_image }"/>	
         </nb-left>	
         <nb-body>	
-          <nb-text>{{ comment.user.nickname }}</nb-Text>	
+          <nb-text>{{ comment.user_nickname }}</nb-Text>	
           <nb-text note>{{ comment.text }}</nb-Text>	
         </nb-body>	
         <nb-right>	
-          <nb-text note>2020/07/09</nb-text>	
+          <nb-text note>{{ comment.time }}</nb-text>	
         </nb-right>	
       </nb-list-item>
     </nb-content>
