@@ -34,8 +34,8 @@
                     :resizeMode="`contain`"
                     :imageBackgroundColor="`#000000`"
                     :style="{
-                      width: 250,
-                      height: 250,
+                      width: 150,
+                      height: 150,
                     }"
                     :source="{uri: image.uri}"
                   />
@@ -156,20 +156,7 @@ export default {
       rating: "",
       postUser: "",
       postUserImage: "",
-      images: [
-        {
-          uri: "https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg",
-          id: 1
-        },
-        {
-          uri: "https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg",
-          id: 2
-        },
-        {
-         uri: "https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg",
-         id: 3
-        },
-      ],
+      images: [],
       comments: [],
       postTime: "",
       newComment: ""
@@ -224,6 +211,11 @@ export default {
           this.comments = []
         }else{
           this.comments = res.data.comments
+        }
+      if (res.data.images == null) {
+          this.images = []
+        }else{
+          this.images = res.data.images
         } 
       this.text = res.data.text
       this.rating = res.data.rating
