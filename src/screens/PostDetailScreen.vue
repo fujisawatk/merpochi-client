@@ -23,11 +23,24 @@
               <nb-text class="post-text">
                 {{ text }}
               </nb-text>
-              <view class="post-image">
-                <image class="image" :source="require('../../assets/icons/sample.jpg')" :style="stylesObj.cardItemImage"/>
-                <image class="image" :source="require('../../assets/icons/sample.jpg')" :style="stylesObj.cardItemImage"/>
-                <image class="image" :source="require('../../assets/icons/sample.jpg')" :style="stylesObj.cardItemImage"/>
-              </view>
+              <scroll-view :horizontal="true">
+                <nb-list-item	
+                  avatar
+                  v-for="image in images"
+                  :key="image.id"
+                >	
+                  <image-modal
+                    :swipeToDismiss="false"
+                    :resizeMode="`contain`"
+                    :imageBackgroundColor="`#000000`"
+                    :style="{
+                      width: 250,
+                      height: 250,
+                    }"
+                    :source="{uri: image.uri}"
+                  />
+                </nb-list-item>
+              </scroll-view>
           </nb-card-item>
         <nb-card-item>
           <nb-left>
@@ -99,11 +112,8 @@
         </nb-right>	
       </nb-list-item>
 
-      <nb-list-item class="dummy-area" />
-
     </nb-content>
     
-
     <footer
       :navigation="navigation"
       class="footer"
@@ -113,6 +123,8 @@
 </template>
 
 <script>
+import { ScrollView } from 'react-native'
+import ImageModal from 'react-native-image-modal';
 import { Rating } from 'react-native-ratings'
 import store from '../store'
 import axios from 'axios'
@@ -127,6 +139,8 @@ import {
 const baseApiUrl = ENV.baseApiUrl
 export default {
   components: {
+    ScrollView,
+    ImageModal,
     Rating
   },
   data() {
@@ -142,6 +156,20 @@ export default {
       rating: "",
       postUser: "",
       postUserImage: "",
+      images: [
+        {
+          uri: "https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg",
+          id: 1
+        },
+        {
+          uri: "https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg",
+          id: 2
+        },
+        {
+         uri: "https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg",
+         id: 3
+        },
+      ],
       comments: [],
       postTime: "",
       newComment: ""
@@ -190,7 +218,7 @@ export default {
   async created () {
     const postId = this.navigation.getParam('id')
     this.postId = postId
-    await axios.get( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts/' + String(postId), { code: code })
+    await axios.get( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts/' + String(postId))
     .then(res => {
       if (res.data.comments == null) {
           this.comments = []
@@ -227,7 +255,6 @@ export default {
 }
 .post-body {
   flex-direction: column;
-  height: 400;
 }
 .post-text {
   align-items: flex-start;
@@ -236,17 +263,14 @@ export default {
   letter-spacing: 2;
   line-height: 25;
 }
-.post-image {
-  flex-direction: row;
-}
 .image {
-  height: 100;
-  width: 100;
+  height: 150;
+  width: 150;
   margin: 10;
 }
 .comment-list {
   padding-right: 15;
-  padding-bottom: 50;
+  padding-bottom: 20;
 }
 .comment-icon {
   color: #bbb;
