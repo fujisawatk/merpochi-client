@@ -52,27 +52,29 @@
         <nb-left>	
           <nb-thumbnail	
             small	
-            :source="{uri: postUserImage }"
+            :source="{uri: currentUserImage }"
           />	
         </nb-left>	
         <nb-body>	
-          <nb-text>{{ postUser }}</nb-Text>	
+          <nb-text>{{ currentUserNickname }}</nb-Text>	
           <nb-form :style="{width:'100%',marginTop:8}">	
             <nb-textarea	
-              :rowSpan="3"	
-              :style="{paddingTop:8}"	
-              bordered	
-              placeholder="コメント..."	
+              :rowSpan="3"
+              :style="{paddingTop:8}"
+              bordered
+              placeholder="コメント..."
+              v-model="newComment"
             />	
-            <!-- <input-with-error	
+            <input-with-error	
               :error="$v.newComment.$dirty && (!$v.newComment.required || !$v.newComment.minLength || !$v.newComment.maxLength)"	
               message="コメントは1〜255文字で入力してください"	
-            />	 -->
-            <nb-button	
-              :style="{width:60}"	
-              small	
-              auto-capitalize="none"	
-              :on-blur="() => $v.newComment.$touch()"	
+            />	
+            <nb-button
+              small
+              :style="{width:60}"
+              :on-press="pressedAddCommentBtn"
+              auto-capitalize="none"
+              :on-blur="() => $v.newComment.$touch()"
             >	
               <nb-text>追加</nb-text>	
             </nb-button>	
@@ -80,10 +82,10 @@
         </nb-body>	
       </nb-list-item>	
       <nb-list-item	
-        :style="{paddingRight:14}"	
-        avatar	
-        v-for="comment in comments"	
+        avatar
+        v-for="comment in comments"
         :key="comment.id"
+        class="comment-list"
       >	
         <nb-left>	
           <nb-thumbnail small :source="{uri: comment.user_image }"/>	
@@ -96,6 +98,9 @@
           <nb-text note>{{ comment.time }}</nb-text>	
         </nb-right>	
       </nb-list-item>
+
+      <nb-list-item class="dummy-area" />
+
     </nb-content>
     
 
@@ -113,6 +118,11 @@ import store from '../store'
 import axios from 'axios'
 import service from '../services/axios'
 import { ENV } from "../services/environment"
+import {
+  required,
+  minLength,
+  maxLength
+} from 'vuelidate/lib/validators'
 
 const baseApiUrl = ENV.baseApiUrl
 export default {
@@ -133,7 +143,15 @@ export default {
       postUser: "",
       postUserImage: "",
       comments: [],
-      postTime: ""
+      postTime: "",
+      newComment: ""
+    }
+  },
+  validations: {
+    newComment: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(255)
     }
   },
   props: {
@@ -142,19 +160,38 @@ export default {
     }
   },
   computed: {
-    currentUser() {
-      return store.state.auth.user
+    currentUserNickname() {
+      return store.state.auth.user.nickname
+    },
+    currentUserImage() {
+      return store.state.image.userImage
     },
     isAuth() {
       return store.state.auth.isAuthResolved
     },
+  },
+  methods: {
+    pressedAddCommentBtn() {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        axios.post( baseApiUrl + '/posts/' + String(this.postId) + '/comments', { text: this.newComment })
+        .then(res => {
+          this.comments.push(res.data)
+          this.newComment = ""
+          // $dirtyをfalseに設定（コメント入力欄アクティブリセット）
+          this.$v.newComment.$reset()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+    }
   },
   async created () {
     const postId = this.navigation.getParam('id')
     this.postId = postId
     await axios.get( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts/' + String(postId), { code: code })
     .then(res => {
-      console.log(res.data)
       if (res.data.comments == null) {
           this.comments = []
         }else{
@@ -206,6 +243,10 @@ export default {
   height: 100;
   width: 100;
   margin: 10;
+}
+.comment-list {
+  padding-right: 15;
+  padding-bottom: 50;
 }
 .comment-icon {
   color: #bbb;

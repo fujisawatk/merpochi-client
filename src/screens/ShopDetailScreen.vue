@@ -163,11 +163,6 @@ import React from "react"
 import { TabHeading, Text } from "native-base"
 import MapView from 'react-native-maps'
 import store from '../store'
-import {
-  required,
-  minLength,
-  maxLength
-} from 'vuelidate/lib/validators'
 import axios from 'axios'
 import service from '../services/axios'
 import { ENV } from "../services/environment"
@@ -205,13 +200,6 @@ export default {
       bookmarkUser: false,
       favoritesCount: 0,
       favoriteUser: false,
-    }
-  },
-  validations: {
-    newComment: {
-      required,
-      minLength: minLength(1),
-      maxLength: maxLength(255)
     }
   },
   components: {
