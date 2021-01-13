@@ -2,7 +2,7 @@
   <nb-container class="post-item-container">
     <!-- <nb-content> -->
       <nb-card>
-        <nb-card-item bordered>
+        <nb-card-item bordered button :on-press="pressedPostItem">
           <nb-left>
             <nb-thumbnail :source="{uri: post.user_image}"></nb-thumbnail>
             <nb-body class="post-top">
@@ -17,7 +17,7 @@
             </nb-body>
           </nb-left>
         </nb-card-item> 
-        <nb-card-item bordered cardBody class="post-body">
+        <nb-card-item bordered cardBody class="post-body" button :on-press="pressedPostItem">
               <nb-text
                 class="post-text"
                 :numberOfLines="3"
@@ -66,6 +66,13 @@ export default {
     post: Object,
     navigation: {
       type: Object
+    },
+    changePostDetail: Function,
+    postId: Number,
+  },
+  methods: {
+    pressedPostItem() {
+      this.changePostDetail(this.postId)
     },
   }
 }

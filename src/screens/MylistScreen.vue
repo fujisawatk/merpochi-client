@@ -86,7 +86,7 @@ export default {
       )
     },
     changeDetail(code) {
-      return this.navigation.navigate('Detail', { code })
+      return this.navigation.navigate('ShopDetail', { code })
     }
   },
   computed: {

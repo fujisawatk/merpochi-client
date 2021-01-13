@@ -150,7 +150,7 @@ export default {
   methods: {
     changeDetail(code) {
       if (store.state.auth.isAuthResolved == true) {
-        this.navigation.navigate('Detail', { code })
+        this.navigation.navigate('ShopDetail', { code })
       } else {
         this.navigation.navigate('Signin')
       }
