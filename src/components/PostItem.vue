@@ -27,7 +27,7 @@
               </nb-text>
               <view class="post-image">
                 <view
-                  v-for="img in post.images"
+                  v-for="img of sliceImages"
                   :key="img.id"
                 >
                     <image class="image" :source="{uri: img.uri}"/>
@@ -63,6 +63,7 @@ export default {
             resizeMode: "cover"
           }
       },
+      sliceImages: []
     }
   },
   props: {
@@ -72,6 +73,14 @@ export default {
     },
     changePostDetail: Function,
     postId: Number,
+  },
+  created () {
+    // ３枚だけ表示
+    if (this.post.images != null) {
+      for ( let i = 0; i < 3; i++ ) {
+        this.sliceImages.push(this.post.images[i])
+      }
+    }
   },
   methods: {
     pressedPostItem() {
