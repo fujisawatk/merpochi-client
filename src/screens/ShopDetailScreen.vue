@@ -6,16 +6,27 @@
       <nb-tab :heading="getDetailsTab()">
         <scroll-view>
           <nb-card-item>
-            <image
-              v-if="img != ''"
-              :source="{uri: img}"
-              class="card-image"
-            />
-            <image
-              v-else
-              :source="require('../../assets/icons/sample.jpg')"
-              class="card-image"
-            />
+            <view>
+              <scroll-view :horizontal="true">
+                <nb-list-item	
+                  avatar
+                  v-for="img in isShopImage"
+                  :key="img.id"
+                >
+                    <image-modal
+                      :swipeToDismiss="false"
+                      :resizeMode="`contain`"
+                      :imageBackgroundColor="`#000000`"
+                      :style="{
+                        width: 300,
+                        height: 250,
+                      }"
+                      :source="{uri: img.uri}"
+                    />
+                </nb-list-item>
+              </scroll-view>
+            </view>
+            
           </nb-card-item>
 
           <nb-list>
@@ -159,6 +170,7 @@
 
 <script>
 import { ScrollView, Linking } from 'react-native'
+import ImageModal from 'react-native-image-modal'
 import React from "react"
 import { TabHeading, Text } from "native-base"
 import MapView from 'react-native-maps'
@@ -200,10 +212,12 @@ export default {
       bookmarkUser: false,
       favoritesCount: 0,
       favoriteUser: false,
+      shopImage: []
     }
   },
   components: {
     ScrollView,
+    ImageModal,
     MapView
   },
   props: {
@@ -229,6 +243,9 @@ export default {
     },
     isFavorite() {
       return this.favoriteUser
+    },
+    isShopImage() {
+      return this.shopImage
     },
   },
   methods: {
@@ -313,10 +330,6 @@ export default {
         }
         store.dispatch("favorite/saveFavorite", data)
         .then(res => {
-          // 店舗新規登録時だけstateのshopIdから値を代入する
-          // if (this.shopId == 0) {
-          //   this.shopId = store.state.shop.shopId
-          // }
           this.favoritesCount += 1
           this.favoriteUser = true
           store.dispatch('shop/plusRating', this.code)
@@ -376,7 +389,19 @@ export default {
       this.marker.coordinate.longitude = Number(shop.longitude)
       this.url = shop.url
       store.dispatch("shop/delShopId")
-    })    
+    })  
+    // 画像がない場合、サンプル画像挿入
+    if (this.img != '') {
+      this.shopImage.push({
+        id: 0,
+        uri: this.img
+      })
+    }else{
+      this.shopImage.push({ 
+        id: 0,
+        uri: "https://i.gyazo.com/395c068648d593021b87d42be1be9250.png"
+      })
+    }  
     // 店舗IDがAPIで登録されている場合
     if (store.state.shop.shopId != 0) {
       // 投稿情報取得
@@ -386,7 +411,12 @@ export default {
           this.posts = []
         }else{
           this.posts = res.data
-        } 
+        }
+        for (let i = 0; i < this.posts.length; i++ ) {
+          for (let k = 0; k < this.posts[i].images.length; k++ ){
+            this.shopImage.push(this.posts[i].images[k])
+          }
+        }
       })
       .catch(() => {})
       const data = {

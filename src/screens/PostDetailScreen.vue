@@ -124,7 +124,7 @@
 
 <script>
 import { ScrollView } from 'react-native'
-import ImageModal from 'react-native-image-modal';
+import ImageModal from 'react-native-image-modal'
 import { Rating } from 'react-native-ratings'
 import store from '../store'
 import axios from 'axios'

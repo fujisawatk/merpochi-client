@@ -26,10 +26,13 @@
                 {{ post.text }}
               </nb-text>
               <view class="post-image">
-                <image class="image" :source="require('../../assets/icons/sample.jpg')" :style="stylesObj.cardItemImage"/>
-                <image class="image" :source="require('../../assets/icons/sample.jpg')" :style="stylesObj.cardItemImage"/>
-                <image class="image" :source="require('../../assets/icons/sample.jpg')" :style="stylesObj.cardItemImage"/>
-              </view>
+                <view
+                  v-for="img of sliceImages"
+                  :key="img.id"
+                >
+                    <image class="image" :source="{uri: img.uri}"/>
+                </view>
+              <view>
           </nb-card-item>
         <nb-card-item>
           <nb-left>
@@ -48,7 +51,7 @@
 </template>
 
 <script>
-import { Rating } from 'react-native-ratings';
+import { Rating } from 'react-native-ratings'
 export default {
   components: {
     Rating
@@ -60,6 +63,7 @@ export default {
             resizeMode: "cover"
           }
       },
+      sliceImages: []
     }
   },
   props: {
@@ -69,6 +73,14 @@ export default {
     },
     changePostDetail: Function,
     postId: Number,
+  },
+  created () {
+    // ３枚だけ表示
+    if (this.post.images != null) {
+      for ( let i = 0; i < 3; i++ ) {
+        this.sliceImages.push(this.post.images[i])
+      }
+    }
   },
   methods: {
     pressedPostItem() {
@@ -97,6 +109,7 @@ export default {
 .post-body {
   flex-direction: column;
   height: 200;
+  width: 100%;
 }
 .post-text {
   align-items: flex-start;
@@ -105,11 +118,14 @@ export default {
 }
 .post-image {
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  
 }
 .image {
-  height: 100;
-  width: 100;
-  margin: 10;
+  padding: 50;
+  margin: 5;
 }
 .comment-icon {
   color: #bbb;
