@@ -55,7 +55,7 @@ export default {
     pressedAddPostTab() {
       store.dispatch("footer/activeAddPostTab")
       .then(() => {
-        // this.navigation.navigate("selectPost")
+        this.navigation.navigate("SelectPost")
       })
       .catch(() => {})
     },
