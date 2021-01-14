@@ -19,7 +19,8 @@
             />
             <image 
               v-else
-              :source="require('../../assets/icons/logo.png')"
+              :source="{uri: 'https://i.gyazo.com/395c068648d593021b87d42be1be9250.png'}"
+              :style="stylesObj.cardItemImage"
             />
             <nb-item class="body-low">
               <nb-left class="body-low-left">
