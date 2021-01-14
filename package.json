@@ -27,6 +27,7 @@
     "react-native-image-modal": "^1.0.16",
     "react-native-maps": "0.26.1",
     "react-native-paper": "^3.10.1",
+    "react-native-press-me-button": "^3.1.0",
     "react-native-ratings": "^7.3.0",
     "react-native-reanimated": "^1.7.1",
     "react-native-safe-area-context": "^0.7.3",

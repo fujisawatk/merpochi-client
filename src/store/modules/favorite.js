@@ -55,7 +55,7 @@ export default {
       return commit('resetFavorites')
     },
     // お気に入り保存
-    async saveFavorite ({commit, dispatch, rootState, getters}, data) {
+    async saveFavorite ({dispatch, rootState}, data) {
       // 店舗が未登録なら、先に店舗を登録する
       if (data.shop_id == 0) {
         await dispatch('shop/saveShop', data.shopData, { root: true })

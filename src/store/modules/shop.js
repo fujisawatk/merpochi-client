@@ -18,6 +18,8 @@ export default {
     commentedShops: [],                                       // ログインユーザーがコメントした店舗情報
     favoritedShops: [],                                       // ログインユーザーがお気に入りした店舗情報
     shopId: 0,
+    shopName: "",                                                 // 投稿する店舗
+    shop: "",
   },
   getters: {
     // 指定IDの店舗情報をstate.restsから取得
@@ -37,7 +39,7 @@ export default {
       state.longitude = location.coords.longitude
       state.errorMessage = ""
     },
-    setShop (state, data) {
+    setShops (state, data) {
       state.shops = []
       data.rest.map(function( value, index ) {
         const hash = {
@@ -71,6 +73,10 @@ export default {
     },
     resetShopId (state) {
       state.shopId = 0
+    },
+    setShop (state, shop) {
+      state.shopName = shop.name
+      state.shop = shop
     },
     setBookmark (state, code) {
       state.shops.find(el => el.code == code).bookmarkUser = true
@@ -121,7 +127,7 @@ export default {
             user_id: rootState.auth.user.id
           }
           await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
-          commit('setShop', res.data)
+          commit('setShops', res.data)
         })
         .catch(() => undefined)
       }, 500)
@@ -173,6 +179,19 @@ export default {
           commit('setShop', res.data)
         })
         .catch(() => undefined)
+    },
+    // 投稿時の店舗検索
+    shopSearch ({state}, keyword) {
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&hit_per_page=" + "20"
+      return axios
+        .get(requestUrl)
+        .then((res) => {
+          return res.data.rest
+        })
+        .catch(() => undefined)
+    },
+    selectedShop({commit}, shop) {
+      commit('setShop', shop)
     },
     // 詳細ページ操作後に一覧ページのブックマーク数更新
     plusBookmark ({commit}, code) {

@@ -10,7 +10,7 @@
       <view class="post-section">
         <view class="easy-post-section">
           <nb-button class="easy-post-btn">
-            <nb-icon type="AntDesign" name="like1" class="like-icon"/>
+            <nb-icon type="AntDesign" name="like1" class="like-icon" :on-press="pressedEasyPostBtn"/>
           </nb-button>
           <nb-text>簡単投稿</nb-text>
         </view>
@@ -42,6 +42,9 @@ export default {
     }
   },
   methods: {
+    pressedEasyPostBtn() {
+      this.navigation.navigate("EasyPost")
+    }
   },
   computed: {
   },

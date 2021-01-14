@@ -20,6 +20,7 @@ import Footer from "./components/Footer.vue"
 import InputWithError from './components/InputWithError.vue'
 import StationItem from "./components/StationItem.vue"
 import GenreItem from "./components/GenreItem.vue"
+import ShopNameItem from "./components/ShopNameItem.vue"
 
 import React from 'react'
 import { NavigationEvents } from 'react-navigation'
@@ -37,6 +38,7 @@ Vue.component("Footer", Footer)
 Vue.component('InputWithError', InputWithError)
 Vue.component("StationItem", StationItem)
 Vue.component("GenreItem", GenreItem)
+Vue.component("ShopNameItem", ShopNameItem)
 Vue.component("NavigationEvents", NavigationEvents)
 
 

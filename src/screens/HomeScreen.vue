@@ -188,6 +188,16 @@ export default {
         })
         // ナビゲーションパラメータ初期化
         this.navigation.setParams({ message: null })
+      }else if (message == 'success') {
+        Toast.show({
+          text: "お気に入り登録しました",
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+        // ナビゲーションパラメータ初期化
+        this.navigation.setParams({ message: null })
       }
     }
   }
