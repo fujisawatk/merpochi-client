@@ -24,6 +24,7 @@ export default {
     isAuthResolved: false,    // 認証が許可されているか判定
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
     mylistTab: false,
+    homeTab: false,
     myAccountTab: false,
   },
   mutations: {
