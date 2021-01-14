@@ -46,9 +46,11 @@ export default {
   },
   created () {
     store.dispatch('auth/verifyUser')
-      .catch(() => {})
+    .catch(() => {})
     store.dispatch("shop/getShops", "")
-      .catch(() => {})
+    .catch(() => {})
+    store.dispatch("footer/activeHomeTab")
+    .catch(() => {})
   }
 };
 </script>

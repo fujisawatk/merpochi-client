@@ -107,6 +107,7 @@ export default {
       if (!this.$v.form.$invalid) {
         store.dispatch("auth/loginOne", this.form)
         .then(user => {
+          store.dispatch("footer/activeHomeTab")
           this.navigation.navigate('Home', { message: 'ログインしました' })
         })
         .catch(() => {

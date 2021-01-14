@@ -10,7 +10,7 @@ import SigninScreen from "./screens/SigninScreen"
 import SignupScreen from "./screens/SignupScreen"
 import ShopDetailScreen from "./screens/ShopDetailScreen"
 import PostDetailScreen from "./screens/PostDetailScreen"
-import MylistScreen from "./screens/MylistScreen"
+import MyListScreen from "./screens/MyListScreen"
 import MyAccountScreen from "./screens/MyAccountScreen"
 import EditAccountScreen from "./screens/EditAccountScreen"
 import StationSearchScreen from "./screens/StationSearchScreen"
@@ -31,7 +31,7 @@ const StackNavigator = createStackNavigator(
     Signup: SignupScreen,
     ShopDetail: ShopDetailScreen,
     PostDetail: PostDetailScreen,
-    Mylist: MylistScreen,
+    MyList: MyListScreen,
     MyAccount: MyAccountScreen,
     EditAccount: EditAccountScreen,
     StationSearch: StationSearchScreen,
