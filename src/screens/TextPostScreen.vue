@@ -123,7 +123,7 @@ export default {
       this.navigation.navigate('ImageBrowser')
     },
     pressedShopSearchInput() {
-      this.navigation.navigate('ShopSearch')
+      this.navigation.navigate('ShopSearch', { screen: 'text' })
     },
   },
 }

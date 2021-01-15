@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     pressedShopSearchInput() {
-      this.navigation.navigate('ShopSearch')
+      this.navigation.navigate('ShopSearch', { screen: 'easy' })
     },
     async pressedFavoriteBtn() {
       const shop = await axios.post( baseApiUrl + '/shops/code', { code: store.state.shop.shop.id })

@@ -67,31 +67,21 @@ export default {
     selectedShop(shop) {
       store.dispatch("shop/selectedShop", shop)
         .then(() => {
-          this.navigation.navigate('EasyPost')
+          const screen = this.navigation.getParam('screen')
+          this.navigation.setParams({ message: null })
+          switch (screen) {
+            case 'easy':
+              this.navigation.navigate('EasyPost')
+              break
+            case 'text':
+              this.navigation.navigate('TextPost')
+              break
+          }
         })
         .catch(() => {
           console.log("選択されていません")
         })
     },
-  },
-  computed: {
-  },
-  watch: {
-    // keyword(val, prev) {
-    //   if (!isEmpty(val)) {
-    //     this.searchWithInterval()
-    //   }else{
-    //     store.dispatch("station/delStationList")
-    //   }
-    // }
-  },
-  created() {
-    //APIの実行を0.5秒に1回に制限
-    // if (store.state.station.selectedStationName != "") {
-    //   this.keyword = store.state.station.selectedStationName
-    // }
-    // store.dispatch("station/delStationList")
-    // this.searchWithInterval = throttle(this.searchStations, 500)
   },
 }
 </script>
