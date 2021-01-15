@@ -1,5 +1,5 @@
 <template>
-  <nb-container class="signup-container">
+  <nb-container class="text-post-container">
     <header
       auth
       :screen="title"
@@ -7,10 +7,11 @@
     />
     <scroll-view>
       <nb-form class="form">
+
         <view class="images-section">
           <view class="images-view">
             <scroll-view :horizontal="true">
-              <view class="input-images">
+              <view class="select-images">
                 <nb-list-item	
                   avatar
                   v-for="(img, i) in images"
@@ -30,70 +31,43 @@
             </nb-button>
           </view>
         </view>
-        <nb-item fixedLabel class="form-input">
-          <nb-icon active type="Entypo" name="user"/>
-          <nb-input
-            placeholder="ユーザー名"
-            v-model="form.nickname"
-            auto-capitalize="none"
-            :on-blur="() => $v.form.nickname.$touch()"
-          />
-        </nb-item>
-        <input-with-error
-          :error="$v.form.nickname.$dirty && (!$v.form.nickname.required || !$v.form.nickname.minLength || !$v.form.nickname.maxLength)"
-          message="ユーザー名は1〜20文字で入力してください"
-        />
+
+        <view class="shop-picker-section">
+          <nb-item class="post-picker">
+            <nb-input placeholder="店舗選択" v-model="shopName"/>
+            <nb-icon active type="FontAwesome5" name="arrow-circle-right" />
+            <nb-button
+              :on-press="pressedShopSearchInput"
+              class="input-cover"
+            />
+          </nb-item>
+        </view>
         
-        <nb-item fixedLabel class="form-input">
-          <nb-icon active type="Entypo" name="mail"/>
-          <nb-input
-            placeholder="メールアドレス"
-            v-model="form.email"
-            auto-capitalize="none"
-            :on-blur="() => $v.form.email.$touch()"
+        <view class="text-section">
+          <nb-textarea class="textarea" bordered placeholder="このお店どうだった？" />
+        </view>
+
+        <view fixedLabel class="rating-section">
+          <airbnb-rating
+            :count="5"
+            :reviews="reviews"
+            :defaultRating="rating"
+            :size="40"
+            class="post-rating"
           />
-        </nb-item>
-        <input-with-error
+        </view>
+        <!-- <input-with-error
           :error="$v.form.email.$dirty && (!$v.form.email.required || !$v.form.email.isValidEmail)"
           message="形式が正しくありません"
-        />
+        /> -->
 
-        <nb-item fixedLabel class="form-input">
-          <nb-icon active type="Entypo" name="key"/>
-          <nb-input
-            placeholder="パスワード"
-            v-model="form.password"
-            auto-capitalize="none"
-            secure-text-entry
-            :on-blur="() => $v.form.password.$touch()"
-          />
-        </nb-item>
-        <input-with-error
-          :error="$v.form.password.$dirty && (!$v.form.password.required || !$v.form.password.minLength || !$v.form.password.maxLength)"
-          message="パスワード6〜20文字で入力してください"
-        />
-
-        <nb-item fixedLabel class="form-input">
-          <nb-icon active type="Entypo" name="key"/>
-          <nb-input
-            placeholder="パスワード(確認)"
-            v-model="form.passwordConfirmation"
-            auto-capitalize="none"
-            secure-text-entry
-            :on-blur="() => $v.form.passwordConfirmation.$touch()"
-          />
-        </nb-item>
-        <input-with-error
-          :error="$v.form.passwordConfirmation.$dirty && (!$v.form.passwordConfirmation.required || !$v.form.passwordConfirmation.sameAsPassword)"
-          message="パスワードが一致していません"
-        />
       </nb-form>
 
       <view class="form-btn">
         <nb-button rounded
           class="send-btn" danger
         >
-          <nb-text class="btn-text">完了</nb-text>
+          <nb-text class="btn-text">投稿</nb-text>
         </nb-button>
 
       </view>
@@ -104,7 +78,8 @@
 
 <script>
 import { ScrollView } from 'react-native'
-import store from '../store';
+import store from '../store'
+import { AirbnbRating } from 'react-native-ratings'
 import {
   required,
   email,
@@ -117,52 +92,39 @@ export default {
   data () {
     return {
       title: "アカウント登録",
-      form: {
-        nickname: '',
-        email: '',
-        password: '',
-        passwordConfirmation: ''
-      }
+      reviews: ["二度と行かない！", "次はないかな…", "まあ、普通かな。", "また行きたい！", "最高！おすすめ！！"],
+      rating: 3,
+      text: ""
     }
   },
   validations: {
-    form: {
-      nickname: {
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(20)
-      },
-      email: {
-        required,
-        isValidEmail: email
-      },
-      password: {
-        required,
-        minLength: minLength(6),
-        maxLength: maxLength(20)
-      },
-      passwordConfirmation: {
-        required,
-        sameAsPassword: sameAs('password')
-      }
-    }
+    
   },
   props: {
     navigation: {
       type: Object,
     }
   },
+  components: {
+    AirbnbRating
+  },
   computed: {
     images() {
       return store.state.image.shopImages
-    }
+    },
+    shopName() {
+      return store.state.shop.shopName
+    },
   },
   created() {
   },
   methods: {
     pickImages() {
       this.navigation.navigate('ImageBrowser')
-    }
+    },
+    pressedShopSearchInput() {
+      this.navigation.navigate('ShopSearch')
+    },
   },
 }
 </script>
@@ -171,6 +133,8 @@ export default {
 .form {
   width: 100%;
 }
+
+/* 画像選択 */
 .images-section {
   height: 150;
   width: 100%;
@@ -180,7 +144,7 @@ export default {
   width: 100%;
   background-color: azure;
 }
-.input-images {
+.select-images {
  flex-direction: row;
 }
 .images {
@@ -197,11 +161,45 @@ export default {
   width: 100%;
   font-size: 20;
 }
-.form-input {
-  max-width: 350px;
+
+/* 店舗選択 */
+.shop-picker-section {
+  width: 95%;
+  align-items: center;
 }
+.post-picker {
+  position: relative;
+  width: 100%;
+  background-color: #eee;
+}
+.input-cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+}
+
+/* 感想 */
+.text-section {
+  width: 100%;
+}
+.textarea {
+  margin-left: 10;
+  margin-right: 10;
+  height: 200;
+  font-size: 20;
+}
+
+/* 評価選択 */
+.rating-section {
+  justify-content: center;
+  margin-top: 20;
+  margin-bottom: 40;
+}
+
+/* 登録ボタン */
 .form-btn {
-  height: 300;
+  height: 200;
   align-items: center;
 }
 .send-btn {
