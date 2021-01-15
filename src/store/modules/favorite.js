@@ -63,10 +63,7 @@ export default {
       }
       const strId = String(data.shop_id)
       return axios.post( baseApiUrl + '/shops/' + strId + '/favorites')
-      .then(res => {})
-      .catch(err => {
-        console.log(err)
-      })
+      .then(() => {})
     },
     // お気に入り解除
     delFavorite ({commit, rootState}, shopId) {

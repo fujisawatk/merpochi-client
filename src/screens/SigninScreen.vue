@@ -108,7 +108,7 @@ export default {
         store.dispatch("auth/loginOne", this.form)
         .then(user => {
           store.dispatch("footer/activeHomeTab")
-          this.navigation.navigate('Home', { message: 'ログインしました' })
+          this.navigation.navigate('Home', { message: 'login' })
         })
         .catch(() => {
           console.log("ログインに失敗しました")

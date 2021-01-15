@@ -51,6 +51,7 @@
 
 <script>
 import PressMeButton from 'react-native-press-me-button'
+import { Toast } from 'native-base'
 import store from '../store'
 import axios from 'axios'
 import { ENV } from "../services/environment"
@@ -87,11 +88,21 @@ export default {
       const data = {
           shop_id: store.state.shop.shopId,
         }
-      return store.dispatch('favorite/saveFavorite', data)
+      store.dispatch('favorite/saveFavorite', data)
       .then(() => {
-        this.navigation.navigate("Home", { message: 'success' })
+        // フッタータブのアクティブ切替
+        store.dispatch("footer/activeHomeTab")
+        this.navigation.navigate("Home", { message: 'favorite' })
       })
-      .catch(() => {})
+      .catch(() => {
+         Toast.show({
+          text: "登録できませんでした",
+          buttonText: 'Ok',
+          type: 'danger',
+          position: 'bottom',
+          duration: 5000
+        })
+      })
     }
   }
 }
