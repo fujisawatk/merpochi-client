@@ -9,7 +9,8 @@ export default {
     selectedImage: {
       uri: ""
     },
-    userImage: ""
+    userImage: "",
+    shopImages: []
   },
   getters: {}, 
   mutations: {
@@ -19,6 +20,10 @@ export default {
     setUserImage (state, image) {
       state.userImage = image
     },
+    setShopImages (state, images) {
+      state.shopImages = images
+      console.log(state.shopImages[0].uri)
+    }
   },
   actions: {
     selectedImage ({commit}, image) {
@@ -85,6 +90,9 @@ export default {
       .then(res => {
         commit('setUserImage',res.data)
       })
+    },
+    cacheImages ({commit}, images) {
+      commit('setShopImages', images)
     }
   }
 }

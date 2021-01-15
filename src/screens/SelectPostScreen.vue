@@ -16,7 +16,7 @@
         </view>
         <view class="text-post-section">
           <nb-button button class="text-post-btn">
-            <nb-icon type="FontAwesome5" name="pencil-alt" class="text-icon"/>
+            <nb-icon type="FontAwesome5" name="pencil-alt" class="text-icon" :on-press="pressedTextPostBtn"/>
           </nb-button>
           <nb-text>テキスト投稿</nb-text>
         </view>
@@ -44,6 +44,9 @@ export default {
   methods: {
     pressedEasyPostBtn() {
       this.navigation.navigate("EasyPost")
+    },
+    pressedTextPostBtn() {
+      this.navigation.navigate("TextPost")
     }
   },
   computed: {
