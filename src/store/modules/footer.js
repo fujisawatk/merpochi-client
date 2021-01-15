@@ -2,7 +2,7 @@ export default {
   namespaced: true,
   state: {
     homeTab: true,            // ナビゲーションバーのアクティブページ判定
-    homeTab: false,
+    addPostTab: false,
     myListTab: false,
     myAccountTab: false,
   },
