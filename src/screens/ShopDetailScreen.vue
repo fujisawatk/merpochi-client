@@ -285,17 +285,19 @@ export default {
         )
     },
     pressedBookmarkBtn() {
-      if (store.state.auth.isAuthResolved == false) {
+      if (store.state.auth.isAuthResolved == true) {
+        store.dispatch("bookmark/saveBookmark")
+        .then(() => {
+          store.dispatch('shop/addBookmark')
+          console.log("ブックマーク登録しました")
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
+      }else{
         this.navigation.navigate('Signin')
       }
-      store.dispatch("bookmark/saveBookmark")
-      .then(() => {
-        store.dispatch('shop/addBookmark')
-        console.log("ブックマーク登録しました")
-      })
-      .catch(() => {
-        console.log("保存に失敗しました")
-      })
+      
     },
     pressedCancelBookmarkBtn() {
       store.dispatch('bookmark/delBookmark')
@@ -308,17 +310,18 @@ export default {
       })
     },
     pressedFavoriteBtn() {
-      if (store.state.auth.isAuthResolved == false) {
+      if (store.state.auth.isAuthResolved == true) {
+        store.dispatch("favorite/saveFavorite")
+        .then(() => {
+          store.dispatch('shop/addRatingAndFavorite')
+          console.log("お気に入り登録しました")
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
+      }else{
         this.navigation.navigate('Signin')
       }
-      store.dispatch("favorite/saveFavorite")
-      .then(() => {
-        store.dispatch('shop/addRatingAndFavorite')
-        console.log("お気に入り登録しました")
-      })
-      .catch(() => {
-        console.log("保存に失敗しました")
-      })
     },
     pressedCancelFavoriteBtn() {
       store.dispatch("favorite/delFavorite")
