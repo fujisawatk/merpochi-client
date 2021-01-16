@@ -10,8 +10,8 @@
               <scroll-view :horizontal="true">
                 <nb-list-item	
                   avatar
-                  v-for="img in isShopImage"
-                  :key="img.id"
+                  v-for="(img, i) in isShopImage"
+                  :key="i"
                 >
                     <image-modal
                       :swipeToDismiss="false"
@@ -393,15 +393,13 @@ export default {
     // 画像がない場合、サンプル画像挿入
     if (this.img != '') {
       this.shopImage.push({
-        id: 0,
         uri: this.img
       })
     }else{
       this.shopImage.push({ 
-        id: 0,
         uri: "https://i.gyazo.com/395c068648d593021b87d42be1be9250.png"
       })
-    }  
+    } 
     // 店舗IDがAPIで登録されている場合
     if (store.state.shop.shopId != 0) {
       // 投稿情報取得
