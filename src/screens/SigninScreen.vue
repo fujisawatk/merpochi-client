@@ -50,9 +50,9 @@
 
       <nb-button rounded dark
         class="send-btn"
-        :on-press="changeSignup"
+        :on-press="pressedTestLoginBtn"
       >
-        <nb-text>アカウント登録</nb-text>
+        <nb-text>テストログイン</nb-text>
       </nb-button>
     </view>
 
@@ -114,6 +114,18 @@ export default {
           console.log("ログインに失敗しました")
         })
       }
+    },
+    pressedTestLoginBtn() {
+      const test = {
+        email: "miku@email.com",
+        password: "mikumiku"
+      }
+      store.dispatch("auth/loginOne", test)
+      .then(user => {
+        store.dispatch("footer/activeHomeTab")
+        this.navigation.navigate('Home', { message: 'login' })
+      })
+      .catch(() => {})
     },
     checkForMessage() {
       const message = this.navigation.getParam('message')
