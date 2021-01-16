@@ -8,13 +8,13 @@
     <nb-left class="item-left">
       <nb-thumbnail
         square
-        v-if="item.img != ''"
+        v-if="item.img != null"
         :source="{uri: item.img}"
       />
       <nb-thumbnail
         square
         v-else
-        :source="require('../../assets/icons/logo.png')"
+        :source="{uri: 'https://i.gyazo.com/395c068648d593021b87d42be1be9250.png'}"
       />
     </nb-left>
 
@@ -27,42 +27,7 @@
         </nb-text>
     </nb-body>
 
-    <nb-right
-      v-if="!mypage"
-      class="item-right"
-    >
-      <nb-button
-        transparent
-        class="list-icon"
-      >
-        <nb-icon
-          type="AntDesign"
-          name="like1"
-          class="icon"
-        />
-        <nb-text class="icon-count">
-          +{{ item.favoritesCount }}
-        </nb-text>
-      </nb-button>
-      <nb-button
-        transparent
-        class="list-icon"
-      >
-        <nb-icon
-          name="chatbubbles"
-          class="icon"
-        />
-        <nb-text class="icon-count">
-          +{{ item.commentsCount }}
-        </nb-text>
-      </nb-button>
-    </nb-right>
-
-    <nb-right
-      v-else
-      class="item-right"
-    >
-
+    <nb-right class="item-right">
   </nb-list-item>
 </template>
 
@@ -95,27 +60,10 @@ export default {
   flex: 1;
 }
 .item-body {
-  flex: 3;
+  flex: 5;
 }
 .shop-category {
   font-size: 12px;
   color: #888;
-}
-.item-right {
-  flex: 2;
-  flex-direction: row;
-}
-.list-icon {
-  position:relative;
-}
-.icon {
-  color: #FF773E;
-  font-size: 20;
-}
-.icon-count {
-  position: absolute;
-  top: 15;
-  left: 25;
-  color: #444;
 }
 </style>
