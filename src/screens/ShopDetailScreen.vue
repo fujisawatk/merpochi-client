@@ -10,8 +10,8 @@
               <scroll-view :horizontal="true">
                 <nb-list-item	
                   avatar
-                  v-for="img in isShopImage"
-                  :key="img.id"
+                  v-for="(img, i) in isShopImage"
+                  :key="i"
                 >
                     <image-modal
                       :swipeToDismiss="false"
@@ -36,38 +36,38 @@
 
             <nb-item class="card-info">
               <nb-text class="card-title">店名：</nb-text>
-              <nb-text class="card-text">{{ name }}</nb-text>
+              <nb-text class="card-text">{{ shop.name }}</nb-text>
             </nb-item>
 
             <nb-item class="card-info">
               <nb-text class="card-title">カテゴリー：</nb-text>
-              <nb-text class="card-text">{{ category }}</nb-text>
+              <nb-text class="card-text">{{ shop.category }}</nb-text>
             </nb-item>
 
             <nb-item class="card-info">
               <nb-text class="card-title">営業時間：</nb-text>
-              <nb-text class="card-text">{{ opentime }}</nb-text>
+              <nb-text class="card-text">{{ shop.opentime }}</nb-text>
             </nb-item>
 
             <nb-item class="card-info">
               <nb-text class="card-title">アクセス：</nb-text>
-              <nb-text class="card-text">{{ access }}</nb-text>
+              <nb-text class="card-text">{{ shop.access }}</nb-text>
             </nb-item>
 
             <nb-item class="card-info">
               <nb-text class="card-title">平均予算：</nb-text>
-              <nb-text class="card-text">{{ budget }}円</nb-text>
+              <nb-text class="card-text">{{ shop.budget }}円</nb-text>
             </nb-item>
 
             <nb-item class="fc-info">
               <nb-left class="fc-left">
                 <nb-button transparent class="fc-icons">
                   <nb-icon class="fc-icon" name="thumbs-up"></nb-icon>
-                  <nb-text class="fc-count" :style="{paddingLeft:4}">{{ isFavoritesCount }}</nb-text>
+                  <nb-text class="fc-count" :style="{paddingLeft:4}">{{ shop.favoritesCount }}</nb-text>
                 </nb-button>
                 <nb-button transparent class="fc-icons">
                   <nb-icon class="fc-icon" type="FontAwesome" name="bookmark"></nb-icon>
-                  <nb-text class="fc-count" :style="{paddingLeft:4}">{{ isBookmarksCount }}</nb-text>
+                  <nb-text class="fc-count" :style="{paddingLeft:4}">{{ shop.bookmarksCount }}</nb-text>
                 </nb-button>
                 <nb-button transparent class="fc-icons">
                   <nb-icon  class="fc-icon" type="Entypo" name="text-document-inverted"></nb-icon>
@@ -83,7 +83,37 @@
             </nb-item>
           </nb-list>
 
-          <nb-separator bordered class="post-index">
+
+          <nb-separator class="post-index">
+            <nb-text class="post-title">あなたの投稿</nb-text>
+          </nb-separator>
+          <nb-list-item
+            :style="{paddingRight:20}"
+            transparent
+            no-shadow
+            avatar
+          >
+            <nb-left>
+              <nb-thumbnail
+                small
+                :source="{uri: currentUserImage }"
+              />	
+            </nb-left>
+            <nb-body>
+              <nb-item regular class="post-input">
+                <nb-input
+                  bordered
+                  placeholder="このお店のオススメ度は？"
+                />
+                <nb-button
+                  :on-press="pressedPostInput"
+                  class="input-cover"
+                />
+              </nb-item>
+            </nb-body>
+          </nb-list-item>
+
+          <nb-separator class="post-index">
             <nb-text class="post-title">投稿一覧</nb-text>
           </nb-separator>
 
@@ -98,7 +128,7 @@
             />
           </nb-list>
 
-          <nb-list-item class="dummy-area" />
+          <view class="dummy-area" />
 
         </scroll-view>
 
@@ -108,7 +138,7 @@
             bordered
             class="like-button"
             :on-press="pressedBookmarkBtn"
-            v-if="isBookmark === false"
+            v-if="shop.bookmarkUser === false"
           >
             <nb-icon active class="btn-icon" type="FontAwesome" name="bookmark-o" />
             <nb-text class="btn-text">ブックマーク</nb-text>
@@ -129,7 +159,7 @@
             bordered
             class="like-button"
             :on-press="pressedFavoriteBtn"
-            v-if="isFavorite === false"
+            v-if="shop.favoriteUser === false"
           >
             <nb-icon active class="btn-icon" type="MaterialIcons" name="favorite-border" />
             <nb-text class="btn-text">リピートしたい！</nb-text>
@@ -156,7 +186,7 @@
           >
             <map-view:marker
               :coordinate="marker.coordinate"
-              :title="name"
+              :title="shop.name"
               :description="marker.description"
             >
             </map-view:marker>
@@ -184,12 +214,6 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   data: function() {
     return {
-      name: "",
-      category: "",
-      opentime: "",
-      access: "",
-      budget: "",
-      img: "",
       title: "店舗詳細ページ",
       marker: {
         coordinate: {
@@ -204,14 +228,6 @@ export default {
         latitudeDelta: 0.003,
         longitudeDelta: 0.003
       },
-      url: "",
-      newComment: "",
-      code: "",
-      posts: [],
-      bookmarksCount: 0,
-      bookmarkUser: false,
-      favoritesCount: 0,
-      favoriteUser: false,
       shopImage: []
     }
   },
@@ -226,23 +242,20 @@ export default {
     }
   },
   computed: {
+    shop() {
+      return store.state.shop.shop
+    },
+    posts() {
+      return store.state.post.posts
+    },
     currentUser() {
       return store.state.auth.user
     },
+    currentUserImage() {
+      return store.state.image.userImage
+    },
     isAuth() {
       return store.state.auth.isAuthResolved
-    },
-    isBookmarksCount() {
-      return this.bookmarksCount
-    },
-    isFavoritesCount() {
-      return this.favoritesCount
-    },
-    isBookmark() {
-      return this.bookmarkUser
-    },
-    isFavorite() {
-      return this.favoriteUser
     },
     isShopImage() {
       return this.shopImage
@@ -271,30 +284,9 @@ export default {
         )
     },
     pressedBookmarkBtn() {
-      const data = {
-        shopData: {
-          code: this.code,
-          name: this.name,
-          category: this.category,
-          opentime: this.opentime,
-          access: this.access,
-          budget:   Number(this.budget),
-          img:     this.img,
-          url: this.url,
-          latitude: Number(this.marker.coordinate.latitude),
-          longitude: Number(this.marker.coordinate.longitude),
-        },
-        shop_id: store.state.shop.shopId,
-      }
-      store.dispatch("bookmark/saveBookmark", data)
-      .then(res => {
-        // 店舗が新規登録の場合、店舗IDを取得
-        // if (this.shopId == 0) {
-        //   this.shopId = store.state.shop.shopId
-        // }
-        this.bookmarksCount += 1
-        this.bookmarkUser = true
-        store.dispatch('shop/plusBookmark', this.code)
+      store.dispatch("bookmark/saveBookmark")
+      .then(() => {
+        store.dispatch('shop/addBookmark')
         console.log("ブックマーク登録しました")
       })
       .catch(() => {
@@ -302,137 +294,70 @@ export default {
       })
     },
     pressedCancelBookmarkBtn() {
-      store.dispatch('bookmark/delBookmark', this.shopId)
-      .then(res => {
-          this.bookmarksCount -= 1
-          this.bookmarkUser = false
-          store.dispatch("shop/minusBookmark", this.code)
-          console.log("ブックマーク解除しました")
-        })
-        .catch(() => {
-          console.log("解除に失敗しました")
-        })
+      store.dispatch('bookmark/delBookmark')
+      .then(() => {
+        store.dispatch('shop/delBookmark')
+        console.log("ブックマーク解除しました")
+      })
+      .catch(() => {
+        console.log("解除に失敗しました")
+      })
     },
     pressedFavoriteBtn() {
-      const data = {
-          shopData: {
-            code: this.code,
-            name: this.name,
-            category: this.category,
-            opentime: this.opentime,
-            budget:   this.budget,
-            img:     this.img,
-            latitude: this.marker.coordinate.latitude,
-            longitude: this.marker.coordinate.longitude,
-            url: this.url
-          },
-          shop_id: store.state.shop.shopId,
-        }
-        store.dispatch("favorite/saveFavorite", data)
-        .then(res => {
-          this.favoritesCount += 1
-          this.favoriteUser = true
-          store.dispatch('shop/plusRating', this.code)
-          console.log("お気に入り登録しました")
-        })
-        .catch(() => {
-          console.log("保存に失敗しました")
-        })
+      store.dispatch("favorite/saveFavorite")
+      .then(() => {
+        store.dispatch('shop/addRatingAndFavorite')
+        console.log("お気に入り登録しました")
+      })
+      .catch(() => {
+        console.log("保存に失敗しました")
+      })
     },
     pressedCancelFavoriteBtn() {
-      store.dispatch("favorite/delFavorite", this.shopId)
-      .then(res => {
-          this.favoritesCount -= 1
-          this.favoriteUser = false
-          store.dispatch('shop/minusRating', this.code)
-          console.log("お気に入り解除しました")
-        })
-        .catch(() => {
-          console.log("解除に失敗しました")
-        })
+      store.dispatch("favorite/delFavorite")
+      .then(() => {
+        store.dispatch('shop/delRatingAndFavorite')
+        console.log("お気に入り解除しました")
+      })
+      .catch(() => {
+        console.log("解除に失敗しました")
+      })
     },
     changePostDetail(id) {
       this.navigation.navigate('PostDetail', { id })
     },
+    pressedPostInput() {
+      this.navigation.navigate('TextPost', { screen: 'shopDetail'})
+    }
   },
   async created () {
     const code = this.navigation.getParam('code')
-    this.coordinates.latitude = Number(store.state.shop.latitude)
-    this.coordinates.longitude = Number(store.state.shop.longitude)
-    this.code = code
-    await axios.post( baseApiUrl + '/shops/code', { code: code })
-    // 店舗登録済の場合
-    .then(res => {
-      this.name = res.data.name
-      this.category = res.data.category
-      this.opentime = res.data.opentime
-      this.access = res.data.access
-      this.budget = res.data.budget
-      this.img = res.data.img
-      this.marker.description = res.data.category
-      this.marker.coordinate.latitude = res.data.latitude
-      this.marker.coordinate.longitude = res.data.longitude
-      this.url = res.data.url
-      store.dispatch("shop/addShopId", res.data.id)
-    })
-    // 未登録の場合
-    .catch(() => {
-      const shop = store.getters['shop/getShop'](code)
-      this.name = shop.name
-      this.category = shop.category
-      this.opentime = shop.opentime
-      this.access = shop.access.line + shop.access.stations + shop.access.station_exit + shop.access.walk + '分'
-      this.budget = Number(shop.budget)
-      this.img = shop.img
-      this.marker.description = shop.category
-      this.marker.coordinate.latitude = Number(shop.latitude)
-      this.marker.coordinate.longitude = Number(shop.longitude)
-      this.url = shop.url
-      store.dispatch("shop/delShopId")
-    })  
-    // 画像がない場合、サンプル画像挿入
-    if (this.img != '') {
-      this.shopImage.push({
-        id: 0,
-        uri: this.img
-      })
-    }else{
-      this.shopImage.push({ 
-        id: 0,
-        uri: "https://i.gyazo.com/395c068648d593021b87d42be1be9250.png"
-      })
-    }  
-    // 店舗IDがAPIで登録されている場合
-    if (store.state.shop.shopId != 0) {
-      // 投稿情報取得
-      axios.get( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts')
-      .then(res => {
-        if (res.data == null) {
-          this.posts = []
-        }else{
-          this.posts = res.data
-        }
-        for (let i = 0; i < this.posts.length; i++ ) {
-          for (let k = 0; k < this.posts[i].images.length; k++ ){
-            this.shopImage.push(this.posts[i].images[k])
+    const shop = store.getters['shop/getShop'](code)
+    store.dispatch("shop/addShop", shop)
+    .then(async() => {
+      if (store.state.shop.shop.img != '') {
+        this.shopImage.push({
+          uri: store.state.shop.shop.img
+        })
+      }else{
+        // 画像がない場合、サンプル画像挿入
+        this.shopImage.push({
+          uri: "https://i.gyazo.com/395c068648d593021b87d42be1be9250.png"
+        })
+      } 
+      // 店舗IDがAPIで登録されている場合
+      if (store.state.shop.shop.id != 0) {
+        // 投稿情報取得
+        await store.dispatch('post/getPosts')
+        for (let i = 0; i < store.state.post.posts.length; i++ ) {
+          for (let k = 0; k < store.state.post.posts[i].images.length; k++ ){
+            this.shopImage.push(store.state.post.posts[i].images[k])
           }
         }
-      })
-      .catch(() => {})
-      const data = {
-        shop_codes: [code],
-        user_id: store.state.auth.user.id
+      }else{
+        await store.dispatch('post/delPosts')
       }
-      // ブックマーク、お気に入り情報取得
-      axios.post( baseApiUrl + '/shops/search', data)
-      .then(res => {
-        this.bookmarksCount = res.data[0].bookmarks_count
-        this.bookmarkUser = res.data[0].bookmark_user
-        this.favoritesCount = res.data[0].favorites_count
-        this.favoriteUser = res.data[0].favorite_user
-      })
-      .catch(() => {})
-    }
+    })
   }
 }
 </script>
@@ -446,8 +371,9 @@ export default {
   width: 100%;
 }
 .card-index {
-  max-height: 50px;
+  height: 50px;
   align-items: center;
+  background-color: #eee;
 }
 .index-title {
   font-size: 15;
@@ -487,16 +413,29 @@ export default {
   left: 40;
   color: #444;
 }
+.post-input {
+  position: relative;
+  width: 100%;
+}
+.input-cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+}
 .post-index {
   height: 50px;
   align-items: center;
+  background-color: #eee;
 }
 .post-title {
   font-size: 15;
 }
 .detail-footer {
   flex-direction: row;
-  background-color: #ffffff;
+  background-color: #fffefe;
+  border-top-width: 1;
+  border-top-color: #eee;
   position: absolute;
   bottom: 0;
   padding: 10px;
@@ -519,6 +458,8 @@ export default {
   flex: 1;
 }
 .dummy-area {
+  width: 100%;
   height: 100px;
+  background-color: #eee;
 }
 </style>

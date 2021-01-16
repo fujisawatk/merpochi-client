@@ -5,16 +5,16 @@
         <nb-card-item bordered button :on-press="itemsPress">
           <nb-left>
             <nb-body>
-              <nb-text note>{{ shop.category }}</nb-text>
-              <nb-text>{{ shop.name }}</nb-text> 
+              <nb-text note>{{ item.category }}</nb-text>
+              <nb-text>{{ item.name }}</nb-text> 
             </nb-body>
           </nb-left>
         </nb-card-item>
         <nb-card-item button :on-press="itemsPress">
           <nb-body class="card-body">
             <image 
-              v-if="shop.img != ''"
-              :source="{uri: shop.img}"
+              v-if="item.img != ''"
+              :source="{uri: item.img}"
               :style="stylesObj.cardItemImage"
             />
             <image 
@@ -26,14 +26,12 @@
               <nb-left class="body-low-left">
                 <view class="budget-item">
                   <nb-icon class="budget-icon" type="FontAwesome5" name="money-bill-alt"/>
-                  <nb-text v-if="shop.budget != ''" class="budget-text">{{ shop.budget }}円</nb-text>
+                  <nb-text v-if="item.budget != ''" class="budget-text">{{ item.budget }}円</nb-text>
                   <nb-text v-else class="budget-text"> - 円</nb-text>
                 </view>
                 <view class="access-item">
                   <nb-icon class="access-icon" type="FontAwesome5" name="train"/>
-                  <nb-text class="access-text">
-                    {{ shop.access.line }}{{ shop.access.station }}{{ shop.access.station_exit }}{{ shop.access.walk }}分
-                    </nb-text>
+                  <nb-text class="access-text">{{ item.access }}</nb-text>
                 </view>
               </nb-left>
               <nb-right class="body-low-right"/>
@@ -42,15 +40,15 @@
         </nb-card-item>
         <nb-card-item class="card-bottom">
           <nb-left class="bottom-left">
-            <nb-text class="bottom-text">{{ shop.ratingCount }} 人がリピート希望！！</nb-text>
+            <nb-text class="bottom-text">{{ item.ratingCount }} 人がリピート希望！！</nb-text>
           </nb-left>
-          <nb-right v-if="isBookmark" class="bottom-right">
+          <nb-right v-if="item.bookmarkUser" class="bottom-right">
             <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark" :on-press="pressedCancelBookmarkBtn"/>
-            <nb-text class="bookmark-count">{{ shop.bookmarksCount }}</nb-text>
+            <nb-text class="bookmark-count">{{ item.bookmarksCount }}</nb-text>
           </nb-right>
           <nb-right v-else class="bottom-right">
             <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark-o" :on-press="pressedBookmarkBtn"/>
-            <nb-text class="bookmark-count">{{ shop.bookmarksCount }}</nb-text>
+            <nb-text class="bookmark-count">{{ item.bookmarksCount }}</nb-text>
           </nb-right>
         </nb-card-item>
       </nb-card>
@@ -71,15 +69,6 @@ export default {
           height: 300
         }
       },
-      shop: {},
-    }
-  },
-  created() {
-    this.shop = this.item
-  },
-  computed: {
-    isBookmark() {
-      return this.shop.bookmarkUser
     }
   },
   props: {
@@ -98,44 +87,30 @@ export default {
       this.changeDetail(this.selCode)
     },
     pressedBookmarkBtn() {
-      const data = {
-        shopData: {
-          code: this.shop.code,
-          name: this.shop.name,
-          category: this.shop.category,
-          opentime: this.opentime,
-          budget:   Number(this.shop.budget),
-          img:     this.shop.img,
-          latitude: Number(this.shop.latitude),
-          longitude: Number(this.shop.longitude),
-          url: this.shop.url
-        },
-        shop_id: this.shop.shopId,
-      }
-      store.dispatch("bookmark/saveBookmark", data)
-      .then(res => {
-        // 店舗が新規登録の場合、店舗IDを取得
-        if (this.shop.shopId == 0) {
-          this.shop.shopId = store.state.shop.shopId
-        }
-        this.shop.bookmarksCount += 1
-        this.shop.bookmarkUser = true
-        console.log("ブックマーク登録しました")
-      })
-      .catch(() => {
-        console.log("保存に失敗しました")
+      // 一覧から店舗情報を取得
+      const shop = store.getters['shop/getShop'](this.item.code)
+      // 登録ずみならIDを送る
+      store.dispatch("shop/addShop", shop)
+      .then(() => {
+        store.dispatch("bookmark/saveBookmark")
+        .then(() => {
+          store.dispatch('shop/addBookmark')
+          console.log("ブックマーク登録しました")
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
       })
     },
     pressedCancelBookmarkBtn() {
-      store.dispatch("bookmark/delBookmark", this.shop.shopId)
-      .then(res => {
-          this.shop.bookmarksCount -= 1
-          this.shop.bookmarkUser = false
-          console.log("ブックマーク解除しました")
-        })
-        .catch(() => {
-          console.log("解除に失敗しました")
-        })
+      store.dispatch("bookmark/delBookmark")
+      .then(() => {
+        store.dispatch('shop/delBookmark')
+        console.log("ブックマーク解除しました")
+      })
+      .catch(() => {
+        console.log("解除に失敗しました")
+      })
     }
   }
 }

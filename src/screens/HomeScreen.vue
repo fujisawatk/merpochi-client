@@ -178,17 +178,37 @@ export default {
     },
     checkForMessage() {
       const message = this.navigation.getParam('message')
-      if ( message ) {
-        Toast.show({
-          text: message,
+      switch (message) {
+        case 'login':
+          Toast.show({
+          text: 'ログインしました',
           buttonText: 'Ok',
           type: 'success',
           position: 'bottom',
           duration: 5000
         })
-        // ナビゲーションパラメータ初期化
-        this.navigation.setParams({ message: null })
+        break
+        case 'favorite':
+          Toast.show({
+          text: "お気に入り登録しました",
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+        break
+        case 'post':
+          Toast.show({
+          text: "お店に投稿しました",
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+        break
       }
+      // ナビゲーションパラメータ初期化
+      this.navigation.setParams({ message: null })
     }
   }
 }

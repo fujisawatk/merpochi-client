@@ -9,27 +9,20 @@ export default {
   getters: {}, 
   mutations: {},
   actions: {
-    async saveBookmark ({dispatch, rootState}, data) {
-      // 初ブックマーク時、店舗IDを新規登録
-      if (data.shop_id == 0) {
-        await dispatch('shop/saveShop', data.shopData, { root: true })
-        data.shop_id = rootState.shop.shopId
+    async saveBookmark ({dispatch, rootState}) {
+      // 店舗が未登録の場合、新規登録
+      if (rootState.shop.shop.id === 0) {
+        await dispatch('shop/saveShop', null, { root: true })
       }
-      const strId = String(data.shop_id)
+      const strId = String(rootState.shop.shop.id)
       return axios.post( baseApiUrl + '/shops/' + strId + '/bookmarks')
-      .then(res => {})
-      .catch(err => {
-        console.log(err)
-      })
+      .then(() => {})
     },
     // お気に入り解除
-    delBookmark ({}, shopId) {
-      const strId = String(shopId)
+    delBookmark ({rootState}) {
+      const strId = String(rootState.shop.shop.id)
       return axios.delete( baseApiUrl + '/shops/' + strId + '/bookmarks')
-      .then(res => {})
-      .catch(err => {
-        console.log(err)
-      })
+      .then(() => {})
     },
   }
 }
