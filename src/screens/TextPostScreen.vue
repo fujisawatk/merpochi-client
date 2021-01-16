@@ -44,7 +44,19 @@
         </view>
         
         <view class="text-section">
-          <nb-textarea class="textarea" bordered placeholder="このお店どうだった？" />
+          <nb-textarea
+            bordered
+            placeholder="このお店どうだった？"
+            class="textarea"
+            v-model="text"
+            auto-capitalize="none"
+            :on-blur="() => $v.text.$touch()"
+          />
+          <input-with-error
+          class="text-error"
+          :error="$v.text.$dirty && (!$v.text.maxLength)"
+          message="ユーザー名は1000文字以内で入力してください"
+        />
         </view>
 
         <view fixedLabel class="rating-section">
@@ -53,19 +65,19 @@
             :reviews="reviews"
             :defaultRating="rating"
             :size="40"
+            :onFinishRating="ratingCompleted"
             class="post-rating"
           />
         </view>
-        <!-- <input-with-error
-          :error="$v.form.email.$dirty && (!$v.form.email.required || !$v.form.email.isValidEmail)"
-          message="形式が正しくありません"
-        /> -->
 
       </nb-form>
 
       <view class="form-btn">
-        <nb-button rounded
-          class="send-btn" danger
+        <nb-button
+          rounded
+          danger
+          class="send-btn"
+          :on-press="pressedPostBtn"
         >
           <nb-text class="btn-text">投稿</nb-text>
         </nb-button>
@@ -80,13 +92,12 @@
 import { ScrollView } from 'react-native'
 import store from '../store'
 import { AirbnbRating } from 'react-native-ratings'
-import {
-  required,
-  email,
-  minLength,
-  sameAs,
-  maxLength
-} from 'vuelidate/lib/validators'
+import axios from 'axios'
+import { ENV } from "../services/environment"
+import * as FileSystem from 'expo-file-system'
+import { maxLength } from 'vuelidate/lib/validators'
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   data () {
@@ -98,7 +109,9 @@ export default {
     }
   },
   validations: {
-    
+    text: {
+      maxLength: maxLength(1000)
+    },
   },
   props: {
     navigation: {
@@ -125,7 +138,56 @@ export default {
     pressedShopSearchInput() {
       this.navigation.navigate('ShopSearch', { screen: 'text' })
     },
-  },
+    ratingCompleted(rating) {
+      this.rating = rating
+    },
+    async pressedPostBtn() {
+      this.$v.text.$touch()
+      if (!this.$v.text.$invalid) {
+        // 画像をbase64エンコード
+        const base64Imgs = []
+        for (let i = 0; i < store.state.image.shopImages.length; i++ ){
+          const base64 = await FileSystem.readAsStringAsync(store.state.image.shopImages[i].uri, { encoding: 'base64' })
+          base64Imgs.push(base64)
+        } 
+        const postData = {
+          text: this.form.text,
+          rating: this.rating,
+          images: base64Imgs
+        }
+        await axios.post( baseApiUrl + '/shops/code', { code: store.state.shop.shop.id })
+        // 店舗登録済の場合
+        .then(async res => {
+          await axios.post( baseApiUrl + '/shops/' + String(res.data.id) + '/posts', postData)
+          this.navigation.navigate("Home", { message: 'post' })
+        })
+        // 未登録の場合、先に店舗登録
+        .catch(async() => {
+          const data = {
+            shopData: {
+              code: store.state.shop.shop.id,
+              name: store.state.shop.shop.name,
+              category: store.state.shop.shop.category,
+              opentime: store.state.shop.shop.opentime,
+              access: store.state.shop.shop.access.line +
+                store.state.shop.shop.access.stations +
+                store.state.shop.shop.access.station_exit +
+                store.state.shop.shop.access.walk + '分',
+              budget:   Number(store.state.shop.shop.budget),
+              img:     store.state.shop.shop.img,
+              url: store.state.shop.shop.url,
+              latitude: Number(store.state.shop.shop.latitude),
+              longitude: Number(store.state.shop.shop.longitude),
+            },
+            shop_id: 0,
+          }
+          await store.dispatch('shop/saveShop', data.shopData)
+          axios.post( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts', postData)
+          this.navigation.navigate("Home", { message: 'post' })
+        })
+      }
+    }
+  }
 }
 </script>
 
@@ -184,10 +246,14 @@ export default {
   width: 100%;
 }
 .textarea {
+  margin-top: 10;
   margin-left: 10;
   margin-right: 10;
   height: 200;
   font-size: 20;
+}
+.text-error {
+  margin-left: 10;
 }
 
 /* 評価選択 */
