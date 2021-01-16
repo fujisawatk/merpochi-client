@@ -54,8 +54,8 @@
           />
           <input-with-error
           class="text-error"
-          :error="$v.text.$dirty && (!$v.text.maxLength)"
-          message="ユーザー名は1000文字以内で入力してください"
+          :error="$v.text.$dirty && (!$v.text.required || !$v.text.maxLength)"
+          message="1〜1000文字以内で入力してください"
         />
         </view>
 
@@ -95,7 +95,8 @@ import { AirbnbRating } from 'react-native-ratings'
 import axios from 'axios'
 import { ENV } from "../services/environment"
 import * as FileSystem from 'expo-file-system'
-import { maxLength } from 'vuelidate/lib/validators'
+import { maxLength, required } from 'vuelidate/lib/validators'
+import { Toast } from 'native-base'
 
 const baseApiUrl = ENV.baseApiUrl
 
@@ -110,6 +111,7 @@ export default {
   },
   validations: {
     text: {
+      required,
       maxLength: maxLength(1000)
     },
   },
@@ -126,10 +128,15 @@ export default {
       return store.state.image.shopImages
     },
     shopName() {
-      return store.state.shop.shopName
+      return store.state.shop.shop.name
     },
   },
   created() {
+    store.dispatch('image/delPostImages')
+    const screen = this.navigation.getParam('screen')
+    if (screen != 'shopDetail') {
+      store.dispatch('shop/delShop')
+    }
   },
   methods: {
     pickImages() {
@@ -151,39 +158,24 @@ export default {
           base64Imgs.push(base64)
         } 
         const postData = {
-          text: this.form.text,
+          text: this.text,
           rating: this.rating,
           images: base64Imgs
         }
-        await axios.post( baseApiUrl + '/shops/code', { code: store.state.shop.shop.id })
-        // 店舗登録済の場合
-        .then(async res => {
-          await axios.post( baseApiUrl + '/shops/' + String(res.data.id) + '/posts', postData)
+        store.dispatch('post/savePost', postData)
+        .then(() => {
+          store.dispatch("footer/activeHomeTab")
           this.navigation.navigate("Home", { message: 'post' })
         })
         // 未登録の場合、先に店舗登録
         .catch(async() => {
-          const data = {
-            shopData: {
-              code: store.state.shop.shop.id,
-              name: store.state.shop.shop.name,
-              category: store.state.shop.shop.category,
-              opentime: store.state.shop.shop.opentime,
-              access: store.state.shop.shop.access.line +
-                store.state.shop.shop.access.stations +
-                store.state.shop.shop.access.station_exit +
-                store.state.shop.shop.access.walk + '分',
-              budget:   Number(store.state.shop.shop.budget),
-              img:     store.state.shop.shop.img,
-              url: store.state.shop.shop.url,
-              latitude: Number(store.state.shop.shop.latitude),
-              longitude: Number(store.state.shop.shop.longitude),
-            },
-            shop_id: 0,
-          }
-          await store.dispatch('shop/saveShop', data.shopData)
-          axios.post( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts', postData)
-          this.navigation.navigate("Home", { message: 'post' })
+          Toast.show({
+            text: "登録できませんでした",
+            buttonText: 'Ok',
+            type: 'danger',
+            position: 'bottom',
+            duration: 5000
+          })
         })
       }
     }

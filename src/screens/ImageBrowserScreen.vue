@@ -99,7 +99,7 @@ export default {
             type: 'image/jpg'
           })
         }
-        await store.dispatch('image/cacheImages', cPhotos)
+        await store.dispatch('image/cachePostImages', cPhotos)
         this.navigation.navigate('TextPost')
       })
       .catch((e) => console.log(e));

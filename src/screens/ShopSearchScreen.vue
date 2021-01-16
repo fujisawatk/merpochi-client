@@ -41,8 +41,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 import store from '../store'
 import { ScrollView } from 'react-native'
+import { ENV } from "../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
+
 export default {
   data: function() {
     return {
@@ -64,23 +69,25 @@ export default {
       const shops = await store.dispatch("shop/shopSearch", this.keyword)
       this.shops = shops
     },
-    selectedShop(shop) {
-      store.dispatch("shop/selectedShop", shop)
-        .then(() => {
-          const screen = this.navigation.getParam('screen')
-          this.navigation.setParams({ message: null })
-          switch (screen) {
-            case 'easy':
-              this.navigation.navigate('EasyPost')
-              break
-            case 'text':
-              this.navigation.navigate('TextPost')
-              break
-          }
-        })
-        .catch(() => {
-          console.log("選択されていません")
-        })
+    async selectedShop(shop) {
+      // 店舗登録済か確認
+      await axios.post( baseApiUrl + '/shops/code', { code: shop.id })
+      .then(() => {
+        store.dispatch("shop/addShop", res.data)
+      })
+      .catch(() => {
+        store.dispatch("shop/selectedShop", shop)
+      })
+      const screen = this.navigation.getParam('screen')
+      this.navigation.setParams({ message: null })
+      switch (screen) {
+        case 'easy':
+          this.navigation.navigate('EasyPost')
+          break
+        case 'text':
+          this.navigation.navigate('TextPost')
+          break
+      }
     },
   },
 }

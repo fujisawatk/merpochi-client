@@ -75,20 +75,18 @@ export default {
   },
   computed: {
     shopName() {
-      return store.state.shop.shopName
+      return store.state.shop.shop.name
     },
+  },
+  created() {
+    store.dispatch('shop/delShop')
   },
   methods: {
     pressedShopSearchInput() {
       this.navigation.navigate('ShopSearch', { screen: 'easy' })
     },
     async pressedFavoriteBtn() {
-      const shop = await axios.post( baseApiUrl + '/shops/code', { code: store.state.shop.shop.id })
-      await store.dispatch("shop/addShopId", shop.data.id)
-      const data = {
-          shop_id: store.state.shop.shopId,
-        }
-      store.dispatch('favorite/saveFavorite', data)
+      store.dispatch('favorite/saveFavorite')
       .then(() => {
         // フッタータブのアクティブ切替
         store.dispatch("footer/activeHomeTab")

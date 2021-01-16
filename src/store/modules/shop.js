@@ -8,18 +8,33 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   namespaced: true,
   state: {
+    gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
+    keyid: "ae0f4e85e8ca70ba78e7ef73bd1db6b9",                // ぐるなびAPIのキーID
     latitude: "",                                             // 現在位置緯度
     longitude: "",                                            // 現在位置経度
     errorMessage: "",                                         // 現在位置取得時のエラーメッセージ
-    gnaviApiUrl: "https://api.gnavi.co.jp/RestSearchAPI/v3/", // ぐるなびAPIアクセス用URL
-    keyid: "ae0f4e85e8ca70ba78e7ef73bd1db6b9",                // ぐるなびAPIのキーID
-    shops: [],                                                // 取得した店舗情報
+    shops: [],                                                // 店舗一覧ページ
     count: "",                                                // 各店舗のブックマーク数、いいね数
-    commentedShops: [],                                       // ログインユーザーがコメントした店舗情報
-    favoritedShops: [],                                       // ログインユーザーがお気に入りした店舗情報
     shopId: 0,
-    shopName: "",                                                 // 投稿する店舗
-    shop: "",
+    shopName: "",                                              
+    shop: {  
+      id: 0,                                                 // 操作する店舗情報
+      code: "",
+      name: "",
+      category: "",
+      opentime: "",
+      access: "",
+      budget: 0,
+      img: "",
+      latitude: 0,
+      longitude: 0,
+      url: "",
+      ratingCount: 0,
+      bookmarksCount: 0,
+      bookmarkUser: false,
+      favoritesCount: 0,
+      favoriteUser: false
+    },
   },
   getters: {
     // 指定IDの店舗情報をstate.restsから取得
@@ -43,20 +58,22 @@ export default {
       state.shops = []
       data.rest.map(function( value, index ) {
         const hash = {
+          id: state.count[index].id,
           code: value.id,
           name: value.name,
-          img: value.image_url.shop_image1,
           category: value.category,
           opentime: value.opentime,
-          budget: value.budget,
+          access: value.access.line + value.access.station + value.access.station_exit + value.access.walk + '分',
+          budget: Number(value.budget),
+          img: value.image_url.shop_image1,
+          latitude: Number(value.latitude),
+          longitude: Number(value.longitude),
           url: value.url,
-          latitude: value.latitude,
-          longitude: value.longitude,
-          access: value.access,
           ratingCount: state.count[index].rating_count,
           bookmarksCount: state.count[index].bookmarks_count,
-          shopId: state.count[index].id,
-          bookmarkUser: state.count[index].bookmark_user
+          bookmarkUser: state.count[index].bookmark_user,
+          favoritesCount: state.count[index].favorites_count,
+          favoriteUser: state.count[index].favorite_user
         }
         state.shops.push(hash)
       })
@@ -68,30 +85,66 @@ export default {
       state.commentedShops = data.commented_shops
       state.favoritedShops = data.favorited_shops
     },
-    setShopId (state, shopId) {
-      state.shopId = shopId
-    },
-    resetShopId (state) {
-      state.shopId = 0
-    },
     setShop (state, shop) {
-      state.shopName = shop.name
       state.shop = shop
     },
-    setBookmark (state, code) {
-      state.shops.find(el => el.code == code).bookmarkUser = true
-      state.shops.find(el => el.code == code).bookmarksCount += 1
+    resetShop (state) {
+      state.shop.id = 0,
+      state.shop.code = "",
+      state.shop.name = "",
+      state.shop.category = "",
+      state.shop.opentime = "",
+      state.shop.access = "",
+      state.shop.budget = 0,
+      state.shop.img = "",
+      state.shop.latitude = 0,
+      state.shop.longitude = 0,
+      state.shop.url = "",
+      state.shop.ratingCount = 0,
+      state.shop.bookmarksCount = 0,
+      state.shop.bookmarkUser = false,
+      state.shop.favoritesCount = 0,
+      state.shop.favoriteUser = false
     },
-    resetBookmark (state, code) {
-      state.shops.find(el => el.code == code).bookmarkUser = false
-      state.shops.find(el => el.code == code).bookmarksCount -= 1
+    setShopId (state, shopId) {
+      state.shop.id = shopId
     },
-    setRating (state, code) {
-      state.shops.find(el => el.code == code).ratingCount += 1
+    setBookmark (state) {
+      state.shops.find(el => el.code == state.shop.code).bookmarkUser = true
+      state.shops.find(el => el.code == state.shop.code).bookmarksCount += 1
     },
-    resetRating (state, code) {
-      state.shops.find(el => el.code == code).ratingCount -= 1
-    }
+    resetBookmark (state) {
+      state.shops.find(el => el.code == state.shop.code).bookmarkUser = false
+      state.shops.find(el => el.code == state.shop.code).bookmarksCount -= 1
+    },
+    setRatingAndFavorite (state) {
+      state.shop.favoriteUser = true
+      state.shop.favoritesCount += 1
+      state.shops.find(el => el.code == state.shop.code).ratingCount += 1
+    },
+    resetRatingAndFavorite (state) {
+      state.shop.favoriteUser = false
+      state.shop.favoritesCount -= 1
+      state.shops.find(el => el.code == state.shop.code).ratingCount -= 1
+    },
+    setSelectedShop (state, shop) {
+      state.shop.id = 0,
+      state.shop.code = shop.id,
+      state.shop.name = shop.name,
+      state.shop.category = shop.category,
+      state.shop.opentime = shop.opentime,
+      state.shop.access = shop.access.line + shop.access.station + shop.access.station_exit + shop.access.walk + '分',
+      state.shop.budget = Number(shop.budget),
+      state.shop.img = shop.image_url.shop_image1,
+      state.shop.latitude = Number(shop.latitude),
+      state.shop.longitude = Number(shop.longitude),
+      state.shop.url = shop.url
+      state.shop.ratingCount = 0,
+      state.shop.bookmarksCount = 0,
+      state.shop.bookmarkUser = false,
+      state.shop.favoritesCount = 0,
+      state.shop.favoriteUser = false
+    },
   },
   actions: {
     // 現在位置情報取得
@@ -140,18 +193,36 @@ export default {
       })
     },
     // 店舗IDを新規登録（初コメor初お気に入り時）
-    saveShop ({commit}, data) {
+    saveShop ({commit, state}) {
+      const data = {
+        code: state.shop.code,
+        name: state.shop.name,
+        category: state.shop.category,
+        opentime: state.shop.opentime,
+        access: state.shop.access,
+        budget:   state.shop.budget,
+        img:     state.shop.img,
+        url: state.shop.url,
+        latitude: state.shop.latitude,
+        longitude: state.shop.longitude
+      }
+      console.log(data)
       return axios.post( baseApiUrl + '/shops', data)
       .then(res => {
         commit('setShopId', res.data.id)
       })
+      .catch(() => undefined)
     },
-    // ユーザーがコメント・お気に入りした店舗情報を取得
-    getCommentedAndFavoritedShops ({commit}) {
-      return axios.get( baseApiUrl + '/shops/me')
-      .then(res => {
-          commit('setCommentedAndFavoritedShops',res.data)
-        })
+    // 操作する店舗を格納
+    addShop ({commit}, shop) {
+      return commit('setShop', shop)
+    },
+    delShop ({commit}) {
+      return commit('resetShop')
+    },
+    // 店舗登録時、操作店舗のIDを更新
+    addShopId ({commit}, shopId) {
+      return commit('setShopId', shopId)
     },
     // 店名・キーワード検索
     keywordSearch ({dispatch, state, commit}, keyword) {
@@ -191,27 +262,21 @@ export default {
         .catch(() => undefined)
     },
     selectedShop({commit}, shop) {
-      commit('setShop', shop)
+      commit('setSelectedShop', shop)
     },
-    // 詳細ページ操作後に一覧ページのブックマーク数更新
-    plusBookmark ({commit}, code) {
-      return commit('setBookmark', code)
+    // 一覧ページからブックマーク数更新
+    addBookmark ({commit}) {
+      return commit('setBookmark')
     },
-    minusBookmark ({commit}, code) {
-      return commit('resetBookmark', code)
+    delBookmark ({commit}) {
+      return commit('resetBookmark')
     },
-    // 詳細ページ操作後に一覧ページのリピート数更新
-    plusRating ({commit}, code) {
-      return commit('setRating', code)
+    // お気に入り数、リピート数更新
+    addRatingAndFavorite ({commit}) {
+      return commit('setRatingAndFavorite')
     },
-    minusRating ({commit}, code) {
-      return commit('resetRating', code)
-    },
-    addShopId ({commit}, shopId) {
-      return commit('setShopId', shopId)
-    },
-    delShopId ({commit}) {
-      return commit('resetShopId')
+    delRatingAndFavorite ({commit}) {
+      return commit('resetRatingAndFavorite')
     },
   }
 }

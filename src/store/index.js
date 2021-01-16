@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue-native-core'
 import auth from './modules/auth'
 import shop from './modules/shop'
+import post from './modules/post'
 import comment from './modules/comment'
 import favorite from './modules/favorite'
 import station from './modules/station'
@@ -16,6 +17,7 @@ export default new Vuex.Store({
   modules: {
     auth,
     shop,
+    post,
     comment,
     favorite,
     station,

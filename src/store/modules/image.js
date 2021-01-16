@@ -20,9 +20,11 @@ export default {
     setUserImage (state, image) {
       state.userImage = image
     },
-    setShopImages (state, images) {
+    setPostImages (state, images) {
       state.shopImages = images
-      console.log(state.shopImages[0].uri)
+    },
+    resetPostImages (state) {
+      state.shopImages = []
     }
   },
   actions: {
@@ -91,8 +93,11 @@ export default {
         commit('setUserImage',res.data)
       })
     },
-    cacheImages ({commit}, images) {
-      commit('setShopImages', images)
+    cachePostImages ({commit}, images) {
+      commit('setPostImages', images)
+    },
+    delPostImages ({commit}) {
+      commit('resetPostImages')
     }
   }
 }
