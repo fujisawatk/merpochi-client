@@ -84,7 +84,7 @@
           </nb-list>
 
 
-          <nb-separator class="post-index">
+          <nb-separator v-if="isAuth" class="post-index">
             <nb-text class="post-title">あなたの投稿</nb-text>
           </nb-separator>
           <nb-list-item
@@ -92,6 +92,7 @@
             transparent
             no-shadow
             avatar
+            v-if="isAuth"
           >
             <nb-left>
               <nb-thumbnail
@@ -284,6 +285,9 @@ export default {
         )
     },
     pressedBookmarkBtn() {
+      if (store.state.auth.isAuthResolved == false) {
+        this.navigation.navigate('Signin')
+      }
       store.dispatch("bookmark/saveBookmark")
       .then(() => {
         store.dispatch('shop/addBookmark')
@@ -304,6 +308,9 @@ export default {
       })
     },
     pressedFavoriteBtn() {
+      if (store.state.auth.isAuthResolved == false) {
+        this.navigation.navigate('Signin')
+      }
       store.dispatch("favorite/saveFavorite")
       .then(() => {
         store.dispatch('shop/addRatingAndFavorite')
