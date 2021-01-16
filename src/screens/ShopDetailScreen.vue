@@ -342,32 +342,41 @@ export default {
   },
   async created () {
     const code = this.navigation.getParam('code')
-    const shop = store.getters['shop/getShop'](code)
-    store.dispatch("shop/addShop", shop)
-    .then(async() => {
-      if (store.state.shop.shop.img != '') {
-        this.shopImage.push({
-          uri: store.state.shop.shop.img
-        })
-      }else{
-        // 画像がない場合、サンプル画像挿入
-        this.shopImage.push({
-          uri: "https://i.gyazo.com/395c068648d593021b87d42be1be9250.png"
-        })
-      } 
-      // 店舗IDがAPIで登録されている場合
-      if (store.state.shop.shop.id != 0) {
-        // 投稿情報取得
-        await store.dispatch('post/getPosts')
-        for (let i = 0; i < store.state.post.posts.length; i++ ) {
-          for (let k = 0; k < store.state.post.posts[i].images.length; k++ ){
-            this.shopImage.push(store.state.post.posts[i].images[k])
-          }
+    const screen = this.navigation.getParam('screen')
+    switch (screen) {
+      case 'home':
+        const shop1 = store.getters['shop/getShop'](code)
+        await store.dispatch("shop/addShop", shop1)
+        break
+      case 'mylist':
+        const shop2 = await axios.post( baseApiUrl + '/shops/code', { code: code })
+        await store.dispatch("shop/addShop", shop2.data)
+        break
+    }
+    if (store.state.shop.shop.img != '') {
+      this.shopImage.push({
+        uri: store.state.shop.shop.img
+      })
+    }else{
+      // 画像がない場合、サンプル画像挿入
+      this.shopImage.push({
+        uri: "https://i.gyazo.com/395c068648d593021b87d42be1be9250.png"
+      })
+    } 
+    // 店舗IDがAPIで登録されている場合
+    if (store.state.shop.shop.id != 0) {
+      // 投稿情報取得
+      await store.dispatch('post/getPosts')
+      for (let i = 0; i < store.state.post.posts.length; i++ ) {
+        for (let k = 0; k < store.state.post.posts[i].images.length; k++ ){
+          this.shopImage.push(store.state.post.posts[i].images[k])
         }
-      }else{
-        await store.dispatch('post/delPosts')
       }
-    })
+    }else{
+      await store.dispatch('post/delPosts')
+    }
+
+      
   }
 }
 </script>

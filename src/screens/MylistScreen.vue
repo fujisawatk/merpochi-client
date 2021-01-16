@@ -108,7 +108,10 @@ export default {
       )
     },
     changeDetail(code) {
-      return this.navigation.navigate('ShopDetail', { code })
+      return this.navigation.navigate('ShopDetail', {
+        code: code,
+        screen: 'mylist'
+      })
     }
   }
 }
