@@ -145,6 +145,12 @@ export default {
       state.shop.favoritesCount = 0,
       state.shop.favoriteUser = false
     },
+    setCount (state, count) {
+      state.shop.bookmarksCount = count[0].bookmarks_count
+      state.shop.bookmarkUser = count[0].bookmark_user
+      state.shop.favoritesCount = count[0].favorites_count
+      state.shop.favoriteUser = count[0].favorite_user
+    }
   },
   actions: {
     // 現在位置情報取得
@@ -278,5 +284,8 @@ export default {
     delRatingAndFavorite ({commit}) {
       return commit('resetRatingAndFavorite')
     },
+    addCount ({commit}, count) {
+      return commit('setCount', count)
+    }
   }
 }

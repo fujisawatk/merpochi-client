@@ -8,7 +8,7 @@
     <nb-left class="item-left">
       <nb-thumbnail
         square
-        v-if="item.img != null"
+        v-if="item.img != ''"
         :source="{uri: item.img}"
       />
       <nb-thumbnail

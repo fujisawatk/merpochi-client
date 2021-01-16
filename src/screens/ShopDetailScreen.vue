@@ -351,6 +351,13 @@ export default {
       case 'mylist':
         const shop2 = await axios.post( baseApiUrl + '/shops/code', { code: code })
         await store.dispatch("shop/addShop", shop2.data)
+        const data = {
+          shop_codes: [code],
+          user_id: store.state.auth.user.id
+        }
+        // ブックマーク、お気に入り情報取得
+        const count = await axios.post( baseApiUrl + '/shops/search', data)
+        store.dispatch('shop/addCount', count.data)
         break
     }
     if (store.state.shop.shop.img != '') {
