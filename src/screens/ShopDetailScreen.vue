@@ -84,7 +84,7 @@
           </nb-list>
 
 
-          <nb-separator class="post-index">
+          <nb-separator v-if="isAuth" class="post-index">
             <nb-text class="post-title">あなたの投稿</nb-text>
           </nb-separator>
           <nb-list-item
@@ -92,6 +92,7 @@
             transparent
             no-shadow
             avatar
+            v-if="isAuth"
           >
             <nb-left>
               <nb-thumbnail
@@ -284,14 +285,19 @@ export default {
         )
     },
     pressedBookmarkBtn() {
-      store.dispatch("bookmark/saveBookmark")
-      .then(() => {
-        store.dispatch('shop/addBookmark')
-        console.log("ブックマーク登録しました")
-      })
-      .catch(() => {
-        console.log("保存に失敗しました")
-      })
+      if (store.state.auth.isAuthResolved == true) {
+        store.dispatch("bookmark/saveBookmark")
+        .then(() => {
+          store.dispatch('shop/addBookmark')
+          console.log("ブックマーク登録しました")
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
+      }else{
+        this.navigation.navigate('Signin')
+      }
+      
     },
     pressedCancelBookmarkBtn() {
       store.dispatch('bookmark/delBookmark')
@@ -304,14 +310,18 @@ export default {
       })
     },
     pressedFavoriteBtn() {
-      store.dispatch("favorite/saveFavorite")
-      .then(() => {
-        store.dispatch('shop/addRatingAndFavorite')
-        console.log("お気に入り登録しました")
-      })
-      .catch(() => {
-        console.log("保存に失敗しました")
-      })
+      if (store.state.auth.isAuthResolved == true) {
+        store.dispatch("favorite/saveFavorite")
+        .then(() => {
+          store.dispatch('shop/addRatingAndFavorite')
+          console.log("お気に入り登録しました")
+        })
+        .catch(() => {
+          console.log("保存に失敗しました")
+        })
+      }else{
+        this.navigation.navigate('Signin')
+      }
     },
     pressedCancelFavoriteBtn() {
       store.dispatch("favorite/delFavorite")

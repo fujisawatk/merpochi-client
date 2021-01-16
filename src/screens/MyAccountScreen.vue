@@ -40,6 +40,7 @@
           rounded
           danger
           class="logout-btn"
+          :on-press="pressedLogoutBtn"
         >
             <nb-text>ログアウト</nb-text>
         </nb-button>
@@ -66,7 +67,8 @@
         <nb-button
           rounded
            class="login-btn"
-          :on-press="pressedRoginBtn">
+          :on-press="pressedLoginBtn"
+        >
             <nb-text>ログインする</nb-text>
         </nb-button>
       </nb-content>
@@ -108,11 +110,23 @@ export default {
     }
   },
   methods: {
-    pressedRoginBtn() {
+    pressedLoginBtn() {
       this.navigation.navigate('Signin')
     },
     pressedEditBtn() {
       this.navigation.navigate('EditAccount')
+    },
+    pressedLogoutBtn() {
+      store.dispatch('auth/logout')
+        .then(() => {
+          Toast.show({
+            text: 'ログアウトしました。',
+            buttonText: 'Ok',
+            type: 'success',
+            position: 'bottom',
+            duration: 5000
+          })
+        })
     },
     checkForMessage() {
       const message = this.navigation.getParam('message')

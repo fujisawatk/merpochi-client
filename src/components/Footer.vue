@@ -53,11 +53,16 @@ export default {
       .catch(() => {})
     },
     pressedAddPostTab() {
-      store.dispatch("footer/activeAddPostTab")
-      .then(() => {
-        this.navigation.navigate("SelectPost")
-      })
-      .catch(() => {})
+      if (store.state.auth.isAuthResolved == true) {
+        store.dispatch("footer/activeAddPostTab")
+        .then(() => {
+          this.navigation.navigate("SelectPost")
+        })
+        .catch(() => {})
+      }else{
+        this.navigation.navigate('Signin')
+      }
+      
     },
     pressedMyListTab() {
       store.dispatch("footer/activeMyListTab")
