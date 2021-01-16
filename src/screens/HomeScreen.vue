@@ -149,11 +149,7 @@ export default {
   },
   methods: {
     changeDetail(code) {
-      if (store.state.auth.isAuthResolved == true) {
-        this.navigation.navigate('ShopDetail', { code })
-      } else {
-        this.navigation.navigate('Signin')
-      }
+      this.navigation.navigate('ShopDetail', { code })
     },
     pressedDetailSearchBar() {
       return this.detailSearchForm = !this.detailSearchForm
