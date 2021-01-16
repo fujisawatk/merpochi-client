@@ -58,6 +58,7 @@
 
 <script>
 import { Dimensions } from "react-native"
+import { Toast } from 'native-base'
 import store from '../store'
 const deviceWidth = Dimensions.get("window").width
 export default {
@@ -87,29 +88,55 @@ export default {
       this.changeDetail(this.selCode)
     },
     pressedBookmarkBtn() {
-      // 一覧から店舗情報を取得
-      const shop = store.getters['shop/getShop'](this.item.code)
-      // 登録ずみならIDを送る
-      store.dispatch("shop/addShop", shop)
-      .then(() => {
-        store.dispatch("bookmark/saveBookmark")
+      if (store.state.auth.isAuthResolved == true) {
+        // 一覧から店舗情報を取得
+        const shop = store.getters['shop/getShop'](this.item.code)
+        // 登録ずみならIDを送る
+        store.dispatch("shop/addShop", shop)
         .then(() => {
-          store.dispatch('shop/addBookmark')
-          console.log("ブックマーク登録しました")
+          store.dispatch("bookmark/saveBookmark")
+          .then(() => {
+            store.dispatch('shop/addBookmark')
+            Toast.show({
+              text: 'ブックマーク登録しました',
+              buttonText: 'Ok',
+              type: 'success',
+              position: 'bottom',
+              duration: 5000
+            })
+          })
+          .catch(() => {
+            Toast.show({
+              text: '登録に失敗しました',
+              buttonText: 'Ok',
+              type: 'danger',
+              position: 'bottom',
+              duration: 5000
+            })
+          })
         })
-        .catch(() => {
-          console.log("保存に失敗しました")
-        })
-      })
+      }
     },
     pressedCancelBookmarkBtn() {
       store.dispatch("bookmark/delBookmark")
       .then(() => {
         store.dispatch('shop/delBookmark')
-        console.log("ブックマーク解除しました")
+        Toast.show({
+          text: 'ブックマーク解除しました',
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
       })
       .catch(() => {
-        console.log("解除に失敗しました")
+        Toast.show({
+          text: '解除に失敗しました',
+          buttonText: 'Ok',
+          type: 'danger',
+          position: 'bottom',
+          duration: 5000
+        })
       })
     }
   }
