@@ -149,7 +149,10 @@ export default {
   },
   methods: {
     changeDetail(code) {
-      this.navigation.navigate('ShopDetail', { code })
+      this.navigation.navigate('ShopDetail',{
+        code: code,
+        screen: 'home'
+      })
     },
     pressedDetailSearchBar() {
       return this.detailSearchForm = !this.detailSearchForm

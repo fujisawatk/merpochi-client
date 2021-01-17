@@ -7,9 +7,28 @@
     />
 
     <nb-tabs>
+      <nb-tab :heading="getBookmarkedTab()">
+        <nb-content v-if="(bookmark.length > 0)">
+          <view v-for="item in bookmark" :key="item.id">
+            <item
+              mypage
+              :item="item"
+              :sel-code="item.code"
+              :change-detail="changeDetail"
+            />
+          </view>
+        </nb-content>
+
+        <nb-content v-else>
+          <view class="show-no-bookmark">
+            <nb-text class="no-bookmark-text">行きたいお店はありません</nb-text>
+          </view>
+        </nb-content>
+      </nb-tab>
+
       <nb-tab :heading="getFavoritedTab()">
-        <nb-content v-if="(favoriteItems.length > 0)">
-          <view v-for="item in favoriteItems" :key="item.id">
+        <nb-content v-if="(favorite.length > 0)">
+          <view v-for="item in favorite" :key="item.id">
             <item
               mypage
               :item="item"
@@ -21,26 +40,7 @@
 
         <nb-content v-else>
           <view class="show-no-favorite">
-            <nb-text class="no-favorite-text">お気に入り登録はありません</nb-text>
-          </view>
-        </nb-content>
-      </nb-tab>
-
-      <nb-tab :heading="getCommentedTab()">
-        <nb-content v-if="(commentItems.length > 0)">
-          <view v-for="item in commentItems" :key="item.id">
-            <item
-              mypage
-              :item="item"
-              :sel-code="item.code"
-              :change-detail="changeDetail"
-            />
-          </view>
-        </nb-content>
-
-        <nb-content v-else>
-          <view class="show-no-comment">
-            <nb-text class="no-comment-text">コメントしたお店はありません</nb-text>
+            <nb-text class="no-favorite-text">行ったお店はありません</nb-text>
           </view>
         </nb-content>
       </nb-tab>
@@ -58,11 +58,16 @@ import React from "react"
 import { TabHeading, Text } from "native-base"
 import axios from 'axios'
 import service from '../services/axios'
+import { ENV } from "../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   data: function() {
     return {
-      title: "マイリスト"
+      title: "マイリスト",
+      bookmarkedShops: [],
+      favoritedShops: []
     };
   },
   props: {
@@ -70,73 +75,52 @@ export default {
       type: Object
     }
   },
+  computed: {
+    bookmark() {
+      return this.bookmarkedShops
+    },
+    favorite() {
+      return this.favoritedShops
+    }
+  },
+  async created() {
+    const shops = await axios.post( baseApiUrl + '/users/mylist')
+    if (shops.data.bookmarked_shops != null) this.bookmarkedShops = shops.data.bookmarked_shops
+    if (shops.data.favorited_shops != null) this.favoritedShops = shops.data.favorited_shops
+  },
   methods: {
-    getFavoritedTab() {
+    getBookmarkedTab() {
       return (
         <TabHeading style={{backgroundColor: '#FFCC33'}}>
-          <Text style={{color:'#444444', fontSize:13}}>お気に入りの店舗</Text>
+          <Text style={{color:'#444444', fontSize:13}}>行きたいお店</Text>
         </TabHeading>
       )
     },
-    getCommentedTab() {
+    getFavoritedTab() {
       return (
         <TabHeading style={{backgroundColor: '#FFCC33'}}>
-          <Text style={{color:'#444444', fontSize:13}}>コメントした店舗</Text>
+          <Text style={{color:'#444444', fontSize:13}}>行ったお店</Text>
         </TabHeading>
       )
     },
     changeDetail(code) {
-      return this.navigation.navigate('ShopDetail', { code })
+      return this.navigation.navigate('ShopDetail', {
+        code: code,
+        screen: 'mylist'
+      })
     }
-  },
-  computed: {
-    commentItems() {
-      return store.state.shop.commentedShops
-    },
-    favoriteItems() {
-      return store.state.shop.favoritedShops
-    },
-    isAuth() {
-      return store.state.auth.isAuthResolved
-    },
-  },
-  created() {
-    store.dispatch('shop/getCommentedAndFavoritedShops')
   }
-};
+}
 </script>
 
 <style>
-.mypage-container {
-  flex: 1;
-}
-.nickname {
-  font-weight: bold;
-}
-.email-section {
-  padding: 10;
-  margin-top: 10;
-}
-.password-section,
-.favorite-section {
-  padding: 10;
-}
-.icon {
-  font-size: 15;
-}
-.email,
-.password,
-.favorite {
-  color: gray;
-  font-weight: bold;
-}
-.show-no-favorite,
-.show-no-commend {
+.show-no-bookmark,
+.show-no-favorite {
   height: 200px;
   width: 100%;
 }
-.no-favorite-text,
-.no-comment-text {
+.no-bookmark-text,
+.no-favorite-text {
   font-size: 20;
   text-align: center;
   line-height: 200px;
