@@ -6,7 +6,14 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   namespaced: true,
   state: {
-    posts: []
+    posts: [],
+    post: "",
+    postImages: []
+  },
+  getters: {
+    getPost: (state) => (id) => {
+      return state.posts.find(post => post.id === id)
+    },
   },
   mutations: {
     setPosts (state, data) {
@@ -19,6 +26,9 @@ export default {
     resetPosts (state) {
       state.posts = []
     },
+    setPost (state, post) {
+      state.post = post
+    }
   },
   actions: {
     // 指定の店舗IDに紐付いた投稿を取得
@@ -41,6 +51,9 @@ export default {
       const strId = String(rootState.shop.shop.id)
       return axios.post( baseApiUrl + '/shops/' + strId + '/posts', postData)
       .then(() => {})
+    },
+    addPost ({commit}, post) {
+      return commit('setPost', post)
     },
   }
 }
