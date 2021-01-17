@@ -6,12 +6,12 @@
       <nb-card>
         <nb-card-item bordered>
           <nb-left>
-            <nb-thumbnail :source="{uri: postUserImage }"></nb-thumbnail>
+            <nb-thumbnail :source="{uri: post.user_image }"></nb-thumbnail>
             <nb-body class="post-top">
-              <nb-text class="top-nickname">{{ postUser }}</nb-text>
+              <nb-text class="top-nickname">{{ post.user_nickname }}</nb-text>
               <rating
                 :ratingCount="5"
-                :startingValue="rating"
+                :startingValue="post.rating"
                 :readonly="true"
                 :imageSize="13"
                 class="top-rating"
@@ -21,12 +21,12 @@
         </nb-card-item> 
         <nb-card-item bordered cardBody class="post-body">
               <nb-text class="post-text">
-                {{ text }}
+                {{ post.text }}
               </nb-text>
               <scroll-view :horizontal="true">
                 <nb-list-item	
                   avatar
-                  v-for="image in images"
+                  v-for="image in post.images"
                   :key="image.id"
                 >	
                   <image-modal
@@ -46,11 +46,11 @@
           <nb-left>
             <nb-button transparent>
               <nb-icon class="comment-icon" name="chatbubbles"></nb-icon>
-              <nb-text class="comment-count">{{ comments.length }}</nb-text>
+              <nb-text class="comment-count">{{ post.comments_count }}</nb-text>
             </nb-button>
           </nb-left>
           <nb-right>
-            <nb-text note>{{ postTime }}</nb-text>
+            <nb-text note>{{ post.time }}</nb-text>
           </nb-right>
         </nb-card-item>
       </nb-card>
@@ -151,14 +151,7 @@ export default {
           }
       },
       title: "投稿詳細ページ",
-      postId: 0,
-      text: "",
-      rating: "",
-      postUser: "",
-      postUserImage: "",
-      images: [],
       comments: [],
-      postTime: "",
       newComment: ""
     }
   },
@@ -175,6 +168,9 @@ export default {
     }
   },
   computed: {
+    post() {
+      return store.state.post.post
+    },
     currentUserNickname() {
       return store.state.auth.user.nickname
     },
@@ -189,7 +185,7 @@ export default {
     pressedAddCommentBtn() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        axios.post( baseApiUrl + '/posts/' + String(this.postId) + '/comments', { text: this.newComment })
+        axios.post( baseApiUrl + '/posts/' + String(this.post.id) + '/comments', { text: this.newComment })
         .then(res => {
           this.comments.push(res.data)
           this.newComment = ""
@@ -204,24 +200,15 @@ export default {
   },
   async created () {
     const postId = this.navigation.getParam('id')
-    this.postId = postId
-    await axios.get( baseApiUrl + '/shops/' + String(store.state.shop.shopId) + '/posts/' + String(postId))
+    const post = store.getters['post/getPost'](postId)
+    await store.dispatch("post/addPost", post)
+    await axios.get( baseApiUrl + '/posts/' + String(postId) + '/comments')
     .then(res => {
-      if (res.data.comments == null) {
+      if (res.data != null) {
+          this.comments = res.data
+        }else{
           this.comments = []
-        }else{
-          this.comments = res.data.comments
         }
-      if (res.data.images == null) {
-          this.images = []
-        }else{
-          this.images = res.data.images
-        } 
-      this.text = res.data.text
-      this.rating = res.data.rating
-      this.postUser = res.data.user_nickname
-      this.postUserImage = res.data.user_image
-      this.postTime = res.data.time
     })
     .catch(() => {})
   }
