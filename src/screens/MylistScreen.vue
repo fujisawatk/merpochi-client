@@ -84,13 +84,9 @@ export default {
     }
   },
   async created() {
-    if (store.state.auth.isAuthResolved == true) {
-      const shops = await axios.post( baseApiUrl + '/users/mylist')
-      if (shops.data.bookmarked_shops != null) this.bookmarkedShops = shops.data.bookmarked_shops
-      if (shops.data.favorited_shops != null) this.favoritedShops = shops.data.favorited_shops
-    }else{
-      this.navigation.navigate('Signin')
-    }
+    const shops = await axios.post( baseApiUrl + '/users/mylist')
+    if (shops.data.bookmarked_shops != null) this.bookmarkedShops = shops.data.bookmarked_shops
+    if (shops.data.favorited_shops != null) this.favoritedShops = shops.data.favorited_shops
   },
   methods: {
     getBookmarkedTab() {
