@@ -52,8 +52,15 @@
       >
         <nb-text>テストログイン</nb-text>
       </nb-button>
-    </view>
 
+      <nb-button transparent
+        class="signup-btn"
+        :on-press="pressedRegisterLink"
+      >
+        <nb-text>登録がまだの方はこちら</nb-text>
+      </nb-button>
+    </view>
+    
   </nb-container>
 </template>
 
@@ -98,7 +105,7 @@ export default {
     }
   },
   methods: {
-    changeSignup() {
+    pressedRegisterLink() {
       this.navigation.navigate("Signup")
     },
     login() {
@@ -163,10 +170,13 @@ export default {
 .send-btn {
   margin-bottom: 10;
   max-width: 350px;
-  flex: 1;
-  justify-content: center;
-  /* iOS用 */
   width: 100%;
-  max-height: 50px;
+  justify-content: center;
+}
+.signup-btn {
+  margin-bottom: 10;
+  max-width: 350px;
+  width: 100%;
+  justify-content: flex-end;
 }
 </style>

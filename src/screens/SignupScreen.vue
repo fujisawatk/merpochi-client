@@ -84,6 +84,12 @@
           <nb-text class="btn-text">完了</nb-text>
         </nb-button>
 
+        <nb-button transparent
+        class="login-btn"
+        :on-press="pressedLoginLink"
+        >
+          <nb-text>ログインの方はこちら</nb-text>
+        </nb-button>
       </view>
     </scroll-view>
 
@@ -147,8 +153,8 @@ export default {
     }
   },
   methods: {
-    changeHome() {
-      this.navigation.navigate("Home", { message: null })
+    pressedLoginLink() {
+      this.navigation.navigate("Signin")
     },
     register() {
       this.$v.form.$touch()
@@ -220,8 +226,15 @@ export default {
   align-items: center;
 }
 .send-btn {
+  margin-top: 10;
   max-width: 350px;
   justify-content: center;
+  width: 100%;
+}
+.login-btn {
+  margin-top: 10;
+  max-width: 350px;
+  justify-content: flex-end;
   width: 100%;
 }
 </style>
