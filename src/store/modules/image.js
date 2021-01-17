@@ -53,7 +53,7 @@ export default {
       };
       return axios(config)
     },
-    async updateUserImage ({state, rootState, dispatch, commit}, image) {
+    async updateUserImage ({rootState, dispatch, commit}, image) {
       const data = new FormData();
       let extention = image.split(".")[1]
       var mineType = await dispatch('mineType', extention)

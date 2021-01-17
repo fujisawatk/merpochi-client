@@ -45,7 +45,6 @@ export default {
     async savePost ({dispatch, rootState}, postData) {
       // 店舗IDを新規登録
       if (rootState.shop.shop.id === 0) {
-        console.log("aaaaaaaaaa")
         await dispatch('shop/saveShop', null, { root: true })
       }
       const strId = String(rootState.shop.shop.id)

@@ -40,12 +40,6 @@ export default {
     // 指定IDの店舗情報をstate.restsから取得
     getShop: (state) => (code) => {
       return state.shops.find(shop => shop.code === code)
-    },
-    getCommentedShop: (state) => (code) => {
-      return state.commentedShops.find(shop => shop.code === code)
-    },
-    getFavoritedShop: (state) => (code) => {
-      return state.favoritedShops.find(shop => shop.code === code)
     }
   }, 
   mutations: {
@@ -179,7 +173,7 @@ export default {
   },
   actions: {
     // 現在位置情報取得
-    getGeolocation ({commit, state}) {
+    getGeolocation ({commit}) {
       Permissions.askAsync(Permissions.LOCATION)
         .then(status => {
           if (!status.granted) {
@@ -237,7 +231,6 @@ export default {
         latitude: state.shop.latitude,
         longitude: state.shop.longitude
       }
-      console.log(data)
       return axios.post( baseApiUrl + '/shops', data)
       .then(res => {
         commit('setShopId', res.data.id)
