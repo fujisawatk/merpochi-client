@@ -117,15 +117,27 @@ export default {
       state.shops.find(el => el.code == state.shop.code).bookmarkUser = false
       state.shops.find(el => el.code == state.shop.code).bookmarksCount -= 1
     },
-    setRatingAndFavorite (state) {
-      state.shop.favoriteUser = true
-      state.shop.favoritesCount += 1
+    setBookmarkForMyList (state) {
+      state.shop.bookmarkUser = true
+      state.shop.bookmarksCount += 1
+    },
+    resetBookmarkForMyList (state) {
+      state.shop.bookmarkUser = false
+      state.shop.bookmarksCount -= 1
+    },
+    setRating (state) {
       state.shops.find(el => el.code == state.shop.code).ratingCount += 1
     },
-    resetRatingAndFavorite (state) {
+    resetRating (state) {
+      state.shops.find(el => el.code == state.shop.code).ratingCount -= 1
+    },
+    setFavorite (state) {
+      state.shop.favoriteUser = true
+      state.shop.favoritesCount += 1
+    },
+    resetFavorite (state) {
       state.shop.favoriteUser = false
       state.shop.favoritesCount -= 1
-      state.shops.find(el => el.code == state.shop.code).ratingCount -= 1
     },
     setSelectedShop (state, shop) {
       state.shop.id = 0,
@@ -150,7 +162,20 @@ export default {
       state.shop.bookmarkUser = count[0].bookmark_user
       state.shop.favoritesCount = count[0].favorites_count
       state.shop.favoriteUser = count[0].favorite_user
-    }
+    },
+    setShopForMyList (state, shop) {
+      state.shop.id = shop.id,
+      state.shop.code = shop.code,
+      state.shop.name = shop.name,
+      state.shop.category = shop.category,
+      state.shop.opentime = shop.opentime,
+      state.shop.access = shop.access,
+      state.shop.budget = shop.budget,
+      state.shop.img = shop.img,
+      state.shop.latitude = shop.latitude,
+      state.shop.longitude = shop.longitude,
+      state.shop.url = shop.url
+    },
   },
   actions: {
     // 現在位置情報取得
@@ -277,15 +302,31 @@ export default {
     delBookmark ({commit}) {
       return commit('resetBookmark')
     },
-    // お気に入り数、リピート数更新
-    addRatingAndFavorite ({commit}) {
-      return commit('setRatingAndFavorite')
+    addBookmarkForMyList ({commit}) {
+      return commit('setBookmarkForMyList')
     },
-    delRatingAndFavorite ({commit}) {
-      return commit('resetRatingAndFavorite')
+    delBookmarkForMyList ({commit}) {
+      return commit('resetBookmarkForMyList')
+    },
+    // お気に入り数、リピート数更新
+    addRating ({commit}) {
+      return commit('setRating')
+    },
+    delRating ({commit}) {
+      return commit('resetRating')
+    },
+    addFavorite ({commit}) {
+      return commit('setFavorite')
+    },
+    delFavorite ({commit}) {
+      return commit('resetFavorite')
     },
     addCount ({commit}, count) {
       return commit('setCount', count)
-    }
+    },
+    // マイリストからの詳細ページアクセス用
+    addShopForMyList ({commit}, shop) {
+      return commit('setShopForMyList', shop)
+    },
   }
 }

@@ -139,7 +139,7 @@
             bordered
             class="like-button"
             :on-press="pressedBookmarkBtn"
-            v-if="shop.bookmarkUser === false"
+            v-if="shop.bookmarkUser != true"
           >
             <nb-icon active class="btn-icon" type="FontAwesome" name="bookmark-o" />
             <nb-text class="btn-text">ブックマーク</nb-text>
@@ -160,7 +160,7 @@
             bordered
             class="like-button"
             :on-press="pressedFavoriteBtn"
-            v-if="shop.favoriteUser === false"
+            v-if="shop.favoriteUser != true"
           >
             <nb-icon active class="btn-icon" type="MaterialIcons" name="favorite-border" />
             <nb-text class="btn-text">リピートしたい！</nb-text>
@@ -288,7 +288,15 @@ export default {
       if (store.state.auth.isAuthResolved == true) {
         store.dispatch("bookmark/saveBookmark")
         .then(() => {
-          store.dispatch('shop/addBookmark')
+          const screen = this.navigation.getParam('screen')
+          switch (screen) {
+            case 'home':
+              store.dispatch('shop/addBookmark')
+              break
+            case 'mylist':
+              store.dispatch('shop/addBookmarkForMyList')
+              break
+          }
           console.log("ブックマーク登録しました")
         })
         .catch(() => {
@@ -302,7 +310,15 @@ export default {
     pressedCancelBookmarkBtn() {
       store.dispatch('bookmark/delBookmark')
       .then(() => {
-        store.dispatch('shop/delBookmark')
+        const screen = this.navigation.getParam('screen')
+        switch (screen) {
+          case 'home':
+            store.dispatch('shop/delBookmark')
+            break
+          case 'mylist':
+            store.dispatch('shop/delBookmarkForMyList')
+            break
+        }
         console.log("ブックマーク解除しました")
       })
       .catch(() => {
@@ -313,7 +329,16 @@ export default {
       if (store.state.auth.isAuthResolved == true) {
         store.dispatch("favorite/saveFavorite")
         .then(() => {
-          store.dispatch('shop/addRatingAndFavorite')
+          const screen = this.navigation.getParam('screen')
+          switch (screen) {
+            case 'home':
+              store.dispatch('shop/addRating')
+              store.dispatch('shop/addFavorite')
+              break
+            case 'mylist':
+              store.dispatch('shop/addFavorite')
+              break
+          }
           console.log("お気に入り登録しました")
         })
         .catch(() => {
@@ -326,7 +351,16 @@ export default {
     pressedCancelFavoriteBtn() {
       store.dispatch("favorite/delFavorite")
       .then(() => {
-        store.dispatch('shop/delRatingAndFavorite')
+        const screen = this.navigation.getParam('screen')
+        switch (screen) {
+          case 'home':
+            store.dispatch('shop/delRating')
+            store.dispatch('shop/delFavorite')
+            break
+          case 'mylist':
+            store.dispatch('shop/delFavorite')
+            break
+        }
         console.log("お気に入り解除しました")
       })
       .catch(() => {
@@ -350,7 +384,7 @@ export default {
         break
       case 'mylist':
         const shop2 = await axios.post( baseApiUrl + '/shops/code', { code: code })
-        await store.dispatch("shop/addShop", shop2.data)
+        await store.dispatch("shop/addShopForMyList", shop2.data)
         const data = {
           shop_codes: [code],
           user_id: store.state.auth.user.id
@@ -375,8 +409,11 @@ export default {
       // 投稿情報取得
       await store.dispatch('post/getPosts')
       for (let i = 0; i < store.state.post.posts.length; i++ ) {
-        for (let k = 0; k < store.state.post.posts[i].images.length; k++ ){
-          this.shopImage.push(store.state.post.posts[i].images[k])
+        // nullエラー対策
+        if (store.state.post.posts[i].images != null) {
+          for (let k = 0; k < store.state.post.posts[i].images.length; k++ ){
+            this.shopImage.push(store.state.post.posts[i].images[k])
+          }
         }
       }
     }else{
