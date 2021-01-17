@@ -1,16 +1,14 @@
 <template>
   <nb-container class="signin-container">
     <navigation-events :on-did-focus="checkForMessage" />
-    <view class="logo">
-      <image
-        class="logo-image"
-        :source="require('../../assets/icons/logo.png')"
-      />
-      <text class="logo-title">merpochi</text>
-    </view>
+    <header
+      auth
+      :screen="title"
+      :navigation="navigation"
+    />
 
     <nb-form class="form">
-      <nb-item rounded class="form-input">
+      <nb-item fixedLabel class="form-input">
         <nb-icon active type="Entypo" name="mail" />
         <nb-input
           placeholder="メールアドレス"
@@ -24,7 +22,7 @@
         message="形式が正しくありません"
       />
 
-      <nb-item rounded class="form-input">
+      <nb-item fixedLabel class="form-input">
         <nb-icon active type="Entypo" name="key" />
         <nb-input
           placeholder="パスワード"
@@ -41,7 +39,7 @@
     </nb-form>
 
     <view class="form-btn">
-      <nb-button rounded dark
+      <nb-button rounded danger
         class="send-btn"
         :on-press="login"
       >
@@ -74,6 +72,7 @@ import {
 export default {
   data () {
     return {
+      title: "ログイン",
       form: {
         email: '',
         password: ''
@@ -146,38 +145,18 @@ export default {
 <style>
 .signin-container {
   flex: 1;
-  background-color: #ffcc33;
   width: 100%;
-}
-.logo {
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 30%;
-}
-.logo-image {
-  width: 120;
-  height: 120;
-  position: absolute;
-  top: 30;
-}
-.logo-title {
-  font-size: 30;
-  font-family: DancingScript-Bold;
-  position: absolute;
-  top: 130;
 }
 .form {
   align-items: center;
   max-height: 450px;
+  margin-top: 50;
 }
 .form-input {
-  background-color: beige;
   max-width: 350px;
   margin-bottom: 10;
 }
 .form-btn {
-  max-height: 70%;
   align-items: center;
   flex: 1;
 }
