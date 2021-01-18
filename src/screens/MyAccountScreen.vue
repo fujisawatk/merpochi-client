@@ -6,74 +6,99 @@
       :screen="title"
       :navigation="navigation"
     />
+    <nb-tabs>
+      <nb-tab :heading="getAccountTab()">
+        <nb-content padder class="mypage-account" v-if="isAuth">
+          <navigation-events :on-did-focus="checkForMessage" />
+          <nb-list-item thumbnail>
+            <nb-left>
+                <nb-thumbnail square :source="{uri: image}"/>
+            </nb-left>
+            <nb-body>
+                <nb-text class="nickname">{{ userNickname }}</nb-Text>
+            </nb-body>
+          </nb-list-item>
 
-      <nb-content padder class="mypage-account" v-if="isAuth">
+          <nb-label class="email-section">
+              <nb-icon active class="icon" name="person"/>
+              <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
+          </nb-label>
+          <nb-label class="password-section">
+              <nb-icon active class="icon" name="person"/>
+              <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
+          </nb-label>
+          <nb-button
+            rounded
+            dark
+            class="edit-btn"
+            :on-press="pressedEditBtn"
+          >
+              <nb-text>編集</nb-text>
+          </nb-button>
+          <nb-button
+            rounded
+            danger
+            class="logout-btn"
+            :on-press="pressedLogoutBtn"
+          >
+              <nb-text>ログアウト</nb-text>
+          </nb-button>
+        </nb-content>
 
-        <navigation-events :on-did-focus="checkForMessage" />
+        <nb-content padder class="mypage-account" v-else>
+          <nb-list-item thumbnail>
+            <nb-left>
+                <nb-thumbnail square :source="require('../../assets/icon.png')"/>
+            </nb-left>
+            <nb-body>
+                <nb-text class="nickname">未登録ユーザー</nb-Text>
+            </nb-body>
+          </nb-list-item>
 
-        <nb-list-item thumbnail>
-          <nb-left>
-              <nb-thumbnail square :source="{uri: image}"/>
-          </nb-left>
-          <nb-body>
-              <nb-text class="nickname">{{ userNickname }}</nb-Text>
-          </nb-body>
-        </nb-list-item>
+          <view class="show-no-login">
+            <nb-text class="no-login-text">
+              お気に入りのお店を登録したり、
+            </nb-text>
+            <nb-text class="no-login-text">
+              好みに合ったお店が見つけやすくなります。
+            </nb-text>
+          </view>
+          <nb-button
+            rounded
+            class="login-btn"
+            :on-press="pressedLoginBtn"
+          >
+              <nb-text>ログインする</nb-text>
+          </nb-button>
+        </nb-content>
+      </nb-tab>
 
-        <nb-label class="email-section">
-            <nb-icon active class="icon" name="person"/>
-            <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
-        </nb-label>
-        <nb-label class="password-section">
-            <nb-icon active class="icon" name="person"/>
-            <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
-        </nb-label>
-        <nb-button
-          rounded
-          dark
-          class="edit-btn"
-          :on-press="pressedEditBtn"
-        >
-            <nb-text>編集</nb-text>
-        </nb-button>
-        <nb-button
-          rounded
-          danger
-          class="logout-btn"
-          :on-press="pressedLogoutBtn"
-        >
-            <nb-text>ログアウト</nb-text>
-        </nb-button>
-      </nb-content>
+      <nb-tab :heading="getMyPostsTab()">
+        <nb-content v-if="(isMyPosts.length > 0)">
+          <view v-for="post in isMyPosts" :key="post.id">
+            <post-item
+              :post="post"
+              :post-id="post.id"
+              :change-post-detail="changePostDetail"
+            />
+          </view>
+        </nb-content>
+      </nb-tab>
 
-      <nb-content padder class="mypage-account" v-else>
-        <nb-list-item thumbnail>
-          <nb-left>
-              <nb-thumbnail square :source="require('../../assets/icon.png')"/>
-          </nb-left>
-          <nb-body>
-              <nb-text class="nickname">未登録ユーザー</nb-Text>
-          </nb-body>
-        </nb-list-item>
+      <nb-tab :heading="getCommentedPostsTab()">
+        <nb-content v-if="(isCommentedPosts.length > 0)">
+          <view v-for="post in isCommentedPosts" :key="post.id">
+            <post-item
+              :post="post"
+              :post-id="post.id"
+              :change-post-detail="changePostDetail"
+            />
+          </view>
+        </nb-content>
+      </nb-tab>
+    </nb-tabs>
 
-        <view class="show-no-login">
-          <nb-text class="no-login-text">
-            お気に入りのお店を登録したり、
-          </nb-text>
-          <nb-text class="no-login-text">
-            好みに合ったお店が見つけやすくなります。
-          </nb-text>
-        </view>
-        <nb-button
-          rounded
-           class="login-btn"
-          :on-press="pressedLoginBtn"
-        >
-            <nb-text>ログインする</nb-text>
-        </nb-button>
-      </nb-content>
-
-     <footer
+    <footer
       :navigation="navigation"
     />
   </nb-container>
@@ -82,12 +107,19 @@
 <script>
 import store from "../store"
 import React from "react"
-import { Toast } from 'native-base'
+import { Toast, TabHeading, Text } from 'native-base'
+import axios from 'axios'
+import service from '../services/axios'
+import { ENV } from "../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   data: function() {
     return {
-      title: "マイページ"
+      title: "マイページ",
+      myPosts: [],
+      commentedPosts: []
     }
   },
   props: {
@@ -107,9 +139,43 @@ export default {
     },
     image() {
       return store.state.image.userImage
+    },
+    isMyPosts() {
+      return this.myPosts
+    },
+    isCommentedPosts() {
+      return this.commentedPosts
+    }
+  },
+  async created() {
+    if (store.state.auth.isAuthResolved == true) {
+      const posts = await axios.post( baseApiUrl + '/users/me')
+      if (posts.data.my_posts != null) this.myPosts = posts.data.my_posts
+    if (posts.data.commented_posts != null) this.commentedPosts = posts.data.commented_posts
     }
   },
   methods: {
+     getAccountTab() {
+      return (
+        <TabHeading style={{backgroundColor: '#FFCC33'}}>
+          <Text style={{color:'#444444', fontSize:13}}>アカウント情報</Text>
+        </TabHeading>
+      )
+    },
+    getMyPostsTab() {
+      return (
+        <TabHeading style={{backgroundColor: '#FFCC33'}}>
+          <Text style={{color:'#444444', fontSize:13}}>投稿した{"\n"}レビュー</Text>
+        </TabHeading>
+      )
+    },
+    getCommentedPostsTab() {
+      return (
+        <TabHeading style={{backgroundColor: '#FFCC33'}}>
+          <Text style={{color:'#444444', fontSize:13}}>コメントした{"\n"}レビュー</Text>
+        </TabHeading>
+      )
+    },
     pressedLoginBtn() {
       this.navigation.navigate('Signin')
     },
@@ -150,7 +216,14 @@ export default {
         return null
       }
       this.navigation.setParams({ message: null })
-    }
+    },
+    changePostDetail(post) {
+      store.dispatch("post/addPost", post)
+      .then(() => {
+        this.navigation.navigate('PostDetail')
+      })
+      
+    },
   }
 }
 </script>

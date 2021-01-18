@@ -367,14 +367,18 @@ export default {
         console.log("解除に失敗しました")
       })
     },
-    changePostDetail(id) {
-      this.navigation.navigate('PostDetail', { id })
+    changePostDetail(post) {
+      store.dispatch("post/addPost", post)
+      .then(() => {
+        this.navigation.navigate('PostDetail')
+      })
     },
     pressedPostInput() {
       this.navigation.navigate('TextPost', { screen: 'shopDetail'})
     }
   },
   async created () {
+    // ※省略可能
     const code = this.navigation.getParam('code')
     const screen = this.navigation.getParam('screen')
     switch (screen) {

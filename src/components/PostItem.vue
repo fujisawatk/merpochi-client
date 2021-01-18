@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     pressedPostItem() {
-      this.changePostDetail(this.postId)
+      this.changePostDetail(this.post)
     },
   }
 }
