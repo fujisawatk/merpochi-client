@@ -217,8 +217,12 @@ export default {
       }
       this.navigation.setParams({ message: null })
     },
-    changePostDetail(id) {
-      this.navigation.navigate('PostDetail', { id })
+    changePostDetail(post) {
+      store.dispatch("post/addPost", post)
+      .then(() => {
+        this.navigation.navigate('PostDetail')
+      })
+      
     },
   }
 }

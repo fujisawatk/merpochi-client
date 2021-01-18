@@ -199,10 +199,7 @@ export default {
     }
   },
   async created () {
-    const postId = this.navigation.getParam('id')
-    const post = store.getters['post/getPost'](postId)
-    await store.dispatch("post/addPost", post)
-    await axios.get( baseApiUrl + '/posts/' + String(postId) + '/comments')
+    await axios.get( baseApiUrl + '/posts/' + String(store.state.post.post.id) + '/comments')
     .then(res => {
       if (res.data != null) {
           this.comments = res.data
