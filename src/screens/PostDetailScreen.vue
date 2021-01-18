@@ -18,6 +18,14 @@
               />
             </nb-body>
           </nb-left>
+          <nb-right>
+            <nb-button transparent
+              v-if="currentUserID == post.user_id"
+              :on-press="pressedEditPostBtn"
+            >
+              <nb-icon type="FontAwesome5" name="edit" class="edit-icon"/>
+      </nb-button>
+          </nb-right>
         </nb-card-item> 
         <nb-card-item bordered cardBody class="post-body">
               <nb-text class="post-text">
@@ -180,6 +188,9 @@ export default {
     isAuth() {
       return store.state.auth.isAuthResolved
     },
+    currentUserID() {
+      return store.state.auth.user.id
+    },
   },
   methods: {
     pressedAddCommentBtn() {
@@ -196,6 +207,9 @@ export default {
           console.log(err)
         })
       }
+    },
+    pressedEditPostBtn() {
+      this.navigation.navigate("EditPost")
     }
   },
   async created () {
@@ -229,8 +243,12 @@ export default {
 .top-rating {
   flex: 1;
 }
+.edit-icon {
+  color: #444;
+}
 .post-body {
   flex-direction: column;
+  min-height: 150;
 }
 .post-text {
   align-items: flex-start;
