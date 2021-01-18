@@ -73,9 +73,29 @@
         </nb-content>
       </nb-tab>
 
-      <nb-tab :heading="getMyPostsTab()"/>
+      <nb-tab :heading="getMyPostsTab()">
+        <nb-content v-if="(isMyPosts.length > 0)">
+          <view v-for="post in isMyPosts" :key="post.id">
+            <post-item
+              :post="post"
+              :post-id="post.id"
+              :change-post-detail="changePostDetail"
+            />
+          </view>
+        </nb-content>
+      </nb-tab>
 
-      <nb-tab :heading="getCommentedPostsTab()"/>
+      <nb-tab :heading="getCommentedPostsTab()">
+        <nb-content v-if="(isCommentedPosts.length > 0)">
+          <view v-for="post in isCommentedPosts" :key="post.id">
+            <post-item
+              :post="post"
+              :post-id="post.id"
+              :change-post-detail="changePostDetail"
+            />
+          </view>
+        </nb-content>
+      </nb-tab>
     </nb-tabs>
 
     <footer
@@ -88,11 +108,18 @@
 import store from "../store"
 import React from "react"
 import { Toast, TabHeading, Text } from 'native-base'
+import axios from 'axios'
+import service from '../services/axios'
+import { ENV } from "../services/environment"
+
+const baseApiUrl = ENV.baseApiUrl
 
 export default {
   data: function() {
     return {
-      title: "マイページ"
+      title: "マイページ",
+      myPosts: [],
+      commentedPosts: []
     }
   },
   props: {
@@ -112,6 +139,19 @@ export default {
     },
     image() {
       return store.state.image.userImage
+    },
+    isMyPosts() {
+      return this.myPosts
+    },
+    isCommentedPosts() {
+      return this.commentedPosts
+    }
+  },
+  async created() {
+    if (store.state.auth.isAuthResolved == true) {
+      const posts = await axios.post( baseApiUrl + '/users/me')
+      if (posts.data.my_posts != null) this.myPosts = posts.data.my_posts
+    if (posts.data.commented_posts != null) this.commentedPosts = posts.data.commented_posts
     }
   },
   methods: {
@@ -176,7 +216,10 @@ export default {
         return null
       }
       this.navigation.setParams({ message: null })
-    }
+    },
+    changePostDetail(id) {
+      this.navigation.navigate('PostDetail', { id })
+    },
   }
 }
 </script>
