@@ -6,74 +6,79 @@
       :screen="title"
       :navigation="navigation"
     />
+    <nb-tabs>
+      <nb-tab :heading="getAccountTab()">
+        <nb-content padder class="mypage-account" v-if="isAuth">
+          <navigation-events :on-did-focus="checkForMessage" />
+          <nb-list-item thumbnail>
+            <nb-left>
+                <nb-thumbnail square :source="{uri: image}"/>
+            </nb-left>
+            <nb-body>
+                <nb-text class="nickname">{{ userNickname }}</nb-Text>
+            </nb-body>
+          </nb-list-item>
 
-      <nb-content padder class="mypage-account" v-if="isAuth">
+          <nb-label class="email-section">
+              <nb-icon active class="icon" name="person"/>
+              <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
+          </nb-label>
+          <nb-label class="password-section">
+              <nb-icon active class="icon" name="person"/>
+              <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
+          </nb-label>
+          <nb-button
+            rounded
+            dark
+            class="edit-btn"
+            :on-press="pressedEditBtn"
+          >
+              <nb-text>編集</nb-text>
+          </nb-button>
+          <nb-button
+            rounded
+            danger
+            class="logout-btn"
+            :on-press="pressedLogoutBtn"
+          >
+              <nb-text>ログアウト</nb-text>
+          </nb-button>
+        </nb-content>
 
-        <navigation-events :on-did-focus="checkForMessage" />
+        <nb-content padder class="mypage-account" v-else>
+          <nb-list-item thumbnail>
+            <nb-left>
+                <nb-thumbnail square :source="require('../../assets/icon.png')"/>
+            </nb-left>
+            <nb-body>
+                <nb-text class="nickname">未登録ユーザー</nb-Text>
+            </nb-body>
+          </nb-list-item>
 
-        <nb-list-item thumbnail>
-          <nb-left>
-              <nb-thumbnail square :source="{uri: image}"/>
-          </nb-left>
-          <nb-body>
-              <nb-text class="nickname">{{ userNickname }}</nb-Text>
-          </nb-body>
-        </nb-list-item>
+          <view class="show-no-login">
+            <nb-text class="no-login-text">
+              お気に入りのお店を登録したり、
+            </nb-text>
+            <nb-text class="no-login-text">
+              好みに合ったお店が見つけやすくなります。
+            </nb-text>
+          </view>
+          <nb-button
+            rounded
+            class="login-btn"
+            :on-press="pressedLoginBtn"
+          >
+              <nb-text>ログインする</nb-text>
+          </nb-button>
+        </nb-content>
+      </nb-tab>
 
-        <nb-label class="email-section">
-            <nb-icon active class="icon" name="person"/>
-            <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
-        </nb-label>
-        <nb-label class="password-section">
-            <nb-icon active class="icon" name="person"/>
-            <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
-        </nb-label>
-        <nb-button
-          rounded
-          dark
-          class="edit-btn"
-          :on-press="pressedEditBtn"
-        >
-            <nb-text>編集</nb-text>
-        </nb-button>
-        <nb-button
-          rounded
-          danger
-          class="logout-btn"
-          :on-press="pressedLogoutBtn"
-        >
-            <nb-text>ログアウト</nb-text>
-        </nb-button>
-      </nb-content>
+      <nb-tab :heading="getMyPostsTab()"/>
 
-      <nb-content padder class="mypage-account" v-else>
-        <nb-list-item thumbnail>
-          <nb-left>
-              <nb-thumbnail square :source="require('../../assets/icon.png')"/>
-          </nb-left>
-          <nb-body>
-              <nb-text class="nickname">未登録ユーザー</nb-Text>
-          </nb-body>
-        </nb-list-item>
+      <nb-tab :heading="getCommentedPostsTab()"/>
+    </nb-tabs>
 
-        <view class="show-no-login">
-          <nb-text class="no-login-text">
-            お気に入りのお店を登録したり、
-          </nb-text>
-          <nb-text class="no-login-text">
-            好みに合ったお店が見つけやすくなります。
-          </nb-text>
-        </view>
-        <nb-button
-          rounded
-           class="login-btn"
-          :on-press="pressedLoginBtn"
-        >
-            <nb-text>ログインする</nb-text>
-        </nb-button>
-      </nb-content>
-
-     <footer
+    <footer
       :navigation="navigation"
     />
   </nb-container>
@@ -82,7 +87,7 @@
 <script>
 import store from "../store"
 import React from "react"
-import { Toast } from 'native-base'
+import { Toast, TabHeading, Text } from 'native-base'
 
 export default {
   data: function() {
@@ -110,6 +115,27 @@ export default {
     }
   },
   methods: {
+     getAccountTab() {
+      return (
+        <TabHeading style={{backgroundColor: '#FFCC33'}}>
+          <Text style={{color:'#444444', fontSize:13}}>アカウント情報</Text>
+        </TabHeading>
+      )
+    },
+    getMyPostsTab() {
+      return (
+        <TabHeading style={{backgroundColor: '#FFCC33'}}>
+          <Text style={{color:'#444444', fontSize:13}}>投稿した{"\n"}レビュー</Text>
+        </TabHeading>
+      )
+    },
+    getCommentedPostsTab() {
+      return (
+        <TabHeading style={{backgroundColor: '#FFCC33'}}>
+          <Text style={{color:'#444444', fontSize:13}}>コメントした{"\n"}レビュー</Text>
+        </TabHeading>
+      )
+    },
     pressedLoginBtn() {
       this.navigation.navigate('Signin')
     },
