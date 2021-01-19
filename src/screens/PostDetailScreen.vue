@@ -21,13 +21,19 @@
               />
             </nb-body>
           </nb-left>
-          <nb-right>
+          <nb-right class="post-top-right">
             <nb-button transparent
               v-if="currentUserID == post.user_id"
               :on-press="pressedEditPostBtn"
             >
               <nb-icon type="FontAwesome5" name="edit" class="edit-icon"/>
-      </nb-button>
+            </nb-button>
+            <nb-button transparent
+              v-if="currentUserID == post.user_id"
+              :on-press="pressedDelPostBtn"
+            >
+              <nb-icon type="FontAwesome5" name="trash" class="trash-icon"/>
+            </nb-button>
           </nb-right>
         </nb-card-item> 
         <nb-card-item bordered cardBody class="post-body">
@@ -227,6 +233,9 @@ export default {
         })
       this.navigation.setParams({ message: null })
       }
+    },
+    pressedDelPostBtn() {
+
     }
   },
   async created () {
@@ -260,8 +269,19 @@ export default {
 .top-rating {
   flex: 1;
 }
+.post-top-right {
+  flex-direction: row;
+  justify-content: flex-end;
+}
 .edit-icon {
-  color: #444;
+  margin-right: 30;
+  color: #777;
+  font-size: 20;
+}
+.trash-icon {
+  margin-right: 15;
+  color: #777;
+  font-size: 20;
 }
 .post-body {
   flex-direction: column;
