@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { ScrollView } from 'react-native'
+import { ScrollView, Alert } from 'react-native'
 import ImageModal from 'react-native-image-modal'
 import { Rating } from 'react-native-ratings'
 import store from '../store'
@@ -234,17 +234,29 @@ export default {
       this.navigation.setParams({ message: null })
       }
     },
-    async pressedDelPostBtn() {
+    pressedDelPostBtn() {
+      Alert.alert(
+        '確認',
+        '本当に削除しますか？',
+        [
+          {text: 'いいえ', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'はい', onPress: () => this.execDelPost()},
+        ],
+        { cancelable: false }
+      )
+    },
+    async execDelPost() {
       // 操作する投稿に紐付く店舗情報を取得
       const shop = await axios.post( baseApiUrl + '/shops/posted', {post_id: store.state.post.post.id})
       await store.dispatch('shop/addShopForMyList', shop.data)
       // 投稿削除
       axios.delete( baseApiUrl + '/shops/' + String(store.state.shop.shop.id) +'/posts/' + String(store.state.post.post.id))
       .then(() => {
+        store.dispatch("footer/activeHomeTab")
         this.navigation.navigate("Home")
       })
       .catch(() => {})
-      }
+    }
   },
   async created () {
     await axios.get( baseApiUrl + '/posts/' + String(store.state.post.post.id) + '/comments')
