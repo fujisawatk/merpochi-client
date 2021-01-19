@@ -164,7 +164,7 @@ export default {
           }
         store.dispatch('post/updatePost', postData)
         .then(() => {
-          this.navigation.navigate('PostDetail')
+          this.navigation.navigate('PostDetail', { message: 'update'})
         })
         // 未登録の場合、先に店舗登録
         .catch(async() => {

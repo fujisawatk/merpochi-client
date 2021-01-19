@@ -1,5 +1,8 @@
 <template>
   <nb-container class="post-item-container">
+
+    <navigation-events :on-did-focus="checkForMessage" />
+
     <header :screen="title" :navigation="navigation" />
     
     <nb-content>
@@ -143,6 +146,7 @@ import {
   minLength,
   maxLength
 } from 'vuelidate/lib/validators'
+import { Toast } from 'native-base'
 
 const baseApiUrl = ENV.baseApiUrl
 export default {
@@ -210,6 +214,19 @@ export default {
     },
     pressedEditPostBtn() {
       this.navigation.navigate("EditPost")
+    },
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if (message == 'update') {
+        Toast.show({
+          text: 'レビューを更新しました',
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+      this.navigation.setParams({ message: null })
+      }
     }
   },
   async created () {
