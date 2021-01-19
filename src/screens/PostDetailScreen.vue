@@ -253,7 +253,7 @@ export default {
       axios.delete( baseApiUrl + '/shops/' + String(store.state.shop.shop.id) +'/posts/' + String(store.state.post.post.id))
       .then(() => {
         store.dispatch("footer/activeHomeTab")
-        this.navigation.navigate("Home")
+        this.navigation.navigate("Home", { message: 'delPost' })
       })
       .catch(() => {})
     }

@@ -198,7 +198,16 @@ export default {
         break
         case 'post':
           Toast.show({
-          text: "お店に投稿しました",
+          text: "レビューを投稿しました",
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+        break
+        case 'delPost':
+          Toast.show({
+          text: "レビューを削除しました",
           buttonText: 'Ok',
           type: 'success',
           position: 'bottom',
