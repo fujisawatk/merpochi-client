@@ -234,9 +234,17 @@ export default {
       this.navigation.setParams({ message: null })
       }
     },
-    pressedDelPostBtn() {
-
-    }
+    async pressedDelPostBtn() {
+      // 操作する投稿に紐付く店舗情報を取得
+      const shop = await axios.post( baseApiUrl + '/shops/posted', {post_id: store.state.post.post.id})
+      await store.dispatch('shop/addShopForMyList', shop.data)
+      // 投稿削除
+      axios.delete( baseApiUrl + '/shops/' + String(store.state.shop.shop.id) +'/posts/' + String(store.state.post.post.id))
+      .then(() => {
+        this.navigation.navigate("Home")
+      })
+      .catch(() => {})
+      }
   },
   async created () {
     await axios.get( baseApiUrl + '/posts/' + String(store.state.post.post.id) + '/comments')
