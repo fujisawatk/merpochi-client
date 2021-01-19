@@ -129,7 +129,7 @@ export default {
     },
     shopName() {
       return store.state.shop.shop.name
-    },
+  },
   },
   async created() {
     this.rating = store.state.post.post.rating
