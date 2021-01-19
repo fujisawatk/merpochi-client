@@ -78,7 +78,12 @@ export default {
     // ３枚だけ表示
     if (this.post.images != null) {
       for ( let i = 0; i < 3; i++ ) {
-        this.sliceImages.push(this.post.images[i])
+        // 画像の登録が３枚より少ない時のエラー対策
+        if (this.post.images[i] != undefined){
+          this.sliceImages.push(this.post.images[i])
+        }else{
+          break
+        }
       }
     }
   },

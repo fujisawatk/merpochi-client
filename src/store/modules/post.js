@@ -23,6 +23,11 @@ export default {
         state.posts = []
       }
     },
+    setUpdatePost (state, data) {
+      if (state.post.text != data.text) state.post.text = data.text
+      if (state.post.rating != data.rating) state.post.rating = data.rating
+      if (state.post.images != data.images) state.post.images = data.images
+    },
     resetPosts (state) {
       state.posts = []
     },
@@ -53,6 +58,22 @@ export default {
     },
     addPost ({commit}, post) {
       return commit('setPost', post)
+    },
+    async updatePost ({commit, rootState, state}, postData) {
+      const strId = String(rootState.shop.shop.id)
+      return axios.put( baseApiUrl + '/shops/' + strId + '/posts/' + String(state.post.id), postData)
+      .then(() => {
+        // 更新後の画像を表示できるように整形
+        const reImgs = []
+        for (let i = 0; i < postData.images.length; i++ ){
+          reImgs.push({
+            uri: 'data:image/jpg;base64,' + postData.images[i]
+          })
+        }
+        postData.images = reImgs
+        commit('setUpdatePost', postData)
+      })
+      
     },
   }
 }

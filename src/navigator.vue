@@ -13,6 +13,7 @@ import PostDetailScreen from "./screens/PostDetailScreen"
 import SelectPostScreen from "./screens/SelectPostScreen"
 import EasyPostScreen from "./screens/EasyPostScreen"
 import TextPostScreen from "./screens/TextPostScreen"
+import EditPostScreen from "./screens/EditPostScreen"
 import MyListScreen from "./screens/MyListScreen"
 import MyAccountScreen from "./screens/MyAccountScreen"
 import EditAccountScreen from "./screens/EditAccountScreen"
@@ -39,6 +40,7 @@ const StackNavigator = createStackNavigator(
     SelectPost: SelectPostScreen,
     EasyPost: EasyPostScreen,
     TextPost: TextPostScreen,
+    EditPost: EditPostScreen,
     MyList: MyListScreen,
     MyAccount: MyAccountScreen,
     EditAccount: EditAccountScreen,

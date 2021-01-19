@@ -1,5 +1,8 @@
 <template>
   <nb-container class="post-item-container">
+
+    <navigation-events :on-did-focus="checkForMessage" />
+
     <header :screen="title" :navigation="navigation" />
     
     <nb-content>
@@ -18,6 +21,14 @@
               />
             </nb-body>
           </nb-left>
+          <nb-right>
+            <nb-button transparent
+              v-if="currentUserID == post.user_id"
+              :on-press="pressedEditPostBtn"
+            >
+              <nb-icon type="FontAwesome5" name="edit" class="edit-icon"/>
+      </nb-button>
+          </nb-right>
         </nb-card-item> 
         <nb-card-item bordered cardBody class="post-body">
               <nb-text class="post-text">
@@ -26,8 +37,8 @@
               <scroll-view :horizontal="true">
                 <nb-list-item	
                   avatar
-                  v-for="image in post.images"
-                  :key="image.id"
+                  v-for="(image, i) in post.images"
+                  :key="i"
                 >	
                   <image-modal
                     :swipeToDismiss="false"
@@ -135,6 +146,7 @@ import {
   minLength,
   maxLength
 } from 'vuelidate/lib/validators'
+import { Toast } from 'native-base'
 
 const baseApiUrl = ENV.baseApiUrl
 export default {
@@ -180,6 +192,9 @@ export default {
     isAuth() {
       return store.state.auth.isAuthResolved
     },
+    currentUserID() {
+      return store.state.auth.user.id
+    },
   },
   methods: {
     pressedAddCommentBtn() {
@@ -195,6 +210,22 @@ export default {
         .catch(err => {
           console.log(err)
         })
+      }
+    },
+    pressedEditPostBtn() {
+      this.navigation.navigate("EditPost")
+    },
+    checkForMessage() {
+      const message = this.navigation.getParam('message')
+      if (message == 'update') {
+        Toast.show({
+          text: 'レビューを更新しました',
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 5000
+        })
+      this.navigation.setParams({ message: null })
       }
     }
   },
@@ -229,8 +260,12 @@ export default {
 .top-rating {
   flex: 1;
 }
+.edit-icon {
+  color: #444;
+}
 .post-body {
   flex-direction: column;
+  min-height: 150;
 }
 .post-text {
   align-items: flex-start;
@@ -238,6 +273,7 @@ export default {
   font-size: 20;
   letter-spacing: 2;
   line-height: 25;
+  min-height: 100;
 }
 .image {
   height: 150;
