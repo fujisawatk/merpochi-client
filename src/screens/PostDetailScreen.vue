@@ -168,7 +168,7 @@ export default {
             resizeMode: "cover"
           }
       },
-      title: "投稿詳細ページ",
+      title: "レビュー詳細",
       comments: [],
       newComment: ""
     }
