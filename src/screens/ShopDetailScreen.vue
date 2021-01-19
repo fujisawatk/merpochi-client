@@ -215,7 +215,7 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   data: function() {
     return {
-      title: "店舗詳細ページ",
+      title: "店舗詳細",
       marker: {
         coordinate: {
           latitude: 0,

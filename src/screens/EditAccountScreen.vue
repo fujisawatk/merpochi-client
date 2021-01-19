@@ -74,7 +74,7 @@ import {
 export default {
   data () {
     return {
-      title: "アカウント情報編集",
+      title: "アカウント編集",
       form: {
         nickname: '',
         email: '',

@@ -21,13 +21,19 @@
               />
             </nb-body>
           </nb-left>
-          <nb-right>
+          <nb-right class="post-top-right">
             <nb-button transparent
               v-if="currentUserID == post.user_id"
               :on-press="pressedEditPostBtn"
             >
               <nb-icon type="FontAwesome5" name="edit" class="edit-icon"/>
-      </nb-button>
+            </nb-button>
+            <nb-button transparent
+              v-if="currentUserID == post.user_id"
+              :on-press="pressedDelPostBtn"
+            >
+              <nb-icon type="FontAwesome5" name="trash" class="trash-icon"/>
+            </nb-button>
           </nb-right>
         </nb-card-item> 
         <nb-card-item bordered cardBody class="post-body">
@@ -134,7 +140,7 @@
 </template>
 
 <script>
-import { ScrollView } from 'react-native'
+import { ScrollView, Alert } from 'react-native'
 import ImageModal from 'react-native-image-modal'
 import { Rating } from 'react-native-ratings'
 import store from '../store'
@@ -162,7 +168,7 @@ export default {
             resizeMode: "cover"
           }
       },
-      title: "投稿詳細ページ",
+      title: "レビュー詳細",
       comments: [],
       newComment: ""
     }
@@ -227,6 +233,29 @@ export default {
         })
       this.navigation.setParams({ message: null })
       }
+    },
+    pressedDelPostBtn() {
+      Alert.alert(
+        '確認',
+        '本当に削除しますか？',
+        [
+          {text: 'いいえ', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'はい', onPress: () => this.execDelPost()},
+        ],
+        { cancelable: false }
+      )
+    },
+    async execDelPost() {
+      // 操作する投稿に紐付く店舗情報を取得
+      const shop = await axios.post( baseApiUrl + '/shops/posted', {post_id: store.state.post.post.id})
+      await store.dispatch('shop/addShopForMyList', shop.data)
+      // 投稿削除
+      axios.delete( baseApiUrl + '/shops/' + String(store.state.shop.shop.id) +'/posts/' + String(store.state.post.post.id))
+      .then(() => {
+        store.dispatch("footer/activeHomeTab")
+        this.navigation.navigate("Home", { message: 'delPost' })
+      })
+      .catch(() => {})
     }
   },
   async created () {
@@ -260,8 +289,19 @@ export default {
 .top-rating {
   flex: 1;
 }
+.post-top-right {
+  flex-direction: row;
+  justify-content: flex-end;
+}
 .edit-icon {
-  color: #444;
+  margin-right: 30;
+  color: #777;
+  font-size: 20;
+}
+.trash-icon {
+  margin-right: 15;
+  color: #777;
+  font-size: 20;
 }
 .post-body {
   flex-direction: column;
