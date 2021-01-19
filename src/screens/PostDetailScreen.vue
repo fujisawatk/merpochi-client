@@ -34,8 +34,8 @@
               <scroll-view :horizontal="true">
                 <nb-list-item	
                   avatar
-                  v-for="image in post.images"
-                  :key="image.id"
+                  v-for="(image, i) in post.images"
+                  :key="i"
                 >	
                   <image-modal
                     :swipeToDismiss="false"
@@ -256,6 +256,7 @@ export default {
   font-size: 20;
   letter-spacing: 2;
   line-height: 25;
+  min-height: 100;
 }
 .image {
   height: 150;

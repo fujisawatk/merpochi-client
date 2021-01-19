@@ -36,8 +36,7 @@
           <nb-item class="post-picker">
             <nb-input placeholder="店舗選択" v-model="shopName"/>
             <nb-icon active type="FontAwesome5" name="arrow-circle-right" />
-            <nb-button
-              :on-press="pressedShopSearchInput"
+            <view
               class="input-cover"
             />
           </nb-item>
@@ -77,9 +76,9 @@
           rounded
           danger
           class="send-btn"
-          :on-press="pressedPostBtn"
+          :on-press="pressedUpdatePostBtn"
         >
-          <nb-text class="btn-text">投稿</nb-text>
+          <nb-text class="btn-text">更新</nb-text>
         </nb-button>
 
       </view>
@@ -129,43 +128,43 @@ export default {
     },
     shopName() {
       return store.state.shop.shop.name
-  },
+    }
   },
   async created() {
     this.rating = store.state.post.post.rating
     this.text = store.state.post.post.text
-console.log(store.state.post.post.images)
     await store.dispatch('image/cachePostImages', store.state.post.post.images)
-    
+    const shop = await axios.post( baseApiUrl + '/shops/posted', {post_id: store.state.post.post.id})
+    store.dispatch('shop/addShopForMyList', shop.data)
   },
   methods: {
     pickImages() {
       this.navigation.navigate('ImageBrowser')
     },
-    pressedShopSearchInput() {
-      this.navigation.navigate('ShopSearch', { screen: 'text' })
-    },
     ratingCompleted(rating) {
       this.rating = rating
     },
-    async pressedPostBtn() {
+    async pressedUpdatePostBtn() {
       this.$v.text.$touch()
       if (!this.$v.text.$invalid) {
         // 画像をbase64エンコード
-        const base64Imgs = []
-        for (let i = 0; i < store.state.image.shopImages.length; i++ ){
-          const base64 = await FileSystem.readAsStringAsync(store.state.image.shopImages[i].uri, { encoding: 'base64' })
-          base64Imgs.push(base64)
-        } 
-        const postData = {
-          text: this.text,
-          rating: this.rating,
-          images: base64Imgs
+        var base64Imgs = []
+        if (store.state.post.post.images != store.state.image.shopImages) {
+          for (let i = 0; i < store.state.image.shopImages.length; i++ ){
+            const base64 = await FileSystem.readAsStringAsync(store.state.image.shopImages[i].uri, { encoding: 'base64' })
+            base64Imgs.push(base64)
+          }
+        }else{
+          base64imgs = store.state.post.post.images
         }
-        store.dispatch('post/savePost', postData)
+          const postData = {
+            text: this.text,
+            rating: this.rating,
+            images: base64Imgs
+          }
+        store.dispatch('post/updatePost', postData)
         .then(() => {
-          store.dispatch("footer/activeHomeTab")
-          this.navigation.navigate("Home", { message: 'post' })
+          this.navigation.navigate('PostDetail')
         })
         // 未登録の場合、先に店舗登録
         .catch(async() => {

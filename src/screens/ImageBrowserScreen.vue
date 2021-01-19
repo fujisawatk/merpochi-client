@@ -100,7 +100,7 @@ export default {
           })
         }
         await store.dispatch('image/cachePostImages', cPhotos)
-        this.navigation.navigate('TextPost')
+        this.navigation.goBack()
       })
       .catch((e) => console.log(e));
     },
