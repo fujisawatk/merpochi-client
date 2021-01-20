@@ -249,7 +249,7 @@ export default {
       return commit('setShopId', shopId)
     },
     // 店名・キーワード検索
-    keywordSearch ({dispatch, state, commit}, keyword) {
+    keywordSearch ({dispatch, state, commit, rootState}, keyword) {
       const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword
       axios
         .get(requestUrl)
@@ -257,8 +257,13 @@ export default {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getCommentsAndFavoritesCount', shopCodes)
-          commit('setShop', res.data)
+          const data = {
+            shop_codes: shopCodes,
+            user_id: rootState.auth.user.id
+          }
+          console.log("aaaaaaaaaa")
+          await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
+          commit('setShops', res.data)
         })
         .catch(() => undefined)
     },
@@ -270,8 +275,12 @@ export default {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getCommentsAndFavoritesCount', shopCodes)
-          commit('setShop', res.data)
+          const data = {
+            shop_codes: shopCodes,
+            user_id: rootState.auth.user.id
+          }
+          await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
+          commit('setShops', res.data)
         })
         .catch(() => undefined)
     },

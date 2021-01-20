@@ -60,7 +60,7 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   data: function() {
     return {
-      title: "簡単投稿",
+      title: "簡単レビュー",
       selected: "",
       keyword: ""
     };
