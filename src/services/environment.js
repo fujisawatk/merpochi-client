@@ -14,19 +14,13 @@ const ENVs = {
 };
 
 function getEnvVars() {
-  // サーバー管理画面のPRODUCTION MODEトグルを判別する関数
+  // サーバー管理画面のPRODUCTION MODEトグルを判別
   const options = Constants.manifest.packagerOpts
-  // リリースチャンネル読み込み関数
-  const channel = Constants.manifest.releaseChannel
   const isDev = options != null ? options.dev : true
   if (isDev) {
     return ENVs.dev
   } else {
-    if (channel.substring(0,10) === "production") {
-      return ENVs.production
-    } else {
-      return ENVs.dev
-    }
+    return ENVs.production
   }
 }
 
