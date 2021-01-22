@@ -43,11 +43,15 @@
             <nb-text class="bottom-text">{{ item.ratingCount }} 人がリピート希望！！</nb-text>
           </nb-left>
           <nb-right v-if="item.bookmarkUser" class="bottom-right">
-            <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark" :on-press="pressedCancelBookmarkBtn"/>
+            <nb-button transparent :on-press="pressedCancelBookmarkBtn">
+              <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark"/>
+            </nb-button>
             <nb-text class="bookmark-count">{{ item.bookmarksCount }}</nb-text>
           </nb-right>
           <nb-right v-else class="bottom-right">
-            <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark-o" :on-press="pressedBookmarkBtn"/>
+            <nb-button  transparent :on-press="pressedBookmarkBtn">
+              <nb-icon class="bookmark-icon" type="FontAwesome" name="bookmark-o"/>
+            </nb-button>
             <nb-text class="bookmark-count">{{ item.bookmarksCount }}</nb-text>
           </nb-right>
         </nb-card-item>
