@@ -9,67 +9,75 @@
     <nb-tabs>
       <nb-tab :heading="getAccountTab()">
         <nb-content padder class="mypage-account" v-if="isAuth">
-          <navigation-events :on-did-focus="checkForMessage" />
-          <nb-list-item thumbnail>
-            <nb-left>
-                <nb-thumbnail square :source="{uri: image}"/>
-            </nb-left>
-            <nb-body>
-                <nb-text class="nickname">{{ userNickname }}</nb-Text>
-            </nb-body>
-          </nb-list-item>
-
-          <nb-label class="email-section">
-              <nb-icon active class="icon" name="person"/>
-              <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
-          </nb-label>
-          <nb-label class="password-section">
-              <nb-icon active class="icon" name="person"/>
-              <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
-          </nb-label>
-          <nb-button
-            rounded
-            dark
-            class="edit-btn"
-            :on-press="pressedEditBtn"
-          >
-              <nb-text>編集</nb-text>
-          </nb-button>
-          <nb-button
-            rounded
-            danger
-            class="logout-btn"
-            :on-press="pressedLogoutBtn"
-          >
-              <nb-text>ログアウト</nb-text>
-          </nb-button>
+          <view class="account-content">
+            <navigation-events :on-did-focus="checkForMessage" />
+            <nb-list-item thumbnail>
+              <nb-left>
+                  <nb-thumbnail square :source="{uri: image}"/>
+              </nb-left>
+              <nb-body>
+                  <nb-text class="nickname">{{ userNickname }}</nb-Text>
+              </nb-body>
+            </nb-list-item>
+            
+            <nb-label class="email-section">
+                <nb-icon active class="icon" name="person"/>
+                <nb-text class="email">&nbsp;&nbsp; {{ userEmail }}</nb-text>
+            </nb-label>
+            <nb-label class="password-section">
+                <nb-icon active class="icon" name="person"/>
+                <nb-text class="password">&nbsp;&nbsp; ********</nb-text>
+            </nb-label>
+              <view class="login-section">
+              <nb-button
+                rounded
+                dark
+                class="edit-btn"
+                :on-press="pressedEditBtn"
+              >
+                  <nb-text>編集</nb-text>
+              </nb-button>
+              <nb-button
+                rounded
+                danger
+                class="logout-btn"
+                :on-press="pressedLogoutBtn"
+              >
+                  <nb-text>ログアウト</nb-text>
+              </nb-button>
+            </view>
+          </view>
         </nb-content>
 
         <nb-content padder class="mypage-account" v-else>
-          <nb-list-item thumbnail>
-            <nb-left>
-                <nb-thumbnail square :source="require('../../assets/icon.png')"/>
-            </nb-left>
-            <nb-body>
-                <nb-text class="nickname">未登録ユーザー</nb-Text>
-            </nb-body>
-          </nb-list-item>
+          <view class="account-content">
+            <nb-list-item thumbnail>
+              <nb-left>
+                  <nb-thumbnail square :source="require('../../assets/icon.png')"/>
+              </nb-left>
+              <nb-body>
+                  <nb-text class="nickname">未登録ユーザー</nb-Text>
+              </nb-body>
+            </nb-list-item>
 
-          <view class="show-no-login">
-            <nb-text class="no-login-text">
-              お気に入りのお店を登録したり、
-            </nb-text>
-            <nb-text class="no-login-text">
-              好みに合ったお店が見つけやすくなります。
-            </nb-text>
+            <view class="login-section">
+              <view class="show-no-login">
+                <nb-text class="no-login-text">
+                  お気に入りのお店を登録したり、
+                </nb-text>
+                <nb-text class="no-login-text">
+                  好みに合ったお店が見つけやすくなります。
+                </nb-text>
+              </view>
+              <nb-button
+                rounded
+                class="login-btn"
+                :on-press="pressedLoginBtn"
+              >
+                  <nb-text>ログインする</nb-text>
+              </nb-button>
+            </view>
           </view>
-          <nb-button
-            rounded
-            class="login-btn"
-            :on-press="pressedLoginBtn"
-          >
-              <nb-text>ログインする</nb-text>
-          </nb-button>
         </nb-content>
       </nb-tab>
 
@@ -231,6 +239,17 @@ export default {
 <style>
 .mypage-container {
   flex: 1;
+  width: 100%;
+}
+.mypage-account {
+  width: 100%;
+}
+.account-content {
+  width: 100%;
+}
+.login-section {
+  width: 100%;
+  align-items: center;
 }
 .nickname {
   font-weight: bold;
@@ -251,7 +270,6 @@ export default {
   font-weight: bold;
 }
 .show-no-login {
-  height: 100px;
   width: 100%;
   padding-top: 25px;
 }
@@ -261,18 +279,21 @@ export default {
 }
 .login-btn {
   background-color: #FFCC33;
-  margin-top: 30;
+  margin-top: 50;
   justify-content: center;
-  max-width: 350px;
+  width: 100%;
+  max-width: 350;
 }
 .edit-btn {
   margin-top: 30;
   justify-content: center;
+  width: 100%;
   max-width: 350px;
 }
 .logout-btn {
   margin-top: 10;
   justify-content: center;
+  width: 100%;
   max-width: 350px;
 }
 </style>
