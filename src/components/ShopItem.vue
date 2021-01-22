@@ -61,13 +61,14 @@ import { Dimensions } from "react-native"
 import { Toast } from 'native-base'
 import store from '../store'
 const deviceWidth = Dimensions.get("window").width
+const deviceHeight = Dimensions.get("window").height
 export default {
   data() {
     return {
       stylesObj: {
         cardItemImage: {
-          width: deviceWidth / 1.18,
-          height: 300
+          width: deviceWidth / 1.1,
+          height: deviceHeight / 1.75
         }
       },
     }
