@@ -249,35 +249,48 @@ export default {
       return commit('setShopId', shopId)
     },
     // 店名・キーワード検索
-    keywordSearch ({dispatch, state, commit}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword
+    keywordSearch ({dispatch, state, commit, rootState}, keyword) {
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid +
+        "&name=" + keyword + "&hit_per_page=" + "30"
       axios
         .get(requestUrl)
         .then(async (res) => {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getCommentsAndFavoritesCount', shopCodes)
-          commit('setShop', res.data)
+          const data = {
+            shop_codes: shopCodes,
+            user_id: rootState.auth.user.id
+          }
+          await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
+          commit('setShops', res.data)
         })
         .catch(() => undefined)
     },
     detailSearch ({dispatch, state, commit, rootState}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&freeword=" + rootState.station.selectedStationName + "駅" + "," + rootState.genre.selectedGenre
+      const requestUrl = state.gnaviApiUrl + "?keyid=" +
+        state.keyid + "&name=" + keyword + "&freeword=" +
+        rootState.station.selectedStationName + "駅" + "," +
+        rootState.genre.selectedGenre + "&hit_per_page=" + "30"
       axios
         .get(requestUrl)
         .then(async (res) => {
           const shopCodes = res.data.rest.map(function( value ) {
             return value.id
           })
-          await dispatch('getCommentsAndFavoritesCount', shopCodes)
-          commit('setShop', res.data)
+          const data = {
+            shop_codes: shopCodes,
+            user_id: rootState.auth.user.id
+          }
+          await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
+          commit('setShops', res.data)
         })
         .catch(() => undefined)
     },
     // 投稿時の店舗検索
     shopSearch ({state}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&hit_per_page=" + "30"
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid +
+        "&name=" + keyword + "&hit_per_page=" + "30"
       return axios
         .get(requestUrl)
         .then((res) => {
@@ -286,7 +299,9 @@ export default {
         .catch(() => undefined)
     },
     geolocationSearch ({state}) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude + "&hit_per_page=" + "30"
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid +
+        "&latitude=" + state.latitude + "&longitude=" + state.longitude +
+        "&hit_per_page=" + "30"
       return axios
         .get(requestUrl)
         .then((res) => {
