@@ -33,7 +33,7 @@
 export default {
   data: function() {
     return {
-      title: "おすすめのお店をレビュー"
+      title: "レビュー方法選択"
     };
   },
   props: {
