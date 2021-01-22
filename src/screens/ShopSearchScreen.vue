@@ -16,13 +16,16 @@
           v-model="keyword"
           auto-capitalize="none"
         />
-        <nb-icon
-          button
-          active
-          type="FontAwesome5"
-          name='search'
-          :on-press="pressedShopSearchBtn"
-        />
+        <nb-button
+            transparent
+            :on-press="pressedShopSearchBtn"
+          >
+          <nb-icon
+            type="FontAwesome5"
+            name='search'
+            class="icon"
+          />
+        </nb-button>
       </nb-item> 
     </nb-form>
 
@@ -116,6 +119,9 @@ export default {
 }
 .geolocation-search-btn {
   padding: 10;
+}
+.icon {
+  color: #111;
 }
 .btn-text {
   width: 100%;
