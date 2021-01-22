@@ -1,20 +1,25 @@
 <template>
   <nb-header class="header">
     <nb-left class="header-left">
-      <nb-icon
-        type="Fontisto"
-        name="map-marker-alt"
+      <nb-button
+        transparent
         :on-press="pushMarker"
-        class="geolocation-icon"
         v-if="home"
-      />
+      >
+        <nb-icon
+          type="Fontisto"
+          name="map-marker-alt"
+          class="icon"
+          
+        />
+      </nb-button>
 
       <nb-button
+        transparent
         v-if="!root"
         :on-press="goBack"
-        transparent
       >
-        <nb-icon name="arrow-back" />
+        <nb-icon type="Entypo" name="back" class="icon" />
       </nb-button>
     </nb-left>
     <nb-body class="header-body">
@@ -26,7 +31,7 @@
         :on-press="displayActionSheet"
         v-if="!auth"
       >
-        <nb-icon type="Entypo" name="user" class="user-icon"/>
+        <nb-icon type="Entypo" name="user" class="icon"/>
       </nb-button>
     </nb-right>
   </nb-header>
@@ -118,10 +123,11 @@ export default {
 }
 .header-left {
   flex: 1;
-  margin-left: 10;
+  margin-left: 15;
 }
 .geolocation-icon {
-  font-size: 20;
+  color: #111;
+  font-size: 25;
 }
 .geolocation-title {
   font-size: 13;
@@ -139,8 +145,8 @@ export default {
   color: #111;
   font-weight: bold;
 }
-.user-icon {
+.icon {
   color: #111;
-  font-size: 20;
+  font-size: 25;
 }
 </style>

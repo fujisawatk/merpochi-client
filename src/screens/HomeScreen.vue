@@ -21,11 +21,17 @@
             v-model="search.keyword"
             auto-capitalize="none"
           />
-          <nb-icon
-            active
-            name='search'
+          <nb-button
+            transparent
             :on-press="pressedSearchIcon"
-          />
+          >
+            <nb-icon
+              active
+              type="FontAwesome5"
+              name='search'
+              class="icon"
+            />
+          </nb-button>
         </nb-item> 
       </nb-form>
 
@@ -232,6 +238,9 @@ export default {
 .search-input {
   padding-left: 10px;
   padding-right: 10px;
+}
+.icon {
+  color: #111;
 }
 .detail-search-bar {
   height: 50;
