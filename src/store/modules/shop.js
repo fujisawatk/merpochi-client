@@ -250,7 +250,8 @@ export default {
     },
     // 店名・キーワード検索
     keywordSearch ({dispatch, state, commit, rootState}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid +
+        "&name=" + keyword + "&hit_per_page=" + "30"
       axios
         .get(requestUrl)
         .then(async (res) => {
@@ -261,14 +262,16 @@ export default {
             shop_codes: shopCodes,
             user_id: rootState.auth.user.id
           }
-          console.log("aaaaaaaaaa")
           await dispatch('getRatingAndBookmarksAndFavoritesCount', data)
           commit('setShops', res.data)
         })
         .catch(() => undefined)
     },
     detailSearch ({dispatch, state, commit, rootState}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&freeword=" + rootState.station.selectedStationName + "駅" + "," + rootState.genre.selectedGenre
+      const requestUrl = state.gnaviApiUrl + "?keyid=" +
+        state.keyid + "&name=" + keyword + "&freeword=" +
+        rootState.station.selectedStationName + "駅" + "," +
+        rootState.genre.selectedGenre + "&hit_per_page=" + "30"
       axios
         .get(requestUrl)
         .then(async (res) => {
@@ -286,7 +289,19 @@ export default {
     },
     // 投稿時の店舗検索
     shopSearch ({state}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&hit_per_page=" + "20"
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid +
+        "&name=" + keyword + "&hit_per_page=" + "30"
+      return axios
+        .get(requestUrl)
+        .then((res) => {
+          return res.data.rest
+        })
+        .catch(() => undefined)
+    },
+    geolocationSearch ({state}) {
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid +
+        "&latitude=" + state.latitude + "&longitude=" + state.longitude +
+        "&hit_per_page=" + "30"
       return axios
         .get(requestUrl)
         .then((res) => {

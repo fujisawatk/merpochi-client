@@ -12,18 +12,31 @@
         class="shop-search-input"
       >
         <nb-input
-          placeholder=""
+          placeholder="店名・キーワード"
           v-model="keyword"
           auto-capitalize="none"
         />
-        <nb-icon
-          button
-          active
-          name='search'
-          :on-press="pressedShopSearchBtn"
-        />
+        <nb-button
+            transparent
+            :on-press="pressedShopSearchBtn"
+          >
+          <nb-icon
+            type="FontAwesome5"
+            name='search'
+            class="icon"
+          />
+        </nb-button>
       </nb-item> 
     </nb-form>
+
+    <view class="geolocation-search-btn">
+      <nb-button
+        rounded danger
+        :on-press="pressedGeolocationSearchBtn"
+      >
+        <nb-text class="btn-text"> 現在地から検索 </nb-text>
+      </nb-button>
+    </view>
 
     <scroll-view>
       <nb-list
@@ -89,6 +102,10 @@ export default {
           break
       }
     },
+    async pressedGeolocationSearchBtn() {
+      const shops = await store.dispatch("shop/geolocationSearch")
+      this.shops = shops
+    },
   },
 }
 </script>
@@ -99,6 +116,16 @@ export default {
 }
 .shop-search-form {
   padding: 10;
+}
+.geolocation-search-btn {
+  padding: 10;
+}
+.icon {
+  color: #111;
+}
+.btn-text {
+  width: 100%;
+  text-align: center;
 }
 .shop-search-input {
   padding-left: 10;
