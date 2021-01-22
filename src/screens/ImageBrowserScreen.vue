@@ -2,8 +2,11 @@
   <nb-container class="image-browser-container">
     <nb-header class="header">
       <nb-left class="header-left">
-        <nb-button transparent>
-          <nb-icon name="arrow-back" />
+        <nb-button
+        transparent
+        :on-press="goBack"
+        >
+          <nb-icon type="Entypo" name="back" class="icon" />
         </nb-button>
       </nb-left>
       <nb-body class="header-body">
@@ -104,6 +107,9 @@ export default {
       })
       .catch((e) => console.log(e));
     },
+    goBack () {
+      this.navigation.goBack()
+    }
   }
 }
 
@@ -144,6 +150,10 @@ const styles = StyleSheet.create({
 .header-left {
   flex: 1;
   margin-left: 10;
+}
+.icon {
+  color: #111;
+  font-size: 25;
 }
 .header-body {
   flex: 2;
