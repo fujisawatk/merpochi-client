@@ -75,7 +75,7 @@
                 </nb-button>
               </nb-left>
               <nb-right>
-                <nb-button bordered light :on-press="openLink">
+                <nb-button bordered light class="phone-btn" :on-press="openLink">
                   <nb-icon active type="Entypo" name="phone" />
                   <nb-text>予約</nb-text>
                 </nb-button>
@@ -279,7 +279,7 @@ export default {
     },
     openLink() {
       Linking
-        .openURL(this.url)
+        .openURL(store.state.shop.shop.url)
         .catch(
           err => console.error('URLを開けませんでした。', err)
         )
@@ -479,6 +479,9 @@ export default {
   position: absolute;
   left: 40;
   color: #444;
+}
+.phone-btn {
+  margin-right: 18;
 }
 .post-input {
   position: relative;
