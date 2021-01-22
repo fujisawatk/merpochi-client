@@ -277,7 +277,16 @@ export default {
     },
     // 投稿時の店舗検索
     shopSearch ({state}, keyword) {
-      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&hit_per_page=" + "20"
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&name=" + keyword + "&hit_per_page=" + "30"
+      return axios
+        .get(requestUrl)
+        .then((res) => {
+          return res.data.rest
+        })
+        .catch(() => undefined)
+    },
+    geolocationSearch ({state}) {
+      const requestUrl = state.gnaviApiUrl + "?keyid=" + state.keyid + "&latitude=" + state.latitude + "&longitude=" + state.longitude + "&hit_per_page=" + "30"
       return axios
         .get(requestUrl)
         .then((res) => {

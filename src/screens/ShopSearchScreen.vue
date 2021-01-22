@@ -25,6 +25,15 @@
       </nb-item> 
     </nb-form>
 
+    <view class="geolocation-search-btn">
+      <nb-button
+        rounded danger
+        :on-press="pressedGeolocationSearchBtn"
+      >
+        <nb-text class="btn-text"> 現在地から検索 </nb-text>
+      </nb-button>
+    </view>
+
     <scroll-view>
       <nb-list
         v-for="shop in shops"
@@ -89,6 +98,10 @@ export default {
           break
       }
     },
+    async pressedGeolocationSearchBtn() {
+      const shops = await store.dispatch("shop/geolocationSearch")
+      this.shops = shops
+    },
   },
 }
 </script>
@@ -99,6 +112,13 @@ export default {
 }
 .shop-search-form {
   padding: 10;
+}
+.geolocation-search-btn {
+  padding: 10;
+}
+.btn-text {
+  width: 100%;
+  text-align: center;
 }
 .shop-search-input {
   padding-left: 10;
