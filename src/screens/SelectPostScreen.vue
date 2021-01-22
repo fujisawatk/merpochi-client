@@ -12,13 +12,13 @@
           <nb-button class="easy-post-btn">
             <nb-icon type="AntDesign" name="like1" class="like-icon" :on-press="pressedEasyPostBtn"/>
           </nb-button>
-          <nb-text>簡単投稿</nb-text>
+          <nb-text>簡単レビュー</nb-text>
         </view>
         <view class="text-post-section">
           <nb-button button class="text-post-btn">
             <nb-icon type="FontAwesome5" name="pencil-alt" class="text-icon" :on-press="pressedTextPostBtn"/>
           </nb-button>
-          <nb-text>テキスト投稿</nb-text>
+          <nb-text>詳細レビュー</nb-text>
         </view>
       </view>
     </view>
@@ -33,7 +33,7 @@
 export default {
   data: function() {
     return {
-      title: "おすすめのお店を投稿"
+      title: "おすすめのお店をレビュー"
     };
   },
   props: {

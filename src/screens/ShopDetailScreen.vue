@@ -85,7 +85,7 @@
 
 
           <nb-separator v-if="isAuth" class="post-index">
-            <nb-text class="post-title">あなたの投稿</nb-text>
+            <nb-text class="post-title">あなたのレビュー</nb-text>
           </nb-separator>
           <nb-list-item
             :style="{paddingRight:20}"

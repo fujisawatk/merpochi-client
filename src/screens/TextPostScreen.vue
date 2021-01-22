@@ -103,7 +103,7 @@ const baseApiUrl = ENV.baseApiUrl
 export default {
   data () {
     return {
-      title: "アカウント登録",
+      title: "レビュー作成",
       reviews: ["二度と行かない！", "次はないかな…", "まあ、普通かな。", "また行きたい！", "最高！おすすめ！！"],
       rating: 3,
       text: ""
