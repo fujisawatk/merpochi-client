@@ -23,6 +23,7 @@
           />
           <nb-icon
             active
+            type="FontAwesome5"
             name='search'
             :on-press="pressedSearchIcon"
           />

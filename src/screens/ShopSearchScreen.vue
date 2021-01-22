@@ -12,13 +12,14 @@
         class="shop-search-input"
       >
         <nb-input
-          placeholder=""
+          placeholder="店名・キーワード"
           v-model="keyword"
           auto-capitalize="none"
         />
         <nb-icon
           button
           active
+          type="FontAwesome5"
           name='search'
           :on-press="pressedShopSearchBtn"
         />
